@@ -331,7 +331,7 @@
                     </div>
                 </div>
 
-                <!-- CATEGORY (New Field) -->
+                <!-- CATEGORY -->
                 <div class="form-group">
                     <label for="category">🗂️ প্রধান খাত <span class="required">*</span></label>
                     <div class="input-wrapper">
@@ -358,7 +358,7 @@
                     <label for="fromAccount">💳 উৎস অ্যাকাউন্ট <span class="required">*</span></label>
                     <div class="input-wrapper">
                         <span class="input-icon">💳</span>
-                        <select id="fromAccount" name="fromAccount" required>
+                        <select id="fromAccount" name="fromAccount" onchange="toggleCardNetwork()" required>
                             <option value="">অ্যাকাউন্ট নির্বাচন করুন</option>
                         </select>
                     </div>
@@ -428,7 +428,7 @@
 
 <script>
     // ========== CONFIGURATION ==========
-    // এখানে আপনার Apps Script এর Web App URL বসাবেন
+    // এখানে আপনার Apps Script এর নতুন Web App URL বসানো হয়েছে
     const scriptURL = 'https://script.google.com/macros/s/AKfycbzvg4kXtMxCpyjA5zkexhKbCd1O5K-2FAbuZPyOsqtMKwbZxzJGyFOtKq33SeoqTUIT/exec';
     // ===================================
 
@@ -453,7 +453,6 @@
     });
 
     // ========== MASTER LIST লোড করা ==========
-    // অ্যাপ লোড হওয়ার সাথে সাথে Apps Script থেকে ড্রপডাউনের ডেটা আনবে
     window.onload = function() {
         google.script.run
             .withSuccessHandler(loadMasterData)
@@ -469,15 +468,14 @@
         
         // ১. লেনদেনের ধরন (Type) ড্রপডাউন পূরণ করা
         const typeSelect = document.getElementById("transactionType");
-        const uniqueTypes = [...new Set(data.map(item => item.type))];
-        uniqueTypes.forEach(type => {
+        data.types.forEach(type => {
             const opt = document.createElement("option");
             opt.value = type;
             opt.textContent = type;
             typeSelect.appendChild(opt);
         });
 
-        // ২. উৎস অ্যাকাউন্ট (From Account) ড্রপডাউন পূরণ করা
+        // ২. উৎস ও গন্তব্য অ্যাকাউন্ট ড্রপডাউন পূরণ করা
         const fromSelect = document.getElementById("fromAccount");
         const toSelect = document.getElementById("toAccount");
         data.accounts.forEach(acc => {
@@ -507,16 +505,14 @@
         const catSelect = document.getElementById("category");
         const subSelect = document.getElementById("subCategory");
         const toGroup = document.getElementById("toAccountGroup");
-        const cardGroup = document.getElementById("cardNetworkGroup");
 
         // রিসেট করা
         catSelect.innerHTML = '<option value="">প্রধান খাত নির্বাচন করুন</option>';
         subSelect.innerHTML = '<option value="">আগে প্রধান খাত নির্বাচন করুন</option>';
         subSelect.disabled = true;
         
-        // Transfer / Loan হলে To Account দেখাবে, Credit Card হলে Card Network দেখাবে
+        // Transfer / Loan হলে To Account দেখাবে
         toGroup.style.display = (type === "স্থানান্তর" || type === "ঋণ") ? "flex" : "none";
-        cardGroup.style.display = (type === "দায়" || type === "স্থানান্তর" && fromSelect.value.includes("Card")) ? "flex" : "none";
 
         if (!type) {
             catSelect.disabled = true;
@@ -526,7 +522,7 @@
         catSelect.disabled = false;
         
         // Type অনুযায়ী ইউনিক ক্যাটাগরি বের করা
-        const filteredCats = [...new Set(masterData.filter(item => item.type === type).map(item => item.category))];
+        const filteredCats = [...new Set(masterData.dataMap.filter(item => item.type === type).map(item => item.category))];
         filteredCats.forEach(cat => {
             const opt = document.createElement("option");
             opt.value = cat;
@@ -550,13 +546,26 @@
 
         subSelect.disabled = false;
         
-        const filteredSubs = masterData.filter(item => item.type === type && item.category === cat).map(item => item.subCategory);
+        const filteredSubs = masterData.dataMap.filter(item => item.type === type && item.category === cat).map(item => item.subCategory);
         filteredSubs.forEach(sub => {
             const opt = document.createElement("option");
             opt.value = sub;
             opt.textContent = sub;
             subSelect.appendChild(opt);
         });
+    }
+
+    // From Account সিলেক্ট করলে Card Network দেখাবে (যদি Card হয়)
+    function toggleCardNetwork() {
+        const fromAccount = document.getElementById("fromAccount").value;
+        const cardGroup = document.getElementById("cardNetworkGroup");
+        
+        // যদি অ্যাকাউন্টের নামে "Card" থাকে, তবেই কার্ড নেটওয়ার্ক দেখাবে
+        if (fromAccount.includes("Card")) {
+            cardGroup.style.display = "flex";
+        } else {
+            cardGroup.style.display = "none";
+        }
     }
 
     // ========== ফর্ম সাবমিট ==========
