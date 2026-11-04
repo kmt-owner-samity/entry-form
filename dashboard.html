@@ -1,0 +1,81 @@
+function getDashboardJSON(year) {
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var transSheet = ss.getSheetByName("Transactions");
+    var settingsSheet = ss.getSheetByName("Settings");
+    var masterSheet = ss.getSheetByName("Master_List");
+
+    var transData = transSheet.getDataRange().getValues();
+    var settingsData = settingsSheet.getDataRange().getValues();
+    var masterData = masterSheet.getDataRange().getValues();
+
+    var selectedYear = parseInt(year) || new Date().getFullYear();
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    // ১. মাসিক সামারি
+    var summary = {};
+    months.forEach(function(m) {
+      summary[m] = { Income: 0, Expense: 0, Surplus: 0, Investment: 0, Loan: 0, Asset: 0, Liability: 0 };
+    });
+
+    // ২. অ্যাকাউন্ট সামারি (Settings থেকে ওপেনিং ব্যালেন্স)
+    var accountSummary = {};
+    for (var i = 1; i < settingsData.length; i++) {
+      var accName = String(settingsData[i][0]).trim();
+      var openingBal = Number(settingsData[i][1]) || 0;
+      if (accName) {
+        accountSummary[accName] = { name: accName, openingBalance: openingBal, totalIn: 0, totalOut: 0 };
+      }
+    }
+
+    // ৩. ট্রানজেকশন ডেটা প্রসেস করা
+    for (var i = 1; i < transData.length; i++) {
+      if (transData[i][0] instanceof Date) {
+        var d = transData[i][0];
+        if (d.getFullYear() === selectedYear) {
+          var monthName = months[d.getMonth()];
+          var type = String(transData[i][1]).trim();
+          var amount = Number(transData[i][7]) || 0;
+          var fromAcc = String(transData[i][4]).trim();
+          var toAcc = String(transData[i][5]).trim();
+
+          // মাসিক হিসাব (বাংলা থেকে ইংরেজি ম্যাপিং)
+          var engType = type;
+          if (type === "আয়" || type === "আয়") engType = "Income";
+          else if (type === "ব্যয়" || type === "ব্যয়") engType = "Expense";
+          else if (type === "বিনিয়োগ") engType = "Investment";
+          else if (type === "ঋণ" || type === "স্থানান্তর") engType = "Loan";
+          else if (type === "সম্পদ") engType = "Asset";
+          else if (type === "দায়") engType = "Liability";
+
+          if (summary[monthName] && summary[monthName].hasOwnProperty(engType)) {
+            summary[monthName][engType] += amount;
+          }
+
+          // অ্যাকাউন্ট সামারি আপডেট (From Account = Total Out, To Account = Total In)
+          if (accountSummary[fromAcc]) accountSummary[fromAcc].totalOut += amount;
+          if (accountSummary[toAcc]) accountSummary[toAcc].totalIn += amount;
+        }
+      }
+    }
+
+    // ৪. কারেন্ট ব্যালেন্স হিসাব ও মাসিক Surplus হিসাব
+    var accountsArray = [];
+    for (var acc in accountSummary) {
+      accountSummary[acc].currentBalance = accountSummary[acc].openingBalance + accountSummary[acc].totalIn - accountSummary[acc].totalOut;
+      accountsArray.push(accountSummary[acc]);
+    }
+
+    months.forEach(function(m) {
+      summary[m].Surplus = summary[m].Income - summary[m].Expense;
+    });
+
+    // রিটার্ন করা
+    return ContentService.createTextOutput(JSON.stringify({ "summary": summary, "accounts": accountsArray }))
+      .setMimeType(ContentService.MimeType.JSON);
+      
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({ "error": error.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
