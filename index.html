@@ -507,24 +507,30 @@
     }
 
     // ========== ড্রপডাউন লজিক ==========
+    
+    // Type সিলেক্ট করলে Category আপডেট হবে
     function updateCategories() {
         const type = document.getElementById("transactionType").value;
         const catSelect = document.getElementById("category");
         const subSelect = document.getElementById("subCategory");
         const toGroup = document.getElementById("toAccountGroup");
 
+        // রিসেট করা
         catSelect.innerHTML = '<option value="">প্রধান খাত নির্বাচন করুন</option>';
         subSelect.innerHTML = '<option value="">আগে প্রধান খাত নির্বাচন করুন</option>';
         subSelect.disabled = true;
         
-        toGroup.style.display = (type === "স্থানান্তর" || type === "ঋণ") ? "flex" : "none";
+        // শুধুমাত্র "স্থানান্তর" হলে To Account দেখাবে (ঋণ হলে নয়)
+        toGroup.style.display = (type === "স্থানান্তর") ? "flex" : "none";
 
         if (!type) {
             catSelect.disabled = true;
             return;
         }
+
         catSelect.disabled = false;
         
+        // Type অনুযায়ী ইউনিক ক্যাটাগরি বের করা
         const filteredCats = [...new Set(masterData.dataMap.filter(item => item.type === type).map(item => item.category))];
         filteredCats.forEach(cat => {
             const opt = document.createElement("option");
@@ -534,6 +540,7 @@
         });
     }
 
+    // Category সিলেক্ট করলে Sub-Category আপডেট হবে
     function updateSubCategories() {
         const type = document.getElementById("transactionType").value;
         const cat = document.getElementById("category").value;
@@ -545,6 +552,7 @@
             subSelect.disabled = true;
             return;
         }
+
         subSelect.disabled = false;
         
         const filteredSubs = masterData.dataMap.filter(item => item.type === type && item.category === cat).map(item => item.subCategory);
@@ -556,10 +564,34 @@
         });
     }
 
+    // From Account সিলেক্ট করলে To Account এর একই অ্যাকাউন্ট ডিজেবল হবে এবং Card Network দেখাবে
     function toggleCardNetwork() {
-        const fromAccount = document.getElementById("fromAccount").value;
+        const fromSelect = document.getElementById("fromAccount");
+        const toSelect = document.getElementById("toAccount");
         const cardGroup = document.getElementById("cardNetworkGroup");
-        if (fromAccount.includes("Card")) {
+        
+        const fromValue = fromSelect.value;
+        
+        // ১. To Account এর অপশন আপডেট করা (একই অ্যাকাউন্ট ডিজেবল করা)
+        toSelect.innerHTML = '<option value="">অ্যাকাউন্ট নির্বাচন করুন</option>';
+        
+        if (masterData.accounts) {
+            masterData.accounts.forEach(acc => {
+                const opt = document.createElement("option");
+                opt.value = acc;
+                opt.textContent = acc;
+                
+                // যদি From Account এর সাথে মিলে যায়, তবে ডিজেবল করে দেব
+                if (acc === fromValue) {
+                    opt.disabled = true;
+                    opt.style.color = "#94a3b8"; // দেখতে ধূসর লাগবে
+                }
+                toSelect.appendChild(opt);
+            });
+        }
+
+        // ২. Card Network দেখানো/লুকানো
+        if (fromValue.includes("Card")) {
             cardGroup.style.display = "flex";
         } else {
             cardGroup.style.display = "none";
