@@ -1,434 +1,197 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>আর্থিক লেনদেন এন্ট্রি</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#e9edf5">
+<title>নতুন লেনদেন</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e9edf5;--ink:#101a33;--mute:#6b7592;--glass:rgba(255,255,255,.62);--edge:rgba(255,255,255,.85);--shadow:0 10px 30px rgba(40,56,110,.10);--blue:#3347ff;--mint:#12b886;--coral:#ff5c7a;--violet:#8b5cf6;
+--a1:#2338e8;--a2:#8b5cf6;--ac:#3347ff;--ac-soft:rgba(51,71,255,.14);--ac-shadow:rgba(51,71,255,.35)}
+body[data-type=income]{--a1:#0b9f73;--a2:#2fd4a3;--ac:#12b886;--ac-soft:rgba(18,184,134,.16);--ac-shadow:rgba(18,184,134,.35)}
+body[data-type=expense]{--a1:#e63a5e;--a2:#ff8a65;--ac:#ff5c7a;--ac-soft:rgba(255,92,122,.16);--ac-shadow:rgba(255,92,122,.35)}
+body[data-type=transfer]{--a1:#1f7ae0;--a2:#4cc3ff;--ac:#2b8cf0;--ac-soft:rgba(43,140,240,.16);--ac-shadow:rgba(43,140,240,.35)}
+body[data-type=invest]{--a1:#6d3fe8;--a2:#b08cff;--ac:#8b5cf6;--ac-soft:rgba(139,92,246,.16);--ac-shadow:rgba(139,92,246,.35)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Hind Siliguri','Segoe UI',sans-serif;color:var(--ink);background:var(--bg);min-height:100vh;padding-bottom:104px;overflow-x:hidden}
+.blob{position:fixed;border-radius:50%;filter:blur(70px);opacity:.55;pointer-events:none;z-index:0}
+.b1{width:340px;height:340px;background:#9fb0ff;top:-90px;left:-70px}
+.b2{width:300px;height:300px;background:#ffc2cf;top:30%;right:-100px}
+.b3{width:320px;height:320px;background:#a8ecd4;bottom:-100px;left:20%}
+.glass{background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--edge);box-shadow:var(--shadow);border-radius:26px}
+.wrap{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:0 16px}
+.bar{position:sticky;top:0;z-index:30;padding:max(12px,env(safe-area-inset-top)) 0 10px}
+.bar-in{display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:22px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px}
+.brand i{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;display:grid;place-items:center;font-size:16px;transition:background .4s}
+.spacer{flex:1}
+.nav{display:flex;gap:2px;padding:6px;border-radius:24px}
+.nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px;border-radius:18px;color:var(--mute);font:600 11.5px 'Hind Siliguri',sans-serif;text-decoration:none;transition:.2s}
+.nav i{font-size:18px}
+.nav .on{background:var(--ink);color:#fff}
+.nav-m{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:40;width:min(92vw,420px)}
+.nav-d{display:none}
 
-    <!-- Flatpickr -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+/* Layout */
+.layout{display:flex;flex-direction:column;gap:14px;margin:0 auto}
+.hero{position:relative;overflow:hidden;padding:26px 22px 22px;border-radius:30px;color:#fff;background:linear-gradient(135deg,var(--a1),var(--a2));box-shadow:0 18px 40px var(--ac-shadow);text-align:center;transition:background .4s,box-shadow .4s}
+.hero::before{content:"";position:absolute;width:240px;height:240px;border-radius:50%;right:-70px;top:-90px;background:rgba(255,255,255,.14)}
+.hero label{position:relative;display:block;font-size:13px;opacity:.9;margin-bottom:4px}
+.amt-row{position:relative;display:flex;align-items:center;justify-content:center;gap:8px}
+.amt-row span{font-size:34px;font-weight:600;opacity:.9}
+#amount{width:100%;max-width:300px;background:none;border:none;border-bottom:2px dashed rgba(255,255,255,.4);outline:none;color:#fff;font:700 50px/1.15 'Hind Siliguri',sans-serif;text-align:center;-moz-appearance:textfield;padding-bottom:4px}
+#amount::-webkit-outer-spin-button,#amount::-webkit-inner-spin-button{-webkit-appearance:none}
+#amount::placeholder{color:rgba(255,255,255,.55)}
+#amount:focus{border-bottom-color:#fff}
+.hint{position:relative;font-size:12px;opacity:.85;margin-top:10px}
+.card{padding:20px 18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;min-width:0}
+.field>label{font-size:12.5px;font-weight:600;color:var(--mute);margin-bottom:7px;display:flex;gap:6px;align-items:center}
+.field>label i{color:var(--ac);width:14px;font-size:12px;transition:color .4s}
+.required{color:var(--coral)}
+.ctl{position:relative}
+input[type=text],select,textarea{width:100%;height:50px;padding:0 14px;background:rgba(255,255,255,.75);border:1px solid rgba(16,26,51,.08);border-radius:14px;color:var(--ink);font:500 15px 'Hind Siliguri',sans-serif;outline:none;transition:.2s}
+select{appearance:none;-webkit-appearance:none;padding-right:38px;cursor:pointer}
+.ctl:has(select)::after{content:"\f078";font:900 10px 'Font Awesome 6 Free';position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--mute);pointer-events:none}
+textarea{height:84px;padding:13px 14px;resize:none}
+input:focus,select:focus,textarea:focus{border-color:var(--ac);background:#fff;box-shadow:0 0 0 4px var(--ac-soft)}
+select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
+.field.reveal{animation:pop .3s ease}
+@keyframes pop{from{opacity:0;transform:translateY(-6px)}}
+.flatpickr-calendar{border-radius:16px!important;box-shadow:0 16px 40px rgba(40,56,110,.2)!important;font-family:'Hind Siliguri',sans-serif}
+.flatpickr-day.selected{background:var(--ac)!important;border-color:var(--ac)!important}
+button[type=submit]{width:100%;height:56px;margin-top:20px;border:none;border-radius:18px;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;font:700 16px 'Hind Siliguri',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 12px 26px var(--ac-shadow);transition:transform .15s,opacity .2s,background .4s}
+button[type=submit]:active{transform:scale(.98)}
+button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
+#statusMsg{display:none;margin-top:14px;padding:13px 16px;border-radius:14px;font-size:14px;font-weight:600;text-align:center}
+#statusMsg.success{display:block;color:#0a7d5c;background:#d9f6ec}
+#statusMsg.error{display:block;color:#c2264a;background:#ffe3ea}
+#statusMsg.loading{display:block;color:#2b4fd0;background:#e0e5ff}
+.foot{text-align:center;color:var(--mute);font-size:12px;margin-top:6px}
 
-    <!-- Google Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+@media(max-width:600px){
+  .grid{grid-template-columns:1fr;}
+  .full{grid-column:auto;}
+  #amount{font-size:42px;}
+}
 
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            font-family: 'Hind Siliguri', 'Segoe UI', Tahoma, sans-serif;
-            background: linear-gradient(135deg, #eef2ff 0%, #f8fafc 45%, #ecfeff 100%);
-            min-height: 100vh;
-            color: #1e293b;
-            padding: 40px 16px;
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 680px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.97);
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.10), 0 4px 12px rgba(15, 23, 42, 0.05);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-        }
-
-        /* HEADER */
-        .header {
-            background: linear-gradient(135deg, #4f46e5, #6366f1);
-            padding: 32px 36px;
-            color: white;
-            position: relative;
-            overflow: hidden;
-            min-height: 120px;
-        }
-
-        .header::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 350px;
-            height: 350px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        .header-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .title-section { display: flex; align-items: center; gap: 16px; }
-
-        .title-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
-            flex-shrink: 0;
-        }
-
-        .title-section h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.2; }
-        .title-section p { font-size: 13px; margin-top: 4px; color: rgba(255, 255, 255, 0.85); font-weight: 500; }
-
-        .btn-dashboard {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 18px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 700;
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            transition: all 0.25s ease;
-            white-space: nowrap;
-            backdrop-filter: blur(10px);
-        }
-
-        .btn-dashboard:hover {
-            background: rgba(255, 255, 255, 0.28);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        /* FORM AREA */
-        .form-area { padding: 28px 30px; }
-
-        .section-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            font-weight: 700;
-            color: #475569;
-            margin-bottom: 22px;
-            text-transform: uppercase;
-            letter-spacing: 0.7px;
-        }
-
-        .section-title::before {
-            content: "";
-            width: 4px;
-            height: 16px;
-            background: #6366f1;
-            border-radius: 10px;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .form-group { display: flex; flex-direction: column; }
-        .form-group.full-width { grid-column: span 2; }
-
-        label {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            font-weight: 700;
-            color: #475569;
-            margin-bottom: 8px;
-        }
-
-        .required { color: #ef4444; font-size: 14px; }
-
-        .input-wrapper { position: relative; }
-
-        .input-icon {
-            position: absolute;
-            left: 13px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 16px;
-            color: #64748b;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            height: 46px;
-            padding: 0 14px 0 40px;
-            border: 1px solid #d7dee8;
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 14px;
-            color: #1e293b;
-            background: #f8fafc;
-            outline: none;
-            transition: all 0.2s ease;
-        }
-
-        textarea {
-            height: 80px;
-            padding: 12px 14px 12px 40px;
-            resize: none;
-        }
-
-        select { cursor: pointer; appearance: auto; }
-
-        input:hover, select:hover, textarea:hover { border-color: #a5b4fc; background: #ffffff; }
-        input:focus, select:focus, textarea:focus {
-            border-color: #6366f1;
-            background: #ffffff;
-            box-shadow: 0 0 0 4px rgba(99,102,241,0.12);
-        }
-
-        input:disabled, select:disabled { background: #f1f5f9; color: #94a3b8; cursor: not-allowed; }
-
-        .amount-wrapper input {
-            padding-left: 42px;
-            padding-right: 60px;
-            font-weight: 600;
-        }
-
-        .currency {
-            position: absolute;
-            right: 13px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 12px;
-            font-weight: 700;
-            color: #64748b;
-            background: #e2e8f0;
-            padding: 4px 7px;
-            border-radius: 5px;
-            pointer-events: none;
-        }
-
-        .divider { height: 1px; background: #e2e8f0; margin: 26px 0 22px; }
-
-        button[type="submit"] {
-            width: 100%;
-            height: 49px;
-            margin-top: 5px;
-            border: none;
-            border-radius: 11px;
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            font-family: inherit;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 7px 18px rgba(16,185,129,0.22);
-            transition: all 0.2s ease;
-        }
-
-        button[type="submit"]:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(16,185,129,0.28); }
-        button[type="submit"]:disabled { background: #94a3b8; box-shadow: none; cursor: not-allowed; transform: none; }
-
-        #statusMsg {
-            display: none;
-            text-align: center;
-            margin-top: 16px;
-            padding: 11px 14px;
-            border-radius: 9px;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        #statusMsg.success { display: block; color: #047857; background: #ecfdf5; border: 1px solid #a7f3d0; }
-        #statusMsg.error { display: block; color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; }
-        #statusMsg.loading { display: block; color: #0369a1; background: #f0f9ff; border: 1px solid #bae6fd; }
-
-        .footer-note { text-align: center; padding: 0 30px 22px; font-size: 11px; color: #94a3b8; }
-
-        .flatpickr-calendar {
-            border-radius: 12px !important;
-            box-shadow: 0 15px 35px rgba(15,23,42,0.18) !important;
-            border: 1px solid #e2e8f0 !important;
-        }
-
-        @media (max-width: 600px) {
-            body { padding: 12px; }
-            .container { border-radius: 20px; }
-            .header { padding: 24px 20px; }
-            .header-top { align-items: flex-start; }
-            .title-section h1 { font-size: 19px; }
-            .form-area { padding: 20px 18px; }
-            .form-grid { grid-template-columns: 1fr; gap: 16px; }
-            .form-group.full-width { grid-column: span 1; }
-            .btn-dashboard { padding: 8px 12px; font-size: 12px; }
-        }
-
-        @media (max-width: 420px) {
-            .header-top { flex-direction: column; gap: 16px; }
-            .btn-dashboard { align-self: stretch; justify-content: center; }
-            .title-section { width: 100%; }
-        }
-    </style>
+@media(min-width:900px){
+  body{padding-bottom:40px}
+  .nav-m{display:none}
+  .nav-d{display:flex;padding:4px;gap:4px;background:rgba(255,255,255,.5);border-radius:16px;box-shadow:none;max-width:480px;margin:0 auto;}
+  .nav-d a{flex-direction:row;gap:8px;padding:9px 16px;font-size:14px;border-radius:12px}
+  .nav-d i{font-size:14px}
+  .bar-in{gap:20px}
+  .wrap{max-width:800px;}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
 </head>
-
 <body>
+<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
 
-<div class="container">
+<div class="wrap">
+  <header class="bar">
+    <div class="bar-in glass">
+      <div class="brand"><i class="fa-solid fa-wallet"></i><span>আমার হিসাব</span></div>
+      
+      <!-- ডেস্কটপ নেভিগেশন (৪টি বাটন, ড্যাশবোর্ডের সাথে মিল) -->
+      <nav class="nav nav-d" aria-label="প্রধান মেনু">
+        <a href="dashboard.html"><i class="fa-solid fa-house"></i>হোম</a>
+        <a href="dashboard.html"><i class="fa-solid fa-building-columns"></i>অ্যাকাউন্ট</a>
+        <a href="dashboard.html"><i class="fa-solid fa-chart-column"></i>রিপোর্ট</a>
+        <a href="index.html" class="on"><i class="fa-solid fa-circle-plus"></i>নতুন এন্ট্রি</a>
+      </nav>
+      
+      <div class="spacer"></div>
+    </div>
+  </header>
 
-    <!-- HEADER -->
-    <div class="header">
-        <div class="header-top">
-            <div class="title-section">
-                <div class="title-icon">💰</div>
-                <div>
-                    <h1>আর্থিক লেনদেন এন্ট্রি</h1>
-                    <p>আপনার আয়, ব্যয় ও বিনিয়োগ রেকর্ড করুন</p>
-                </div>
-            </div>
-            <!-- ড্যাশবোর্ড লিংক -->
-            <a href="dashboard.html" class="btn-dashboard">
-                📊 <span>ড্যাশবোর্ড</span>
-            </a>
+  <form id="financeForm" class="layout">
+    <!-- পরিমাণ কার্ড (সবার উপরে) -->
+    <div class="hero">
+      <label for="amount">পরিমাণ <span class="required" style="color:#fff">*</span></label>
+      <div class="amt-row"><span>৳</span>
+        <input type="number" id="amount" name="amount" min="0" step="any" placeholder="০.০০" inputmode="decimal" required>
+      </div>
+      <div class="hint">আগে পরিমাণ লিখুন, তারপর বিবরণ দিন</div>
+    </div>
+
+    <!-- ফর্ম ফিল্ডসমূহ -->
+    <div class="card glass">
+      <div class="grid">
+        <div class="field">
+          <label for="date"><i class="fa-regular fa-calendar"></i>তারিখ <span class="required">*</span></label>
+          <div class="ctl"><input type="text" id="date" name="date" placeholder="দিন/মাস/বছর" required></div>
         </div>
+
+        <div class="field">
+          <label for="transactionType"><i class="fa-solid fa-right-left"></i>লেনদেনের ধরন <span class="required">*</span></label>
+          <div class="ctl"><select id="transactionType" name="transactionType" onchange="updateCategories(); setAccent(this.value);" required>
+            <option value="">ধরন নির্বাচন করুন</option></select></div>
+        </div>
+
+        <div class="field">
+          <label for="category"><i class="fa-solid fa-layer-group"></i>প্রধান খাত <span class="required">*</span></label>
+          <div class="ctl"><select id="category" name="category" onchange="updateSubCategories()" required disabled>
+            <option value="">আগে ধরন নির্বাচন করুন</option></select></div>
+        </div>
+
+        <div class="field">
+          <label for="subCategory"><i class="fa-solid fa-tag"></i>উপ-খাত <span class="required">*</span></label>
+          <div class="ctl"><select id="subCategory" name="subCategory" required disabled>
+            <option value="">আগে প্রধান খাত নির্বাচন করুন</option></select></div>
+        </div>
+
+        <div class="field">
+          <label for="fromAccount"><i class="fa-solid fa-wallet"></i>উৎস অ্যাকাউন্ট <span class="required">*</span></label>
+          <div class="ctl"><select id="fromAccount" name="fromAccount" onchange="toggleCardNetwork()" required>
+            <option value="">অ্যাকাউন্ট নির্বাচন করুন</option></select></div>
+        </div>
+
+        <div class="field" id="toAccountGroup" style="display:none">
+          <label for="toAccount"><i class="fa-solid fa-building-columns"></i>গন্তব্য অ্যাকাউন্ট <span class="required">*</span></label>
+          <div class="ctl"><select id="toAccount" name="toAccount">
+            <option value="">অ্যাকাউন্ট নির্বাচন করুন</option></select></div>
+        </div>
+
+        <div class="field" id="cardNetworkGroup" style="display:none">
+          <label for="cardNetwork"><i class="fa-regular fa-credit-card"></i>কার্ড নেটওয়ার্ক <span class="required">*</span></label>
+          <div class="ctl"><select id="cardNetwork" name="cardNetwork">
+            <option value="">কার্ড নির্বাচন করুন</option></select></div>
+        </div>
+
+        <div class="field full">
+          <label for="notes"><i class="fa-regular fa-note-sticky"></i>বিবরণ</label>
+          <div class="ctl"><textarea id="notes" name="notes" placeholder="লেনদেনের বিবরণ লিখুন (ঐচ্ছিক)"></textarea></div>
+        </div>
+      </div>
+
+      <button type="submit" id="submitBtn"><i class="fa-solid fa-check"></i> লেনদেন সেভ করুন</button>
+      <p id="statusMsg"></p>
     </div>
-
-    <!-- FORM AREA -->
-    <div class="form-area">
-        <div class="section-title">লেনদেনের বিবরণ</div>
-
-        <form id="financeForm">
-            <div class="form-grid">
-
-                <!-- DATE -->
-                <div class="form-group">
-                    <label for="date">📅 তারিখ <span class="required">*</span></label>
-                    <div class="input-wrapper">
-                        <span class="input-icon">📅</span>
-                        <input type="text" id="date" name="date" placeholder="দিন/মাস/বছর" required>
-                    </div>
-                </div>
-
-                <!-- TRANSACTION TYPE -->
-                <div class="form-group">
-                    <label for="transactionType">🔄 লেনদেনের ধরন <span class="required">*</span></label>
-                    <div class="input-wrapper">
-                        <span class="input-icon">↔️</span>
-                        <select id="transactionType" name="transactionType" onchange="updateCategories()" required>
-                            <option value="">ধরন নির্বাচন করুন</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- CATEGORY -->
-                <div class="form-group">
-                    <label for="category">🗂️ প্রধান খাত <span class="required">*</span></label>
-                    <div class="input-wrapper">
-                        <span class="input-icon">📂</span>
-                        <select id="category" name="category" onchange="updateSubCategories()" required disabled>
-                            <option value="">আগে ধরন নির্বাচন করুন</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- SUB CATEGORY -->
-                <div class="form-group">
-                    <label for="subCategory">📁 উপ-খাত <span class="required">*</span></label>
-                    <div class="input-wrapper">
-                        <span class="input-icon">🗃️</span>
-                        <select id="subCategory" name="subCategory" required disabled>
-                            <option value="">আগে প্রধান খাত নির্বাচন করুন</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- FROM ACCOUNT -->
-                <div class="form-group">
-                    <label for="fromAccount">💳 উৎস অ্যাকাউন্ট <span class="required">*</span></label>
-                    <div class="input-wrapper">
-                        <span class="input-icon">💳</span>
-                        <select id="fromAccount" name="fromAccount" onchange="toggleCardNetwork()" required>
-                            <option value="">অ্যাকাউন্ট নির্বাচন করুন</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- TO ACCOUNT (Hidden by default) -->
-                <div class="form-group" id="toAccountGroup" style="display: none;">
-                    <label for="toAccount">🏦 গন্তব্য অ্যাকাউন্ট <span class="required">*</span></label>
-                    <div class="input-wrapper">
-                        <span class="input-icon">🏦</span>
-                        <select id="toAccount" name="toAccount">
-                            <option value="">অ্যাকাউন্ট নির্বাচন করুন</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- CARD NETWORK (Hidden by default) -->
-                <div class="form-group" id="cardNetworkGroup" style="display: none;">
-                    <label for="cardNetwork">💳 কার্ড নেটওয়ার্ক <span class="required">*</span></label>
-                    <div class="input-wrapper">
-                        <span class="input-icon">🌐</span>
-                        <select id="cardNetwork" name="cardNetwork">
-                            <option value="">কার্ড নির্বাচন করুন</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- AMOUNT -->
-                <div class="form-group">
-                    <label for="amount">💵 পরিমাণ <span class="required">*</span></label>
-                    <div class="input-wrapper amount-wrapper">
-                        <span class="input-icon">৳</span>
-                        <input type="number" id="amount" name="amount" min="0" step="any" placeholder="০.০০" required>
-                        <span class="currency">টাকা</span>
-                    </div>
-                </div>
-
-                <!-- NOTES (Full Width) -->
-                <div class="form-group full-width">
-                    <label for="notes">📝 বিবরণ</label>
-                    <div class="input-wrapper">
-                        <span class="input-icon" style="top: 20px;">📝</span>
-                        <textarea id="notes" name="notes" placeholder="লেনদেনের বিবরণ লিখুন (ঐচ্ছিক)"></textarea>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="divider"></div>
-
-            <!-- SUBMIT BUTTON -->
-            <button type="submit" id="submitBtn">💾 লেনদেন সেভ করুন</button>
-        </form>
-
-        <!-- STATUS MESSAGE -->
-        <p id="statusMsg"></p>
-    </div>
-
-    <div class="footer-note">
-        আপনার সব লেনদেন নিরাপদে গুগল শিটে সেভ হবে।
-    </div>
-
+    <p class="foot"><i class="fa-solid fa-lock"></i> সব লেনদেন নিরাপদে গুগল শিটে সেভ হবে</p>
+  </form>
 </div>
 
-<!-- Flatpickr JS -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<!-- মোবাইল বটম নেভিগেশন (৪টি বাটন) -->
+<nav class="nav nav-m glass" aria-label="প্রধান মেনু">
+  <a href="dashboard.html"><i class="fa-solid fa-house"></i>হোম</a>
+  <a href="dashboard.html"><i class="fa-solid fa-building-columns"></i>অ্যাকাউন্ট</a>
+  <a href="dashboard.html"><i class="fa-solid fa-chart-column"></i>রিপোর্ট</a>
+  <a href="index.html" class="on"><i class="fa-solid fa-circle-plus"></i>এন্ট্রি</a>
+</nav>
 
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     // ========== CONFIGURATION ==========
-    // এখানে আপনার Apps Script এর Web App URL বসানো হলো
     const scriptURL = 'https://script.google.com/macros/s/AKfycbyNkZhEYgVZPS4IGJUT4fbESwStiRFe_XWusBVZmnrxkIoXsoSiJJZuBW6ZXBngZwv1/exec';
     // ===================================
 
@@ -446,11 +209,11 @@
         dateFormat: "d/m/Y",
         defaultDate: "today",
         allowInput: true,
+        disableMobile: true,
         onReady: function(selectedDates) { if (selectedDates[0]) setBackendDate(selectedDates[0]); },
         onChange: function(selectedDates) { if (selectedDates[0]) setBackendDate(selectedDates[0]); }
     });
 
-    // ========== MASTER LIST লোড করা (fetch API দিয়ে) ==========
     window.onload = function() {
         fetch(scriptURL + '?action=getMasterData')
             .then(response => {
@@ -469,8 +232,7 @@
 
     function loadMasterData(data) {
         masterData = data;
-        
-        // ১. ধরন (Type) ড্রপডাউন পূরণ করা
+
         const typeSelect = document.getElementById("transactionType");
         typeSelect.innerHTML = '<option value="">ধরন নির্বাচন করুন</option>';
         data.types.forEach(type => {
@@ -480,12 +242,11 @@
             typeSelect.appendChild(opt);
         });
 
-        // ২. উৎস ও গন্তব্য অ্যাকাউন্ট ড্রপডাউন পূরণ করা
         const fromSelect = document.getElementById("fromAccount");
         const toSelect = document.getElementById("toAccount");
         fromSelect.innerHTML = '<option value="">অ্যাকাউন্ট নির্বাচন করুন</option>';
         toSelect.innerHTML = '<option value="">অ্যাকাউন্ট নির্বাচন করুন</option>';
-        
+
         data.accounts.forEach(acc => {
             const opt1 = document.createElement("option");
             opt1.value = acc; opt1.textContent = acc;
@@ -496,7 +257,6 @@
             toSelect.appendChild(opt2);
         });
 
-        // ৩. কার্ড নেটওয়ার্ক ড্রপডাউন পূরণ করা
         const cardSelect = document.getElementById("cardNetwork");
         cardSelect.innerHTML = '<option value="">কার্ড নির্বাচন করুন</option>';
         data.cardNetworks.forEach(card => {
@@ -506,31 +266,24 @@
         });
     }
 
-    // ========== ড্রপডাউন লজিক ==========
-    
-    // Type সিলেক্ট করলে Category আপডেট হবে
     function updateCategories() {
         const type = document.getElementById("transactionType").value;
         const catSelect = document.getElementById("category");
         const subSelect = document.getElementById("subCategory");
         const toGroup = document.getElementById("toAccountGroup");
 
-        // রিসেট করা
         catSelect.innerHTML = '<option value="">প্রধান খাত নির্বাচন করুন</option>';
         subSelect.innerHTML = '<option value="">আগে প্রধান খাত নির্বাচন করুন</option>';
         subSelect.disabled = true;
-        
-        // শুধুমাত্র "স্থানান্তর" হলে To Account দেখাবে (ঋণ হলে নয়)
+
         toGroup.style.display = (type === "স্থানান্তর") ? "flex" : "none";
 
         if (!type) {
             catSelect.disabled = true;
             return;
         }
-
         catSelect.disabled = false;
-        
-        // Type অনুযায়ী ইউনিক ক্যাটাগরি বের করা
+
         const filteredCats = [...new Set(masterData.dataMap.filter(item => item.type === type).map(item => item.category))];
         filteredCats.forEach(cat => {
             const opt = document.createElement("option");
@@ -540,21 +293,19 @@
         });
     }
 
-    // Category সিলেক্ট করলে Sub-Category আপডেট হবে
     function updateSubCategories() {
         const type = document.getElementById("transactionType").value;
         const cat = document.getElementById("category").value;
         const subSelect = document.getElementById("subCategory");
-        
+
         subSelect.innerHTML = '<option value="">উপ-খাত নির্বাচন করুন</option>';
-        
+
         if (!cat) {
             subSelect.disabled = true;
             return;
         }
-
         subSelect.disabled = false;
-        
+
         const filteredSubs = masterData.dataMap.filter(item => item.type === type && item.category === cat).map(item => item.subCategory);
         filteredSubs.forEach(sub => {
             const opt = document.createElement("option");
@@ -564,33 +315,28 @@
         });
     }
 
-    // From Account সিলেক্ট করলে To Account এর একই অ্যাকাউন্ট ডিজেবল হবে এবং Card Network দেখাবে
     function toggleCardNetwork() {
         const fromSelect = document.getElementById("fromAccount");
         const toSelect = document.getElementById("toAccount");
         const cardGroup = document.getElementById("cardNetworkGroup");
-        
+
         const fromValue = fromSelect.value;
-        
-        // ১. To Account এর অপশন আপডেট করা (একই অ্যাকাউন্ট ডিজেবল করা)
+
         toSelect.innerHTML = '<option value="">অ্যাকাউন্ট নির্বাচন করুন</option>';
-        
+
         if (masterData.accounts) {
             masterData.accounts.forEach(acc => {
                 const opt = document.createElement("option");
                 opt.value = acc;
                 opt.textContent = acc;
-                
-                // যদি From Account এর সাথে মিলে যায়, তবে ডিজেবল করে দেব
                 if (acc === fromValue) {
                     opt.disabled = true;
-                    opt.style.color = "#94a3b8"; // দেখতে ধূসর লাগবে
+                    opt.style.color = "#94a3b8";
                 }
                 toSelect.appendChild(opt);
             });
         }
 
-        // ২. Card Network দেখানো/লুকানো
         if (fromValue.includes("Card")) {
             cardGroup.style.display = "flex";
         } else {
@@ -598,7 +344,6 @@
         }
     }
 
-    // ========== ফর্ম সাবমিট ==========
     const form = document.getElementById('financeForm');
     const submitBtn = document.getElementById('submitBtn');
     const statusMsg = document.getElementById('statusMsg');
@@ -606,7 +351,7 @@
     form.addEventListener('submit', e => {
         e.preventDefault();
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '⏳ সেভ হচ্ছে...';
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> সেভ হচ্ছে...';
         statusMsg.className = "loading";
         statusMsg.innerText = "গুগল শিটে ডেটা সেভ করা হচ্ছে...";
         statusMsg.style.display = "block";
@@ -623,14 +368,17 @@
                 form.reset();
                 fp.setDate(new Date());
                 setBackendDate(new Date());
+                
                 document.getElementById("category").disabled = true;
                 document.getElementById("category").innerHTML = '<option value="">আগে ধরন নির্বাচন করুন</option>';
                 document.getElementById("subCategory").disabled = true;
                 document.getElementById("subCategory").innerHTML = '<option value="">আগে প্রধান খাত নির্বাচন করুন</option>';
                 document.getElementById("toAccountGroup").style.display = "none";
                 document.getElementById("cardNetworkGroup").style.display = "none";
+                setAccent(""); // থিম রিসেট
+                
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = '💾 লেনদেন সেভ করুন';
+                submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> লেনদেন সেভ করুন';
                 setTimeout(() => { statusMsg.className = ""; statusMsg.style.display = "none"; }, 4000);
             } else {
                 throw new Error(data.error || 'Server returned error');
@@ -642,10 +390,16 @@
             statusMsg.innerText = "✕ ডেটা সেভ করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।";
             statusMsg.style.display = "block";
             submitBtn.disabled = false;
-            submitBtn.innerHTML = '💾 লেনদেন সেভ করুন';
+            submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> লেনদেন সেভ করুন';
         });
     });
-</script>
 
+    // ========== UI-only: লেনদেনের ধরন অনুযায়ী থিম রং ==========
+    function setAccent(type) {
+        const map = [["আয়", "income"], ["ব্যয়", "expense"], ["খরচ", "expense"], ["স্থানান্তর", "transfer"], ["বিনিয়োগ", "invest"]];
+        const hit = map.find(m => type.includes(m[0]));
+        if (hit) document.body.dataset.type = hit[1]; else delete document.body.dataset.type;
+    }
+</script>
 </body>
 </html>
