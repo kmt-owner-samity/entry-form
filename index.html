@@ -357,11 +357,8 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         document.body.dataset.view = v;
         document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
         
-        // টপ বারকে বাম দিকে স্ক্রল করে ফেলা (সমস্যা সমাধানের জন্য)
         const barIn = document.querySelector('.bar-in');
-        if (barIn) {
-            barIn.scrollLeft = 0;
-        }
+        if (barIn) { barIn.scrollLeft = 0; }
 
         window.scrollTo(0, 0);
         
@@ -373,9 +370,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
             }, 100);
         }
         
-        if (v === 'entry') {
-            initForm();
-        }
+        if (v === 'entry') { initForm(); }
     }
 
     // ========== Dashboard Logic ==========
@@ -438,7 +433,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         document.getElementById('cardBalance').innerText = formatAmount(totalBalance);
 
         const rate = totalIncome > 0 ? Math.max(0, Math.min(100, ((totalIncome - totalExpense) / totalIncome) * 100)) : 0;
-        // এখানে ইংরেজি সংখ্যায় % দেখানো হচ্ছে
         document.getElementById('ringPct').innerText = Math.round(rate) + '%';
         document.getElementById('ringArc').style.strokeDashoffset = 238.76 * (1 - rate / 100);
     }
@@ -770,7 +764,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> লেনদেন সেভ করুন';
 
-                // সফলভাবে সেভ হলে হোম পেজে চলে যাবে
                 setTimeout(() => { 
                     statusMsg.className = ""; 
                     statusMsg.style.display = "none"; 
