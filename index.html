@@ -4,14 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#e9edf5">
-<title>আর্থিক ড্যাশবোর্ড</title>
+<title>আমার হিসাব</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
 <style>
-:root{--bg:#e9edf5;--ink:#101a33;--mute:#6b7592;--glass:rgba(255,255,255,.62);--edge:rgba(255,255,255,.85);--shadow:0 10px 30px rgba(40,56,110,.10);--blue:#3347ff;--mint:#12b886;--coral:#ff5c7a;--amber:#ffa62b;--violet:#8b5cf6}
+:root{--bg:#e9edf5;--ink:#101a33;--mute:#6b7592;--glass:rgba(255,255,255,.62);--edge:rgba(255,255,255,.85);--shadow:0 10px 30px rgba(40,56,110,.10);--blue:#3347ff;--mint:#12b886;--coral:#ff5c7a;--amber:#ffa62b;--violet:#8b5cf6;
+--a1:#2338e8;--a2:#8b5cf6;--ac:#3347ff;--ac-soft:rgba(51,71,255,.14);--ac-shadow:rgba(51,71,255,.35)}
+body[data-type=income]{--a1:#0b9f73;--a2:#2fd4a3;--ac:#12b886;--ac-soft:rgba(18,184,134,.16);--ac-shadow:rgba(18,184,134,.35)}
+body[data-type=expense]{--a1:#e63a5e;--a2:#ff8a65;--ac:#ff5c7a;--ac-soft:rgba(255,92,122,.16);--ac-shadow:rgba(255,92,122,.35)}
+body[data-type=transfer]{--a1:#1f7ae0;--a2:#4cc3ff;--ac:#2b8cf0;--ac-soft:rgba(43,140,240,.16);--ac-shadow:rgba(43,140,240,.35)}
+body[data-type=invest]{--a1:#6d3fe8;--a2:#b08cff;--ac:#8b5cf6;--ac-soft:rgba(139,92,246,.16);--ac-shadow:rgba(139,92,246,.35)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'Hind Siliguri','Segoe UI',sans-serif;color:var(--ink);background:var(--bg);min-height:100vh;padding-bottom:104px;overflow-x:hidden}
 .blob{position:fixed;border-radius:50%;filter:blur(70px);opacity:.55;pointer-events:none;z-index:0}
@@ -23,32 +30,28 @@ body{font-family:'Hind Siliguri','Segoe UI',sans-serif;color:var(--ink);backgrou
 .bar{position:sticky;top:0;z-index:30;padding:max(12px,env(safe-area-inset-top)) 0 10px}
 .bar-in{display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:22px}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px}
-.brand i{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;display:grid;place-items:center;font-size:16px}
+.brand i{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;display:grid;place-items:center;font-size:16px;transition:background .4s}
 .spacer{flex:1}
-.yr{position:relative}
-.yr::after{content:"\f078";font:900 9px 'Font Awesome 6 Free';position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--mute);pointer-events:none}
-.yr select{appearance:none;-webkit-appearance:none;height:40px;padding:0 30px 0 14px;border-radius:14px;border:1px solid var(--edge);background:rgba(255,255,255,.7);font:600 14px 'Hind Siliguri',sans-serif;color:var(--ink);outline:none;cursor:pointer}
-
-.nav{display:flex;gap:6px;padding:6px;border-radius:24px;width:100%;}
-.nav button, .nav a{flex:1;display:flex;justify-content:center;align-items:center;gap:6px;padding:10px 4px;border:none;background:none;border-radius:18px;color:var(--mute);font:600 13px 'Hind Siliguri',sans-serif;text-decoration:none;cursor:pointer;transition:.2s;text-align:center}
-.nav i{font-size:16px}
+.nav{display:flex;gap:2px;padding:6px;border-radius:24px}
+.nav button, .nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px;border:none;background:none;border-radius:18px;color:var(--mute);font:600 11.5px 'Hind Siliguri',sans-serif;text-decoration:none;cursor:pointer;transition:.2s}
+.nav i{font-size:18px}
 .nav .on{background:var(--ink);color:#fff}
-
+.nav-m{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:40;width:min(92vw,420px)}
 .nav-d{display:none}
-@media(min-width:900px){
-  .nav-d{display:flex;max-width:520px;margin:0 auto;}
-  .nav-m{display:none !important;}
-}
 
-.nav-m{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:40;width:min(95vw,520px);background:var(--glass);backdrop-filter:blur(18px);border:1px solid var(--edge);box-shadow:var(--shadow);}
-
+/* View Control */
 .view{display:none}
-body[data-view=home] #view-home,body[data-view=accounts] #view-accounts,body[data-view=reports] #view-reports{display:block}
-#loadingMsg{display:flex;justify-content:center;align-items:center;gap:10px;padding:80px;color:var(--mute);font-weight:600}
-#loadingMsg::before{content:"";width:20px;height:20px;border:3px solid #cfd6ea;border-top-color:var(--blue);border-radius:50%;animation:sp .8s linear infinite}
-@keyframes sp{to{transform:rotate(360deg)}}
-#errorMsg{display:none;margin:16px 0;padding:16px;text-align:center;color:#c2264a;font-weight:600;background:#ffe3ea;border-radius:18px}
-#content{display:none}
+body[data-view=home] #view-home,body[data-view=accounts] #view-accounts,body[data-view=reports] #view-reports,body[data-view=entry] #view-entry{display:block}
+
+/* ===== Skeleton Loading ===== */
+#skeleton{display:none;padding:20px}
+.sk-hero{height:160px;border-radius:30px;background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);background-size:200% 100%;animation:shine 1.5s infinite;margin-bottom:16px}
+.sk-kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.sk-kpi{height:80px;border-radius:16px;background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);background-size:200% 100%;animation:shine 1.5s infinite}
+.sk-chart{height:220px;border-radius:20px;background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);background-size:200% 100%;animation:shine 1.5s infinite;margin-bottom:16px}
+@keyframes shine{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ===== Dashboard Content ===== */
 .grid{display:grid;gap:14px;grid-template-columns:1fr}
 .hero{position:relative;overflow:hidden;padding:24px;border-radius:30px;color:#fff;background:linear-gradient(135deg,#2338e8,#6a4cf0 60%,#8b5cf6);box-shadow:0 18px 40px rgba(51,71,255,.35);display:flex;justify-content:space-between;align-items:center;gap:12px}
 .hero::before{content:"";position:absolute;width:240px;height:240px;border-radius:50%;right:-70px;top:-90px;background:rgba(255,255,255,.12)}
@@ -79,14 +82,12 @@ tfoot td{font-weight:700;background:rgba(51,71,255,.08)}
 tfoot td:first-child{background:#e6e9fb}
 .two{display:grid;gap:14px;grid-template-columns:1fr}
 .pos{color:var(--mint)}.neg{color:var(--coral)}
-
 .acc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
 .acc{padding:18px;cursor:pointer;text-align:left;font-family:inherit;color:inherit;transition:transform .2s}
 .acc:hover{transform:translateY(-3px)}
 .acc .ic{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;color:#fff;font-size:18px;margin-bottom:14px}
 .acc .n{font-weight:600;font-size:14px;color:var(--mute)}
 .acc .v{font-size:20px;font-weight:700;margin-top:2px}
-
 .ov{position:fixed;inset:0;z-index:60;background:rgba(16,26,51,.45);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center}
 .ov.show{display:flex}
 .sheet{width:100%;max-width:460px;background:#fff;border-radius:28px 28px 0 0;padding:24px 22px max(26px,env(safe-area-inset-bottom));animation:up .3s ease}
@@ -104,8 +105,55 @@ tfoot td:first-child{background:#e6e9fb}
 .share-l{font-size:12px;color:var(--mute);margin-top:6px}
 .empty{padding:30px;text-align:center;color:var(--mute)}
 
+/* ===== Entry Form ===== */
+.form-layout{display:flex;flex-direction:column;gap:14px;max-width:640px;margin:0 auto}
+.form-hero{position:relative;overflow:hidden;padding:26px 22px 22px;border-radius:30px;color:#fff;background:linear-gradient(135deg,var(--a1),var(--a2));box-shadow:0 18px 40px var(--ac-shadow);text-align:center;transition:background .4s,box-shadow .4s}
+.form-hero::before{content:"";position:absolute;width:240px;height:240px;border-radius:50%;right:-70px;top:-90px;background:rgba(255,255,255,.14)}
+.form-hero label{position:relative;display:block;font-size:13px;opacity:.9;margin-bottom:4px}
+.amt-row{position:relative;display:flex;align-items:center;justify-content:center;gap:8px}
+.amt-row span{font-size:34px;font-weight:600;opacity:.9}
+#amount{width:100%;max-width:300px;background:none;border:none;border-bottom:2px dashed rgba(255,255,255,.4);outline:none;color:#fff;font:700 50px/1.15 'Hind Siliguri',sans-serif;text-align:center;-moz-appearance:textfield;padding-bottom:4px}
+#amount::-webkit-outer-spin-button,#amount::-webkit-inner-spin-button{-webkit-appearance:none}
+#amount::placeholder{color:rgba(255,255,255,.55)}
+#amount:focus{border-bottom-color:#fff}
+.hint{position:relative;font-size:12px;opacity:.85;margin-top:10px}
+.form-card{padding:20px 18px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;min-width:0}
+.field>label{font-size:12.5px;font-weight:600;color:var(--mute);margin-bottom:7px;display:flex;gap:6px;align-items:center}
+.field>label i{color:var(--ac);width:14px;font-size:12px;transition:color .4s}
+.required{color:var(--coral)}
+.ctl{position:relative}
+input[type=text],select,textarea{width:100%;height:50px;padding:0 14px;background:rgba(255,255,255,.75);border:1px solid rgba(16,26,51,.08);border-radius:14px;color:var(--ink);font:500 15px 'Hind Siliguri',sans-serif;outline:none;transition:.2s}
+select{appearance:none;-webkit-appearance:none;padding-right:38px;cursor:pointer}
+.ctl:has(select)::after{content:"\f078";font:900 10px 'Font Awesome 6 Free';position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--mute);pointer-events:none}
+textarea{height:84px;padding:13px 14px;resize:none}
+input:focus,select:focus,textarea:focus{border-color:var(--ac);background:#fff;box-shadow:0 0 0 4px var(--ac-soft)}
+select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
+.flatpickr-calendar{border-radius:16px!important;box-shadow:0 16px 40px rgba(40,56,110,.2)!important;font-family:'Hind Siliguri',sans-serif}
+.flatpickr-day.selected{background:var(--ac)!important;border-color:var(--ac)!important}
+button[type=submit]{width:100%;height:56px;margin-top:20px;border:none;border-radius:18px;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;font:700 16px 'Hind Siliguri',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 12px 26px var(--ac-shadow);transition:transform .15s,opacity .2s,background .4s}
+button[type=submit]:active{transform:scale(.98)}
+button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
+#statusMsg{display:none;margin-top:14px;padding:13px 16px;border-radius:14px;font-size:14px;font-weight:600;text-align:center}
+#statusMsg.success{display:block;color:#0a7d5c;background:#d9f6ec}
+#statusMsg.error{display:block;color:#c2264a;background:#ffe3ea}
+#statusMsg.loading{display:block;color:#2b4fd0;background:#e0e5ff}
+.foot{text-align:center;color:var(--mute);font-size:12px;margin-top:6px}
+
+@media(max-width:600px){
+  .form-grid{grid-template-columns:1fr;}
+  .full{grid-column:auto;}
+  #amount{font-size:42px;}
+}
+
 @media(min-width:900px){
   body{padding-bottom:40px}
+  .nav-m{display:none}
+  .nav-d{display:flex;padding:4px;gap:4px;background:rgba(255,255,255,.5);border-radius:16px;box-shadow:none;max-width:520px;margin:0 auto;}
+  .nav-d button{flex-direction:row;gap:8px;padding:9px 16px;font-size:14px;border-radius:12px}
+  .nav-d i{font-size:14px}
   .bar-in{gap:20px}
   .grid{grid-template-columns:5fr 7fr}
   .two{grid-template-columns:1fr 1fr}
@@ -128,7 +176,7 @@ tfoot td:first-child{background:#e6e9fb}
         <button class="on" data-v="home" onclick="showView('home')"><i class="fa-solid fa-house"></i>হোম</button>
         <button data-v="accounts" onclick="showView('accounts')"><i class="fa-solid fa-building-columns"></i>অ্যাকাউন্ট</button>
         <button data-v="reports" onclick="showView('reports')"><i class="fa-solid fa-chart-column"></i>রিপোর্ট</button>
-        <a href="entry.html"><i class="fa-solid fa-plus"></i>নতুন এন্ট্রি</a>
+        <button data-v="entry" onclick="showView('entry')"><i class="fa-solid fa-circle-plus"></i>নতুন এন্ট্রি</button>
       </nav>
       
       <div class="spacer"></div>
@@ -138,10 +186,20 @@ tfoot td:first-child{background:#e6e9fb}
     </div>
   </header>
 
-  <div id="errorMsg"><i class="fa-solid fa-triangle-exclamation"></i> ডেটা লোড করতে সমস্যা হয়েছে। পেজটি রিফ্রেশ করুন।</div>
-  <div id="loadingMsg">ডেটা লোড হচ্ছে...</div>
+  <!-- Skeleton Loading -->
+  <div id="skeleton">
+    <div class="sk-hero"></div>
+    <div class="sk-kpis">
+      <div class="sk-kpi"></div><div class="sk-kpi"></div>
+      <div class="sk-kpi"></div><div class="sk-kpi"></div>
+    </div>
+    <div class="sk-chart"></div>
+    <div class="sk-chart"></div>
+  </div>
 
-  <main id="content">
+  <div id="errorMsg"><i class="fa-solid fa-triangle-exclamation"></i> ডেটা লোড করতে সমস্যা হয়েছে। পেজটি রিফ্রেশ করুন।</div>
+
+  <main id="content" style="display:none">
     <!-- হোম পেজ -->
     <section class="view" id="view-home">
       <div class="grid">
@@ -188,6 +246,73 @@ tfoot td:first-child{background:#e6e9fb}
         </table></div>
       </div>
     </section>
+
+    <!-- এন্ট্রি পেজ -->
+    <section class="view" id="view-entry">
+      <form id="financeForm" class="form-layout">
+        <div class="form-hero">
+          <label for="amount">পরিমাণ <span class="required" style="color:#fff">*</span></label>
+          <div class="amt-row"><span>৳</span>
+            <input type="number" id="amount" name="amount" min="0" step="any" placeholder="০.০০" inputmode="decimal" required>
+          </div>
+          <div class="hint">আগে পরিমাণ লিখুন, তারপর বিবরণ দিন</div>
+        </div>
+
+        <div class="form-card glass">
+          <div class="form-grid">
+            <div class="field">
+              <label for="date"><i class="fa-regular fa-calendar"></i>তারিখ <span class="required">*</span></label>
+              <div class="ctl"><input type="text" id="date" name="date" placeholder="দিন/মাস/বছর" required></div>
+            </div>
+
+            <div class="field">
+              <label for="transactionType"><i class="fa-solid fa-right-left"></i>লেনদেনের ধরন <span class="required">*</span></label>
+              <div class="ctl"><select id="transactionType" name="transactionType" onchange="updateCategories(); setAccent(this.value);" required>
+                <option value="">ধরন নির্বাচন করুন</option></select></div>
+            </div>
+
+            <div class="field">
+              <label for="category"><i class="fa-solid fa-layer-group"></i>প্রধান খাত <span class="required">*</span></label>
+              <div class="ctl"><select id="category" name="category" onchange="updateSubCategories()" required disabled>
+                <option value="">আগে ধরন নির্বাচন করুন</option></select></div>
+            </div>
+
+            <div class="field">
+              <label for="subCategory"><i class="fa-solid fa-tag"></i>উপ-খাত <span class="required">*</span></label>
+              <div class="ctl"><select id="subCategory" name="subCategory" required disabled>
+                <option value="">আগে প্রধান খাত নির্বাচন করুন</option></select></div>
+            </div>
+
+            <div class="field">
+              <label for="fromAccount"><i class="fa-solid fa-wallet"></i>উৎস অ্যাকাউন্ট <span class="required">*</span></label>
+              <div class="ctl"><select id="fromAccount" name="fromAccount" onchange="toggleCardNetwork()" required>
+                <option value="">অ্যাকাউন্ট নির্বাচন করুন</option></select></div>
+            </div>
+
+            <div class="field" id="toAccountGroup" style="display:none">
+              <label for="toAccount"><i class="fa-solid fa-building-columns"></i>গন্তব্য অ্যাকাউন্ট <span class="required">*</span></label>
+              <div class="ctl"><select id="toAccount" name="toAccount">
+                <option value="">অ্যাকাউন্ট নির্বাচন করুন</option></select></div>
+            </div>
+
+            <div class="field" id="cardNetworkGroup" style="display:none">
+              <label for="cardNetwork"><i class="fa-regular fa-credit-card"></i>কার্ড নেটওয়ার্ক <span class="required">*</span></label>
+              <div class="ctl"><select id="cardNetwork" name="cardNetwork">
+                <option value="">কার্ড নির্বাচন করুন</option></select></div>
+            </div>
+
+            <div class="field full">
+              <label for="notes"><i class="fa-regular fa-note-sticky"></i>বিবরণ</label>
+              <div class="ctl"><textarea id="notes" name="notes" placeholder="লেনদেনের বিবরণ লিখুন (ঐচ্ছিক)"></textarea></div>
+            </div>
+          </div>
+
+          <button type="submit" id="submitBtn"><i class="fa-solid fa-check"></i> লেনদেন সেভ করুন</button>
+          <p id="statusMsg"></p>
+        </div>
+        <p class="foot"><i class="fa-solid fa-lock"></i> সব লেনদেন নিরাপদে গুগল শিটে সেভ হবে</p>
+      </form>
+    </section>
   </main>
 </div>
 
@@ -196,7 +321,7 @@ tfoot td:first-child{background:#e6e9fb}
   <button class="on" data-v="home" onclick="showView('home')"><i class="fa-solid fa-house"></i>হোম</button>
   <button data-v="accounts" onclick="showView('accounts')"><i class="fa-solid fa-building-columns"></i>অ্যাকাউন্ট</button>
   <button data-v="reports" onclick="showView('reports')"><i class="fa-solid fa-chart-column"></i>রিপোর্ট</button>
-  <a href="entry.html"><i class="fa-solid fa-plus"></i>এন্ট্রি</a>
+  <button data-v="entry" onclick="showView('entry')"><i class="fa-solid fa-plus"></i>এন্ট্রি</button>
 </nav>
 
 <!-- অ্যাকাউন্ট ডিটেইল মোডাল -->
@@ -204,6 +329,7 @@ tfoot td:first-child{background:#e6e9fb}
   <div class="sheet" id="sheet"></div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     // ========== CONFIGURATION ==========
     const scriptURL = 'https://script.google.com/macros/s/AKfycbyNkZhEYgVZPS4IGJUT4fbESwStiRFe_XWusBVZmnrxkIoXsoSiJJZuBW6ZXBngZwv1/exec';
@@ -217,15 +343,30 @@ tfoot td:first-child{background:#e6e9fb}
         return "৳ " + number.toLocaleString('en-BD', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
+    // ========== View Control ==========
+    function showView(v) {
+        document.body.dataset.view = v;
+        document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (v === 'home' || v === 'reports' || v === 'accounts') {
+            setTimeout(() => Object.values(charts).forEach(c => c.resize()), 30);
+        }
+    }
+
+    // ========== Dashboard Logic ==========
     window.onload = function() {
         fetchDashboardData();
     };
 
     function fetchDashboardData() {
         const year = document.getElementById('yearFilter').value;
-        document.getElementById('loadingMsg').style.display = 'flex';
-        document.getElementById('errorMsg').style.display = 'none';
-        document.getElementById('content').style.display = 'none';
+        const skeleton = document.getElementById('skeleton');
+        const content = document.getElementById('content');
+        const errorMsg = document.getElementById('errorMsg');
+
+        skeleton.style.display = 'block';
+        content.style.display = 'none';
+        errorMsg.style.display = 'none';
 
         fetch(scriptURL + '?year=' + year)
             .then(res => {
@@ -233,21 +374,21 @@ tfoot td:first-child{background:#e6e9fb}
                 return res.json();
             })
             .then(data => {
-                document.getElementById('loadingMsg').style.display = 'none';
                 if (data.error) throw new Error(data.error);
 
                 window.__accounts = data.accounts || [];
                 renderKPI(data.summary, data.accounts);
                 renderMonthlyTable(data.summary);
                 renderAccountGrid(data.accounts);
-
-                document.getElementById('content').style.display = 'block';
                 renderCharts(data.summary, data.accounts);
+
+                skeleton.style.display = 'none';
+                content.style.display = 'block';
             })
             .catch(err => {
                 console.error(err);
-                document.getElementById('loadingMsg').style.display = 'none';
-                document.getElementById('errorMsg').style.display = 'block';
+                skeleton.style.display = 'none';
+                errorMsg.style.display = 'block';
             });
     }
 
@@ -343,13 +484,6 @@ tfoot td:first-child{background:#e6e9fb}
         });
     }
 
-    function showView(v) {
-        document.body.dataset.view = v;
-        document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        setTimeout(() => Object.values(charts).forEach(c => c.resize()), 30);
-    }
-
     function openModal(i) {
         const acc = window.__accounts[i];
         const total = window.__accounts.reduce((s, a) => s + Math.max(0, Number(a.currentBalance) || 0), 0);
@@ -382,7 +516,6 @@ tfoot td:first-child{background:#e6e9fb}
         Chart.defaults.font.family = "'Hind Siliguri', sans-serif";
         Chart.defaults.color = '#6b7592';
         const val = (m, k) => Number(summary && summary[m] ? summary[m][k] : 0) || 0;
-        // মাসের নাম ইংরেজি সংক্ষিপ্ত রূপে (Jan, Feb, Mar...)
         const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         
         const inc = enMonths.map(m => val(m, 'Income'));
@@ -421,6 +554,230 @@ tfoot td:first-child{background:#e6e9fb}
             datasets: [{ data: accs.length ? accs.map(x => Number(x.a.totalOut)) : [1], backgroundColor: accs.length ? accs.map(x => palette[x.i % palette.length]) : ['#dfe4f2'], borderWidth: 3, borderColor: '#fff', hoverOffset: 6 }]
         }, options: donutOpts });
     }
+
+    // ========== Form Logic ==========
+    let formattedBackendDate = "";
+    let masterData = { types: [], accounts: [], cardNetworks: [], dataMap: [] };
+    let formInitialized = false;
+
+    function setBackendDate(dateObj) {
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        formattedBackendDate = `${year}-${month}-${day}`;
+    }
+
+    const fp = flatpickr("#date", {
+        dateFormat: "d/m/Y",
+        defaultDate: "today",
+        allowInput: true,
+        disableMobile: true,
+        onReady: function(selectedDates) { if (selectedDates[0]) setBackendDate(selectedDates[0]); },
+        onChange: function(selectedDates) { if (selectedDates[0]) setBackendDate(selectedDates[0]); }
+    });
+
+    // ফর্মে প্রথমবার এলে ড্রপডাউন লোড করবে
+    function initForm() {
+        if (formInitialized) return;
+        formInitialized = true;
+
+        fetch(scriptURL + '?action=getMasterData')
+            .then(response => {
+                if (!response.ok) throw new Error('Network response failed');
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) throw new Error(data.error);
+                masterData = data;
+                loadMasterData();
+            })
+            .catch(err => {
+                console.error("Error loading master data:", err);
+                alert("ড্রপডাউন ডেটা লোড করতে সমস্যা হয়েছে। দয়া করে পেজটি রিফ্রেশ করুন।");
+            });
+    }
+
+    function loadMasterData() {
+        const typeSelect = document.getElementById("transactionType");
+        typeSelect.innerHTML = '<option value="">ধরন নির্বাচন করুন</option>';
+        masterData.types.forEach(type => {
+            const opt = document.createElement("option");
+            opt.value = type;
+            opt.textContent = type;
+            typeSelect.appendChild(opt);
+        });
+
+        const fromSelect = document.getElementById("fromAccount");
+        const toSelect = document.getElementById("toAccount");
+        fromSelect.innerHTML = '<option value="">অ্যাকাউন্ট নির্বাচন করুন</option>';
+        toSelect.innerHTML = '<option value="">অ্যাকাউন্ট নির্বাচন করুন</option>';
+
+        masterData.accounts.forEach(acc => {
+            const opt1 = document.createElement("option");
+            opt1.value = acc; opt1.textContent = acc;
+            fromSelect.appendChild(opt1);
+
+            const opt2 = document.createElement("option");
+            opt2.value = acc; opt2.textContent = acc;
+            toSelect.appendChild(opt2);
+        });
+
+        const cardSelect = document.getElementById("cardNetwork");
+        cardSelect.innerHTML = '<option value="">কার্ড নির্বাচন করুন</option>';
+        masterData.cardNetworks.forEach(card => {
+            const opt = document.createElement("option");
+            opt.value = card; opt.textContent = card;
+            cardSelect.appendChild(opt);
+        });
+    }
+
+    function updateCategories() {
+        const type = document.getElementById("transactionType").value;
+        const catSelect = document.getElementById("category");
+        const subSelect = document.getElementById("subCategory");
+        const toGroup = document.getElementById("toAccountGroup");
+
+        catSelect.innerHTML = '<option value="">প্রধান খাত নির্বাচন করুন</option>';
+        subSelect.innerHTML = '<option value="">আগে প্রধান খাত নির্বাচন করুন</option>';
+        subSelect.disabled = true;
+
+        toGroup.style.display = (type === "স্থানান্তর") ? "flex" : "none";
+
+        if (!type) {
+            catSelect.disabled = true;
+            return;
+        }
+        catSelect.disabled = false;
+
+        const filteredCats = [...new Set(masterData.dataMap.filter(item => item.type === type).map(item => item.category))];
+        filteredCats.forEach(cat => {
+            const opt = document.createElement("option");
+            opt.value = cat;
+            opt.textContent = cat;
+            catSelect.appendChild(opt);
+        });
+    }
+
+    function updateSubCategories() {
+        const type = document.getElementById("transactionType").value;
+        const cat = document.getElementById("category").value;
+        const subSelect = document.getElementById("subCategory");
+
+        subSelect.innerHTML = '<option value="">উপ-খাত নির্বাচন করুন</option>';
+
+        if (!cat) {
+            subSelect.disabled = true;
+            return;
+        }
+        subSelect.disabled = false;
+
+        const filteredSubs = masterData.dataMap.filter(item => item.type === type && item.category === cat).map(item => item.subCategory);
+        filteredSubs.forEach(sub => {
+            const opt = document.createElement("option");
+            opt.value = sub;
+            opt.textContent = sub;
+            subSelect.appendChild(opt);
+        });
+    }
+
+    function toggleCardNetwork() {
+        const fromSelect = document.getElementById("fromAccount");
+        const toSelect = document.getElementById("toAccount");
+        const cardGroup = document.getElementById("cardNetworkGroup");
+
+        const fromValue = fromSelect.value;
+
+        toSelect.innerHTML = '<option value="">অ্যাকাউন্ট নির্বাচন করুন</option>';
+
+        if (masterData.accounts) {
+            masterData.accounts.forEach(acc => {
+                const opt = document.createElement("option");
+                opt.value = acc;
+                opt.textContent = acc;
+                if (acc === fromValue) {
+                    opt.disabled = true;
+                    opt.style.color = "#94a3b8";
+                }
+                toSelect.appendChild(opt);
+            });
+        }
+
+        if (fromValue.includes("Card")) {
+            cardGroup.style.display = "flex";
+        } else {
+            cardGroup.style.display = "none";
+        }
+    }
+
+    const form = document.getElementById('financeForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const statusMsg = document.getElementById('statusMsg');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> সেভ হচ্ছে...';
+        statusMsg.className = "loading";
+        statusMsg.innerText = "গুগল শিটে ডেটা সেভ করা হচ্ছে...";
+        statusMsg.style.display = "block";
+
+        const formData = new FormData(form);
+        formData.set('date', formattedBackendDate);
+
+        fetch(scriptURL, { method: 'POST', body: formData })
+        .then(response => response.json())
+        .then(data => {
+            if (data.result === 'success') {
+                statusMsg.className = "success";
+                statusMsg.innerText = "✓ লেনদেন সফলভাবে সেভ হয়েছে!";
+                form.reset();
+                fp.setDate(new Date());
+                setBackendDate(new Date());
+                
+                document.getElementById("category").disabled = true;
+                document.getElementById("category").innerHTML = '<option value="">আগে ধরন নির্বাচন করুন</option>';
+                document.getElementById("subCategory").disabled = true;
+                document.getElementById("subCategory").innerHTML = '<option value="">আগে প্রধান খাত নির্বাচন করুন</option>';
+                document.getElementById("toAccountGroup").style.display = "none";
+                document.getElementById("cardNetworkGroup").style.display = "none";
+                setAccent(""); // থিম রিসেট
+                
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> লেনদেন সেভ করুন';
+                setTimeout(() => { statusMsg.className = ""; statusMsg.style.display = "none"; }, 4000);
+
+                // ড্যাশবোর্ড রিফ্রেশ করা (নতুন ডেটার জন্য)
+                fetchDashboardData();
+
+            } else {
+                throw new Error(data.error || 'Server returned error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            statusMsg.className = "error";
+            statusMsg.innerText = "✕ ডেটা সেভ করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।";
+            statusMsg.style.display = "block";
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> লেনদেন সেভ করুন';
+        });
+    });
+
+    // ========== UI-only: লেনদেনের ধরন অনুযায়ী থিম রং ==========
+    function setAccent(type) {
+        const map = [["আয়", "income"], ["ব্যয়", "expense"], ["খরচ", "expense"], ["স্থানান্তর", "transfer"], ["বিনিয়োগ", "invest"]];
+        const hit = map.find(m => type.includes(m[0]));
+        if (hit) document.body.dataset.type = hit[1]; else delete document.body.dataset.type;
+    }
+
+    // Entry ট্যাবে ক্লিক করলে ফর্ম ইনিশিয়ালাইজ হবে
+    document.querySelectorAll('.nav button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (this.dataset.v === 'entry') {
+                initForm();
+            }
+        });
+    });
 </script>
 </body>
 </html>
