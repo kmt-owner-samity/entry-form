@@ -20,7 +20,7 @@ body[data-type=expense]{--a1:#e63a5e;--a2:#ff8a65;--ac:#ff5c7a;--ac-soft:rgba(25
 body[data-type=transfer]{--a1:#1f7ae0;--a2:#4cc3ff;--ac:#2b8cf0;--ac-soft:rgba(43,140,240,.16);--ac-shadow:rgba(43,140,240,.35)}
 body[data-type=invest]{--a1:#6d3fe8;--a2:#b08cff;--ac:#8b5cf6;--ac-soft:rgba(139,92,246,.16);--ac-shadow:rgba(139,92,246,.35)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'Hind Siliguri','Segoe UI',sans-serif;color:var(--ink);background:var(--bg);min-height:100vh;padding-bottom:104px;overflow-x:hidden}
+body{font-family:'Hind Siliguri','Segoe UI',sans-serif;color:var(--ink);background:var(--bg);min-height:100vh;padding-bottom:40px;overflow-x:hidden}
 .blob{position:fixed;border-radius:50%;filter:blur(70px);opacity:.55;pointer-events:none;z-index:0}
 .b1{width:340px;height:340px;background:#9fb0ff;top:-90px;left:-70px}
 .b2{width:300px;height:300px;background:#ffc2cf;top:30%;right:-100px}
@@ -28,22 +28,29 @@ body{font-family:'Hind Siliguri','Segoe UI',sans-serif;color:var(--ink);backgrou
 .glass{background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--edge);box-shadow:var(--shadow);border-radius:26px}
 .wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 16px}
 .bar{position:sticky;top:0;z-index:30;padding:max(12px,env(safe-area-inset-top)) 0 10px}
-.bar-in{display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:22px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px}
+.bar-in{display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:22px;flex-wrap:nowrap;overflow-x:auto}
+.bar-in::-webkit-scrollbar { display: none; }
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;white-space:nowrap}
 .brand i{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;display:grid;place-items:center;font-size:16px;transition:background .4s}
-.spacer{flex:1}
-.nav{display:flex;gap:2px;padding:6px;border-radius:24px}
-.nav button, .nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px;border:none;background:none;border-radius:18px;color:var(--mute);font:600 11.5px 'Hind Siliguri',sans-serif;text-decoration:none;cursor:pointer;transition:.2s}
-.nav i{font-size:18px}
+.spacer{flex:1;min-width:10px}
+
+/* নেভিগেশন বার */
+.nav{display:flex;gap:4px;padding:4px;border-radius:20px;width:100%;max-width:500px}
+.nav button, .nav a{flex:1;display:flex;justify-content:center;align-items:center;gap:6px;padding:10px 4px;border:none;background:none;border-radius:16px;color:var(--mute);font:600 12px 'Hind Siliguri',sans-serif;text-decoration:none;cursor:pointer;transition:.2s;text-align:center;white-space:nowrap}
+.nav i{font-size:14px}
 .nav .on{background:var(--ink);color:#fff}
-.nav-m{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:40;width:min(92vw,420px)}
 .nav-d{display:none}
+@media(min-width:900px){
+  .nav-d{display:flex;max-width:500px;margin:0 auto;}
+  .nav-m{display:none !important;}
+}
+.nav-m{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:40;width:min(95vw,500px);background:var(--glass);backdrop-filter:blur(18px);border:1px solid var(--edge);box-shadow:var(--shadow);display:flex;}
 
 /* View Control */
 .view{display:none}
 body[data-view=home] #view-home,body[data-view=accounts] #view-accounts,body[data-view=reports] #view-reports,body[data-view=entry] #view-entry{display:block}
 
-/* ===== Skeleton Loading ===== */
+/* Skeleton Loading */
 #skeleton{display:none;padding:20px}
 .sk-hero{height:160px;border-radius:30px;background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);background-size:200% 100%;animation:shine 1.5s infinite;margin-bottom:16px}
 .sk-kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
@@ -51,7 +58,7 @@ body[data-view=home] #view-home,body[data-view=accounts] #view-accounts,body[dat
 .sk-chart{height:220px;border-radius:20px;background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);background-size:200% 100%;animation:shine 1.5s infinite;margin-bottom:16px}
 @keyframes shine{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-/* ===== Dashboard Content ===== */
+/* Dashboard */
 .grid{display:grid;gap:14px;grid-template-columns:1fr}
 .hero{position:relative;overflow:hidden;padding:24px;border-radius:30px;color:#fff;background:linear-gradient(135deg,#2338e8,#6a4cf0 60%,#8b5cf6);box-shadow:0 18px 40px rgba(51,71,255,.35);display:flex;justify-content:space-between;align-items:center;gap:12px}
 .hero::before{content:"";position:absolute;width:240px;height:240px;border-radius:50%;right:-70px;top:-90px;background:rgba(255,255,255,.12)}
@@ -105,9 +112,14 @@ tfoot td:first-child{background:#e6e9fb}
 .share-l{font-size:12px;color:var(--mute);margin-top:6px}
 .empty{padding:30px;text-align:center;color:var(--mute)}
 
-/* ===== Entry Form ===== */
-.form-layout{display:flex;flex-direction:column;gap:14px;max-width:640px;margin:0 auto}
-.form-hero{position:relative;overflow:hidden;padding:26px 22px 22px;border-radius:30px;color:#fff;background:linear-gradient(135deg,var(--a1),var(--a2));box-shadow:0 18px 40px var(--ac-shadow);text-align:center;transition:background .4s,box-shadow .4s}
+/* Entry Form Title */
+.page-title{font-size:22px;font-weight:700;color:var(--ink);text-align:center;margin:10px 0 20px}
+.form-container{width:100%;max-width:1120px;margin:0 auto}
+.form-card-outer{width:100%;padding:24px;border-radius:26px}
+
+/* Entry Form */
+.form-layout{display:flex;flex-direction:column;gap:14px}
+.form-hero{position:relative;overflow:hidden;padding:26px 22px 22px;border-radius:24px;color:#fff;background:linear-gradient(135deg,var(--a1),var(--a2));box-shadow:0 18px 40px var(--ac-shadow);text-align:center;transition:background .4s,box-shadow .4s;margin-bottom:16px}
 .form-hero::before{content:"";position:absolute;width:240px;height:240px;border-radius:50%;right:-70px;top:-90px;background:rgba(255,255,255,.14)}
 .form-hero label{position:relative;display:block;font-size:13px;opacity:.9;margin-bottom:4px}
 .amt-row{position:relative;display:flex;align-items:center;justify-content:center;gap:8px}
@@ -117,7 +129,6 @@ tfoot td:first-child{background:#e6e9fb}
 #amount::placeholder{color:rgba(255,255,255,.55)}
 #amount:focus{border-bottom-color:#fff}
 .hint{position:relative;font-size:12px;opacity:.85;margin-top:10px}
-.form-card{padding:20px 18px}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .full{grid-column:1/-1}
 .field{display:flex;flex-direction:column;min-width:0}
@@ -146,14 +157,12 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
   .form-grid{grid-template-columns:1fr;}
   .full{grid-column:auto;}
   #amount{font-size:42px;}
+  .form-card-outer{padding:16px;}
+  .page-title{font-size:18px;}
 }
 
 @media(min-width:900px){
   body{padding-bottom:40px}
-  .nav-m{display:none}
-  .nav-d{display:flex;padding:4px;gap:4px;background:rgba(255,255,255,.5);border-radius:16px;box-shadow:none;max-width:520px;margin:0 auto;}
-  .nav-d button{flex-direction:row;gap:8px;padding:9px 16px;font-size:14px;border-radius:12px}
-  .nav-d i{font-size:14px}
   .bar-in{gap:20px}
   .grid{grid-template-columns:5fr 7fr}
   .two{grid-template-columns:1fr 1fr}
@@ -249,16 +258,18 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
 
     <!-- এন্ট্রি পেজ -->
     <section class="view" id="view-entry">
-      <form id="financeForm" class="form-layout">
-        <div class="form-hero">
-          <label for="amount">পরিমাণ <span class="required" style="color:#fff">*</span></label>
-          <div class="amt-row"><span>৳</span>
-            <input type="number" id="amount" name="amount" min="0" step="any" placeholder="০.০০" inputmode="decimal" required>
+      <div class="page-title">হিসাব এন্ট্রি করুন</div>
+      
+      <div class="form-card-outer glass">
+        <form id="financeForm" class="form-layout">
+          <div class="form-hero">
+            <label for="amount">পরিমাণ <span class="required" style="color:#fff">*</span></label>
+            <div class="amt-row"><span>৳</span>
+              <input type="number" id="amount" name="amount" min="0" step="any" placeholder="০.০০" inputmode="decimal" required>
+            </div>
+            <div class="hint">আগে পরিমাণ লিখুন, তারপর বিবরণ দিন</div>
           </div>
-          <div class="hint">আগে পরিমাণ লিখুন, তারপর বিবরণ দিন</div>
-        </div>
 
-        <div class="form-card glass">
           <div class="form-grid">
             <div class="field">
               <label for="date"><i class="fa-regular fa-calendar"></i>তারিখ <span class="required">*</span></label>
@@ -309,9 +320,9 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
 
           <button type="submit" id="submitBtn"><i class="fa-solid fa-check"></i> লেনদেন সেভ করুন</button>
           <p id="statusMsg"></p>
-        </div>
+        </form>
         <p class="foot"><i class="fa-solid fa-lock"></i> সব লেনদেন নিরাপদে গুগল শিটে সেভ হবে</p>
-      </form>
+      </div>
     </section>
   </main>
 </div>
@@ -321,7 +332,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
   <button class="on" data-v="home" onclick="showView('home')"><i class="fa-solid fa-house"></i>হোম</button>
   <button data-v="accounts" onclick="showView('accounts')"><i class="fa-solid fa-building-columns"></i>অ্যাকাউন্ট</button>
   <button data-v="reports" onclick="showView('reports')"><i class="fa-solid fa-chart-column"></i>রিপোর্ট</button>
-  <button data-v="entry" onclick="showView('entry')"><i class="fa-solid fa-plus"></i>এন্ট্রি</button>
+  <button data-v="entry" onclick="showView('entry')"><i class="fa-solid fa-circle-plus"></i>এন্ট্রি</button>
 </nav>
 
 <!-- অ্যাকাউন্ট ডিটেইল মোডাল -->
@@ -350,6 +361,9 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         window.scrollTo({ top: 0, behavior: 'smooth' });
         if (v === 'home' || v === 'reports' || v === 'accounts') {
             setTimeout(() => Object.values(charts).forEach(c => c.resize()), 30);
+        }
+        if (v === 'entry') {
+            initForm();
         }
     }
 
@@ -576,7 +590,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         onChange: function(selectedDates) { if (selectedDates[0]) setBackendDate(selectedDates[0]); }
     });
 
-    // ফর্মে প্রথমবার এলে ড্রপডাউন লোড করবে
     function initForm() {
         if (formInitialized) return;
         formInitialized = true;
@@ -744,10 +757,14 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                 
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> লেনদেন সেভ করুন';
-                setTimeout(() => { statusMsg.className = ""; statusMsg.style.display = "none"; }, 4000);
 
-                // ড্যাশবোর্ড রিফ্রেশ করা (নতুন ডেটার জন্য)
-                fetchDashboardData();
+                // সফলভাবে সেভ হলে হোম পেজে চলে যাবে
+                setTimeout(() => { 
+                    statusMsg.className = ""; 
+                    statusMsg.style.display = "none"; 
+                    showView('home'); // হোম পেজে নেভিগেট
+                    fetchDashboardData(); // ড্যাশবোর্ড রিফ্রেশ
+                }, 1500);
 
             } else {
                 throw new Error(data.error || 'Server returned error');
@@ -769,15 +786,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         const hit = map.find(m => type.includes(m[0]));
         if (hit) document.body.dataset.type = hit[1]; else delete document.body.dataset.type;
     }
-
-    // Entry ট্যাবে ক্লিক করলে ফর্ম ইনিশিয়ালাইজ হবে
-    document.querySelectorAll('.nav button').forEach(btn => {
-        btn.addEventListener('click', function() {
-            if (this.dataset.v === 'entry') {
-                initForm();
-            }
-        });
-    });
 </script>
 </body>
 </html>
