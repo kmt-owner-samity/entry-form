@@ -113,7 +113,14 @@ tfoot td:first-child{background:#e6e9fb}
 .empty{padding:30px;text-align:center;color:var(--mute)}
 
 /* Entry Form Title */
-.page-title{font-size:22px;font-weight:700;color:var(--ink);text-align:center;margin:10px 0 20px}
+/* Entry Form Title & Home Page Title (Left Align) */
+.page-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 6px 2px 12px;
+    text-align: left;
+}
 .form-container{width:100%;max-width:1120px;margin:0 auto}
 .form-card-outer{width:100%;padding:24px;border-radius:26px}
 
@@ -208,9 +215,12 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
 
   <div id="errorMsg"><i class="fa-solid fa-triangle-exclamation"></i> ডেটা লোড করতে সমস্যা হয়েছে। পেজটি রিফ্রেশ করুন।</div>
 
-  <main id="content" style="display:none">
+    <main id="content" style="display:none">
     <!-- হোম পেজ -->
     <section class="view" id="view-home">
+      <!-- হোম পেজের টাইটেল -->
+      <div class="page-title">ড্যাশবোর্ড</div>
+
       <div class="grid">
         <div class="hero">
           <div><small>মোট ব্যালেন্স</small><div class="big" id="cardBalance">৳ ০.০০</div></div>
@@ -258,6 +268,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
 
     <!-- এন্ট্রি পেজ -->
     <section class="view" id="view-entry">
+      <!-- ফর্মের টাইটেল (এখন অ্যাকাউন্ট সামারি/মাসিক হিসাবের মতো) -->
       <div class="page-title">হিসাব এন্ট্রি করুন</div>
       
       <div class="form-card-outer glass">
