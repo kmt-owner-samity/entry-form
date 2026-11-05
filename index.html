@@ -112,6 +112,29 @@ tfoot td:first-child{background:#e6e9fb}
 .share-l{font-size:12px;color:var(--mute);margin-top:6px}
 .empty{padding:30px;text-align:center;color:var(--mute)}
 
+/* Transaction List (Report) */
+.txn-list{display:flex;flex-direction:column;gap:10px}
+.txn-item{display:flex;justify-content:space-between;align-items:center;padding:14px;background:#fff;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,0.04);gap:10px}
+.txn-left{display:flex;align-items:center;gap:12px;min-width:0}
+.txn-icon{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:16px;flex-shrink:0}
+.txn-details{min-width:0}
+.txn-details h4{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.txn-details p{font-size:11px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.txn-right{text-align:right;display:flex;align-items:center;gap:4px;flex-shrink:0}
+.txn-amount{font-size:14px;font-weight:700;margin-right:4px}
+.txn-btn{background:none;border:none;cursor:pointer;font-size:14px;padding:6px;border-radius:50%;transition:.2s}
+.txn-btn.edit{color:var(--blue)}
+.txn-btn.edit:hover{background:#e0e5ff}
+.txn-btn.del{color:var(--coral)}
+.txn-btn.del:hover{background:#ffe3ea}
+
+/* Edit Modal */
+.edit-field{margin-bottom:12px}
+.edit-field label{display:block;font-size:12px;font-weight:600;color:var(--mute);margin-bottom:5px}
+.edit-field input{width:100%;height:44px;padding:0 12px;border:1px solid #dde2ef;border-radius:10px;font-family:inherit;font-size:14px;outline:none}
+.edit-field input:focus{border-color:var(--blue)}
+.edit-btn{width:100%;height:48px;margin-top:10px;border:none;border-radius:12px;background:var(--blue);color:#fff;font-weight:700;font-size:15px;cursor:pointer}
+
 /* Entry Form */
 .form-container{width:100%;max-width:1120px;margin:0 auto}
 .form-card-outer{width:100%;padding:24px;border-radius:26px}
@@ -244,7 +267,14 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
 
     <!-- রিপোর্ট পেজ -->
     <section class="view" id="view-reports">
-      <div class="sec" style="margin-top:6px"><span>মাসিক হিসাব</span></div>
+      <!-- সাম্প্রতিক লেনদেন (শেষ ১০টি) -->
+      <div class="sec" style="margin-top:6px"><span>সাম্প্রতিক লেনদেন</span></div>
+      <div class="txn-list" id="recentTxnList">
+        <div class="empty">লোড হচ্ছে...</div>
+      </div>
+
+      <!-- মাসিক হিসাব -->
+      <div class="sec" style="margin-top:24px"><span>মাসিক হিসাব</span></div>
       <div class="card glass" style="padding:8px">
         <div class="tw"><table>
           <thead><tr><th>মাস</th><th>আয়</th><th>ব্যয়</th><th>সঞ্চয়</th><th>বিনিয়োগ</th><th>ঋণ/স্থানান্তর</th><th>সম্পদ</th><th>দায়</th></tr></thead>
@@ -338,6 +368,11 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
   <div class="sheet" id="sheet"></div>
 </div>
 
+<!-- এডিট মোডাল -->
+<div class="ov" id="editModal" onclick="if(event.target===this)closeEditModal()" role="dialog" aria-modal="true">
+  <div class="sheet" id="editSheet"></div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     // ========== CONFIGURATION ==========
@@ -371,6 +406,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         }
         
         if (v === 'entry') { initForm(); }
+        if (v === 'reports') { loadRecentTransactions(); }
     }
 
     // ========== Dashboard Logic ==========
@@ -524,8 +560,160 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         document.getElementById('modal').classList.add('show');
     }
     function closeModal() { document.getElementById('modal').classList.remove('show'); }
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeEditModal(); } });
 
+    // ========== Recent Transactions (Report) ==========
+    let currentTransactions = [];
+
+    function loadRecentTransactions() {
+        const container = document.getElementById('recentTxnList');
+        container.innerHTML = '<div class="empty">লোড হচ্ছে...</div>';
+        
+        fetch(scriptURL + '?action=getTransactionsList')
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) throw new Error(data.error);
+                
+                currentTransactions = data.transactions || [];
+                const recent = currentTransactions.slice(0, 10);
+                
+                if (recent.length === 0) {
+                    container.innerHTML = '<div class="empty">কোনো লেনদেন পাওয়া যায়নি।</div>';
+                    return;
+                }
+                
+                container.innerHTML = '';
+                recent.forEach(txn => {
+                    container.appendChild(createTxnElement(txn));
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                container.innerHTML = '<div class="empty">লোড করতে সমস্যা হয়েছে।</div>';
+            });
+    }
+
+    function createTxnElement(txn) {
+        const isIncome = txn.type.includes('আয়');
+        const isExpense = txn.type.includes('ব্যয়') || txn.type.includes('খরচ');
+        const iconClass = isIncome ? 'fa-arrow-down' : (isExpense ? 'fa-arrow-up' : 'fa-right-left');
+        const iconBg = isIncome ? '#d9f6ec' : (isExpense ? '#ffe1e8' : '#e0e5ff');
+        const iconColor = isIncome ? 'var(--mint)' : (isExpense ? 'var(--coral)' : 'var(--blue)');
+        const amountClass = isIncome ? 'pos' : (isExpense ? 'neg' : '');
+        const sign = isIncome ? '+' : (isExpense ? '-' : '');
+        
+        const div = document.createElement('div');
+        div.className = 'txn-item';
+        div.innerHTML = `
+            <div class="txn-left">
+                <div class="txn-icon" style="background:${iconBg};color:${iconColor}"><i class="fa-solid ${iconClass}"></i></div>
+                <div class="txn-details">
+                    <h4>${txn.subCategory || txn.category || 'লেনদেন'}</h4>
+                    <p>${txn.fromAccount} • ${txn.date} ${txn.notes ? '• '+txn.notes : ''}</p>
+                </div>
+            </div>
+            <div class="txn-right">
+                <div class="txn-amount ${amountClass}">${sign}${formatAmount(txn.amount)}</div>
+                <button class="txn-btn edit" onclick="editTxn(${txn.row})" title="এডিট"><i class="fa-solid fa-pen"></i></button>
+                <button class="txn-btn del" onclick="deleteTxn(${txn.row})" title="ডিলিট"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        `;
+        return div;
+    }
+
+    // ========== Edit Transaction ==========
+    function editTxn(row) {
+        const txn = currentTransactions.find(t => t.row === row);
+        if (!txn) return;
+        
+        document.getElementById('editSheet').innerHTML = `
+            <div class="sheet-h">
+                <div class="ic" style="background:var(--blue)"><i class="fa-solid fa-pen"></i></div>
+                <b>লেনদেন এডিট করুন</b>
+                <button onclick="closeEditModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="edit-field">
+                <label>তারিখ</label>
+                <input type="date" id="editDate" value="${txn.date}">
+            </div>
+            <div class="edit-field">
+                <label>পরিমাণ</label>
+                <input type="number" id="editAmount" value="${txn.amount}" step="any">
+            </div>
+            <div class="edit-field">
+                <label>বিবরণ</label>
+                <input type="text" id="editNotes" value="${txn.notes || ''}" placeholder="বিবরণ">
+            </div>
+            <button class="edit-btn" onclick="saveEdit(${row})">সেভ করুন</button>
+        `;
+        document.getElementById('editModal').classList.add('show');
+    }
+
+    function closeEditModal() { 
+        document.getElementById('editModal').classList.remove('show'); 
+    }
+
+    function saveEdit(row) {
+        const date = document.getElementById('editDate').value;
+        const amount = document.getElementById('editAmount').value;
+        const notes = document.getElementById('editNotes').value;
+        
+        if (!date || !amount) {
+            alert('তারিখ ও পরিমাণ দিন!');
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append('action', 'updateTransaction');
+        formData.append('row', row);
+        formData.append('date', date);
+        formData.append('amount', amount);
+        formData.append('notes', notes);
+        
+        fetch(scriptURL, { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(data => {
+                if (data.result === 'success') {
+                    alert('লেনদেন সফলভাবে আপডেট হয়েছে!');
+                    closeEditModal();
+                    loadRecentTransactions();
+                    fetchDashboardData();
+                } else {
+                    alert('আপডেট করতে সমস্যা: ' + (data.error || ''));
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('আপডেট করতে সমস্যা হয়েছে।');
+            });
+    }
+
+    // ========== Delete Transaction ==========
+    function deleteTxn(row) {
+        if (!confirm('আপনি কি নিশ্চিত এই লেনদেনটি ডিলিট করতে চান?')) return;
+        
+        const formData = new FormData();
+        formData.append('action', 'deleteTransaction');
+        formData.append('row', row);
+        
+        fetch(scriptURL, { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(data => {
+                if (data.result === 'success') {
+                    alert('লেনদেন সফলভাবে ডিলিট হয়েছে!');
+                    loadRecentTransactions();
+                    fetchDashboardData();
+                } else {
+                    alert('ডিলিট করতে সমস্যা: ' + (data.error || ''));
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('ডিলিট করতে সমস্যা হয়েছে।');
+            });
+    }
+
+    // ========== Charts ==========
     const charts = {};
     function mkChart(id, cfg) {
         if (charts[id]) charts[id].destroy();
