@@ -28,8 +28,21 @@ body{font-family:'Hind Siliguri','Segoe UI',sans-serif;color:var(--ink);backgrou
 .glass{background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--edge);box-shadow:var(--shadow);border-radius:26px}
 .wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 16px}
 .bar{position:sticky;top:0;z-index:30;padding:max(12px,env(safe-area-inset-top)) 0 10px}
-.bar-in{display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:22px;flex-wrap:nowrap;overflow-x:auto}
-.bar-in::-webkit-scrollbar { display: none; }
+.bar-in {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 14px;
+    border-radius: 22px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+}
+.bar-in::-webkit-scrollbar {
+    display: none; /* Chrome, Brave, Safari */
+}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;white-space:nowrap}
 .brand i{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;display:grid;place-items:center;font-size:16px;transition:background .4s}
 .spacer{flex:1;min-width:10px}
@@ -41,8 +54,13 @@ body{font-family:'Hind Siliguri','Segoe UI',sans-serif;color:var(--ink);backgrou
 .nav .on{background:var(--ink);color:#fff}
 .nav-d{display:none}
 @media(min-width:900px){
-  .nav-d{display:flex;max-width:500px;margin:0 auto;}
-  .nav-m{display:none !important;}
+  .nav-d {
+      display: flex;
+      max-width: 500px;
+      margin: 0 auto;
+      flex-wrap: nowrap;
+  }
+  .nav-m { display: none !important; }
 }
 .nav-m{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:40;width:min(95vw,500px);background:var(--glass);backdrop-filter:blur(18px);border:1px solid var(--edge);box-shadow:var(--shadow);display:flex;}
 
@@ -366,17 +384,26 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
     }
 
     // ========== View Control ==========
-    function showView(v) {
-        document.body.dataset.view = v;
-        document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        if (v === 'home' || v === 'reports' || v === 'accounts') {
-            setTimeout(() => Object.values(charts).forEach(c => c.resize()), 30);
-        }
-        if (v === 'entry') {
-            initForm();
-        }
+function showView(v) {
+    document.body.dataset.view = v;
+    document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+    
+    // স্ক্রল টপে নেওয়ার সময় smooth বাদ দেওয়া হলো (Chrome/Brave-এ সমস্যা এড়াতে)
+    window.scrollTo(0, 0);
+    
+    // চার্ট resize করার জন্য sedikit দেরি করে কল করা হলো
+    if (v === 'home' || v === 'reports' || v === 'accounts') {
+        setTimeout(() => {
+            Object.values(charts).forEach(c => {
+                try { c.resize(); } catch(e) {}
+            });
+        }, 100);
     }
+    
+    if (v === 'entry') {
+        initForm();
+    }
+}
 
     // ========== Dashboard Logic ==========
     window.onload = function() {
