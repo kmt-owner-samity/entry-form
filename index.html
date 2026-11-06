@@ -146,6 +146,16 @@ tfoot td:first-child{background:#e6e9fb}
 .net-worth-card .nw-item{font-size:13px;opacity:.9}
 .net-worth-card .nw-item b{display:block;font-size:16px;margin-top:2px}
 
+/* Loan Summary Card (Home) */
+.loan-summary-card{padding:18px;border-radius:20px;background:#fff;margin-bottom:20px;box-shadow:0 10px 30px rgba(40,56,110,.10)}
+.loan-summary-card h3{font-size:15px;font-weight:700;margin-bottom:14px;color:var(--ink)}
+.loan-summary-row{display:flex;justify-content:space-between;gap:12px}
+.loan-summary-item{flex:1;padding:14px;border-radius:14px;text-align:center}
+.loan-summary-item.recv{background:#ecfdf5;color:#047857}
+.loan-summary-item.pay{background:#fef2f2;color:#b91c1c}
+.loan-summary-item .lbl{font-size:11px;font-weight:600;opacity:.85}
+.loan-summary-item .val{font-size:18px;font-weight:700;margin-top:4px}
+
 /* Edit Form Modal */
 .edit-form .edit-field{margin-bottom:14px}
 .edit-form .edit-field label{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--mute);margin-bottom:6px}
@@ -259,6 +269,21 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         <div class="nw-row">
           <div class="nw-item">মোট সম্পদ <b id="totalAssets">৳ ০.০০</b></div>
           <div class="nw-item">মোট দায় <b id="totalLiabilities">৳ ০.০০</b></div>
+        </div>
+      </div>
+
+      <!-- ঋণ ও দেনা সারসংক্ষেপ -->
+      <div class="loan-summary-card">
+        <h3>💳 ঋণ ও দেনা</h3>
+        <div class="loan-summary-row">
+          <div class="loan-summary-item recv">
+            <div class="lbl">মোট প্রাপ্য</div>
+            <div class="val" id="homeTotalReceivable">৳ ০.০০</div>
+          </div>
+          <div class="loan-summary-item pay">
+            <div class="lbl">মোট দেয়</div>
+            <div class="val" id="homeTotalPayable">৳ ০.০০</div>
+          </div>
         </div>
       </div>
 
@@ -461,6 +486,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
     // ========== Dashboard Logic ==========
     window.onload = function() {
         fetchDashboardData();
+        loadHomeLoanSummary();
     };
 
     function fetchDashboardData() {
@@ -515,6 +541,18 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         document.getElementById('totalAssets').innerText = formatAmount(totalAssets);
         document.getElementById('totalLiabilities').innerText = formatAmount(totalLiabilities);
         document.getElementById('netWorthValue').innerText = formatAmount(netWorth);
+    }
+
+    // ========== Home Loan Summary ==========
+    function loadHomeLoanSummary() {
+        fetch(scriptURL + '?action=getLoanSummary')
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) return;
+                document.getElementById('homeTotalReceivable').innerText = formatAmount(data.totalReceivable || 0);
+                document.getElementById('homeTotalPayable').innerText = formatAmount(data.totalPayable || 0);
+            })
+            .catch(err => console.error(err));
     }
 
     function renderKPI(summary, accounts) {
@@ -898,6 +936,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                     closeEditModal();
                     loadRecentTransactions();
                     loadLoanSummary();
+                    loadHomeLoanSummary();
                     fetchDashboardData();
                 } else {
                     alert('আপডেট করতে সমস্যা: ' + (data.error || ''));
@@ -924,6 +963,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                     alert('লেনদেন সফলভাবে ডিলিট হয়েছে!');
                     loadRecentTransactions();
                     loadLoanSummary();
+                    loadHomeLoanSummary();
                     fetchDashboardData();
                 } else {
                     alert('ডিলিট করতে সমস্যা: ' + (data.error || ''));
@@ -1179,6 +1219,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                     statusMsg.style.display = "none"; 
                     showView('home');
                     fetchDashboardData();
+                    loadHomeLoanSummary();
                 }, 1500);
 
             } else {
