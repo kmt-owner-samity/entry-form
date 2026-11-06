@@ -28,8 +28,7 @@ body{font-family:'Hind Siliguri','Segoe UI',sans-serif;color:var(--ink);backgrou
 .glass{background:var(--glass);border:1px solid var(--edge);box-shadow:var(--shadow);border-radius:26px}
 .wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 16px}
 .bar{position:sticky;top:0;z-index:30;padding:max(12px,env(safe-area-inset-top)) 0 10px}
-.bar-in{display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:22px;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.bar-in::-webkit-scrollbar{display:none}
+.bar-in{display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:22px;flex-wrap:nowrap;overflow:hidden}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;white-space:nowrap}
 .brand i{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;display:grid;place-items:center;font-size:16px;transition:background .4s}
 .spacer{flex:1;min-width:10px}
@@ -128,12 +127,32 @@ tfoot td:first-child{background:#e6e9fb}
 .txn-btn.del{color:var(--coral)}
 .txn-btn.del:hover{background:#ffe3ea}
 
-/* Edit Modal */
-.edit-field{margin-bottom:12px}
-.edit-field label{display:block;font-size:12px;font-weight:600;color:var(--mute);margin-bottom:5px}
-.edit-field input{width:100%;height:44px;padding:0 12px;border:1px solid #dde2ef;border-radius:10px;font-family:inherit;font-size:14px;outline:none}
-.edit-field input:focus{border-color:var(--blue)}
-.edit-btn{width:100%;height:48px;margin-top:10px;border:none;border-radius:12px;background:var(--blue);color:#fff;font-weight:700;font-size:15px;cursor:pointer}
+/* ঋণ ও দেনার তালিকা */
+.loan-section{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:10px}
+.loan-card{padding:18px;border-radius:20px}
+.loan-card h3{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.loan-list{display:flex;flex-direction:column;gap:8px}
+.loan-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px dashed #dde2ef}
+.loan-item:last-child{border-bottom:none}
+.loan-name{font-size:14px;font-weight:600}
+.loan-amount{font-size:14px;font-weight:700}
+.loan-total{margin-top:12px;padding-top:12px;border-top:2px solid #e2e8f0;display:flex;justify-content:space-between;font-weight:700;font-size:15px}
+
+/* Net Worth Card */
+.net-worth-card{padding:24px;border-radius:24px;background:linear-gradient(135deg,#1b4965,#25617f);color:#fff;margin-bottom:20px;box-shadow:0 18px 40px rgba(27,73,101,.35)}
+.net-worth-card .nw-label{font-size:13px;opacity:.85;margin-bottom:4px}
+.net-worth-card .nw-value{font-size:clamp(28px,7vw,40px);font-weight:700;margin-bottom:14px}
+.net-worth-card .nw-row{display:flex;gap:24px}
+.net-worth-card .nw-item{font-size:13px;opacity:.9}
+.net-worth-card .nw-item b{display:block;font-size:16px;margin-top:2px}
+
+/* Edit Form Modal */
+.edit-form .edit-field{margin-bottom:14px}
+.edit-form .edit-field label{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--mute);margin-bottom:6px}
+.edit-form .edit-field label i{color:var(--blue)}
+.edit-form .edit-field input,.edit-form .edit-field select{width:100%;height:48px;padding:0 14px;border:1px solid #dde2ef;border-radius:12px;font-family:inherit;font-size:15px;color:var(--ink);background:#f8fafc;outline:none;transition:.2s}
+.edit-form .edit-field input:focus,.edit-form .edit-field select:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(51,71,255,.1)}
+.edit-form .edit-btn{width:100%;height:52px;margin-top:10px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;font:700 15px 'Hind Siliguri',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 10px 22px rgba(51,71,255,.25)}
 
 /* Entry Form */
 .form-container{width:100%;max-width:1120px;margin:0 auto}
@@ -178,6 +197,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
   .full{grid-column:auto;}
   #amount{font-size:42px;}
   .form-card-outer{padding:16px;}
+  .loan-section{grid-template-columns:1fr;}
 }
 
 @media(min-width:900px){
@@ -267,7 +287,26 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
 
     <!-- রিপোর্ট পেজ -->
     <section class="view" id="view-reports">
-      <!-- সাম্প্রতিক লেনদেন (শেষ ১০টি) -->
+      <!-- ঋণ ও দেনার তালিকা -->
+      <div class="sec" style="margin-top:6px"><span>ঋণ ও দেনা</span></div>
+      <div class="loan-section" id="loanSection">
+        <div class="loan-card glass" id="receivableCard">
+          <h3>🟢 প্রাপ্য (Receivable)</h3>
+          <div class="loan-list" id="receivableList">
+            <div class="empty">লোড হচ্ছে...</div>
+          </div>
+          <div class="loan-total"><span>মোট প্রাপ্য</span><span id="totalReceivable">৳ ০.০০</span></div>
+        </div>
+        <div class="loan-card glass" id="payableCard">
+          <h3>🔴 দেয় (Payable)</h3>
+          <div class="loan-list" id="payableList">
+            <div class="empty">লোড হচ্ছে...</div>
+          </div>
+          <div class="loan-total"><span>মোট দেয়</span><span id="totalPayable">৳ ০.০০</span></div>
+        </div>
+      </div>
+
+      <!-- সাম্প্রতিক লেনদেন -->
       <div class="sec" style="margin-top:6px"><span>সাম্প্রতিক লেনদেন</span></div>
       <div class="txn-list" id="recentTxnList">
         <div class="empty">লোড হচ্ছে...</div>
@@ -341,7 +380,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
             </div>
 
             <div class="field full">
-              <label for="notes"><i class="fa-regular fa-note-sticky"></i>বিবরণ</label>
+              <label for="notes"><i class="fa-regular fa-note-sticky"></i>বিবরণ (ঋণের ক্ষেত্রে ঋণগ্রহীতার নাম লিখুন)</label>
               <div class="ctl"><textarea id="notes" name="notes" placeholder="লেনদেনের বিবরণ লিখুন (ঐচ্ছিক)"></textarea></div>
             </div>
           </div>
@@ -392,9 +431,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         document.body.dataset.view = v;
         document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
         
-        const barIn = document.querySelector('.bar-in');
-        if (barIn) { barIn.scrollLeft = 0; }
-
         window.scrollTo(0, 0);
         
         if (v === 'home' || v === 'reports' || v === 'accounts') {
@@ -406,7 +442,10 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         }
         
         if (v === 'entry') { initForm(); }
-        if (v === 'reports') { loadRecentTransactions(); }
+        if (v === 'reports') { 
+            loadRecentTransactions(); 
+            loadLoanSummary();
+        }
     }
 
     // ========== Dashboard Logic ==========
@@ -562,6 +601,55 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
     function closeModal() { document.getElementById('modal').classList.remove('show'); }
     document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeEditModal(); } });
 
+    // ========== Loan Summary ==========
+    function loadLoanSummary() {
+        const recList = document.getElementById('receivableList');
+        const payList = document.getElementById('payableList');
+        
+        recList.innerHTML = '<div class="empty">লোড হচ্ছে...</div>';
+        payList.innerHTML = '<div class="empty">লোড হচ্ছে...</div>';
+        
+        fetch(scriptURL + '?action=getLoanSummary')
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) throw new Error(data.error);
+                
+                // প্রাপ্য
+                if (data.receivables && data.receivables.length > 0) {
+                    recList.innerHTML = '';
+                    data.receivables.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'loan-item';
+                        div.innerHTML = `<span class="loan-name">${item.name}</span><span class="loan-amount pos">${formatAmount(item.amount)}</span>`;
+                        recList.appendChild(div);
+                    });
+                } else {
+                    recList.innerHTML = '<div class="empty">কোনো প্রাপ্য নেই</div>';
+                }
+                
+                // দেয়
+                if (data.payables && data.payables.length > 0) {
+                    payList.innerHTML = '';
+                    data.payables.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'loan-item';
+                        div.innerHTML = `<span class="loan-name">${item.name}</span><span class="loan-amount neg">${formatAmount(item.amount)}</span>`;
+                        payList.appendChild(div);
+                    });
+                } else {
+                    payList.innerHTML = '<div class="empty">কোনো দেয় নেই</div>';
+                }
+                
+                document.getElementById('totalReceivable').innerText = formatAmount(data.totalReceivable);
+                document.getElementById('totalPayable').innerText = formatAmount(data.totalPayable);
+            })
+            .catch(err => {
+                console.error(err);
+                recList.innerHTML = '<div class="empty">লোড করতে সমস্যা</div>';
+                payList.innerHTML = '<div class="empty">লোড করতে সমস্যা</div>';
+            });
+    }
+
     // ========== Recent Transactions (Report) ==========
     let currentTransactions = [];
 
@@ -626,27 +714,119 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         const txn = currentTransactions.find(t => t.row === row);
         if (!txn) return;
         
+        const typeOptions = masterData.types.map(t => `<option value="${t}" ${t === txn.type ? 'selected' : ''}>${t}</option>`).join('');
+        const fromOptions = masterData.accounts.map(a => `<option value="${a}" ${a === txn.fromAccount ? 'selected' : ''}>${a}</option>`).join('');
+        const toOptions = masterData.accounts.map(a => `<option value="${a}" ${a === txn.toAccount ? 'selected' : ''}>${a}</option>`).join('');
+        const cardOptions = masterData.cardNetworks.map(c => `<option value="${c}" ${c === txn.cardNetwork ? 'selected' : ''}>${c}</option>`).join('');
+        
         document.getElementById('editSheet').innerHTML = `
             <div class="sheet-h">
                 <div class="ic" style="background:var(--blue)"><i class="fa-solid fa-pen"></i></div>
                 <b>লেনদেন এডিট করুন</b>
                 <button onclick="closeEditModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="edit-field">
-                <label>তারিখ</label>
-                <input type="date" id="editDate" value="${txn.date}">
+            <div class="edit-form">
+                <div class="edit-field">
+                    <label><i class="fa-regular fa-calendar"></i> তারিখ</label>
+                    <input type="date" id="editDate" value="${txn.date}">
+                </div>
+                <div class="edit-field">
+                    <label><i class="fa-solid fa-right-left"></i> লেনদেনের ধরন</label>
+                    <select id="editType" onchange="onEditTypeChange()">
+                        <option value="">ধরন নির্বাচন করুন</option>
+                        ${typeOptions}
+                    </select>
+                </div>
+                <div class="edit-field">
+                    <label><i class="fa-solid fa-layer-group"></i> প্রধান খাত</label>
+                    <select id="editCategory">
+                        <option value="${txn.category}">${txn.category || 'নির্বাচন করুন'}</option>
+                    </select>
+                </div>
+                <div class="edit-field">
+                    <label><i class="fa-solid fa-tag"></i> উপ-খাত</label>
+                    <select id="editSubCategory">
+                        <option value="${txn.subCategory}">${txn.subCategory || 'নির্বাচন করুন'}</option>
+                    </select>
+                </div>
+                <div class="edit-field">
+                    <label><i class="fa-solid fa-wallet"></i> উৎস অ্যাকাউন্ট</label>
+                    <select id="editFrom">
+                        <option value="">অ্যাকাউন্ট নির্বাচন করুন</option>
+                        ${fromOptions}
+                    </select>
+                </div>
+                <div class="edit-field" id="editToGroup" style="${txn.toAccount ? '' : 'display:none'}">
+                    <label><i class="fa-solid fa-building-columns"></i> গন্তব্য অ্যাকাউন্ট</label>
+                    <select id="editTo">
+                        <option value="">অ্যাকাউন্ট নির্বাচন করুন</option>
+                        ${toOptions}
+                    </select>
+                </div>
+                <div class="edit-field" id="editCardGroup" style="${txn.cardNetwork ? '' : 'display:none'}">
+                    <label><i class="fa-regular fa-credit-card"></i> কার্ড নেটওয়ার্ক</label>
+                    <select id="editCard">
+                        <option value="">কার্ড নির্বাচন করুন</option>
+                        ${cardOptions}
+                    </select>
+                </div>
+                <div class="edit-field">
+                    <label><i class="fa-solid fa-money-bill-wave"></i> পরিমাণ</label>
+                    <input type="number" id="editAmount" value="${txn.amount}" step="any">
+                </div>
+                <div class="edit-field">
+                    <label><i class="fa-regular fa-note-sticky"></i> বিবরণ</label>
+                    <input type="text" id="editNotes" value="${txn.notes || ''}">
+                </div>
+                <button class="edit-btn" onclick="saveEdit(${row})">
+                    <i class="fa-solid fa-check"></i> সেভ করুন
+                </button>
             </div>
-            <div class="edit-field">
-                <label>পরিমাণ</label>
-                <input type="number" id="editAmount" value="${txn.amount}" step="any">
-            </div>
-            <div class="edit-field">
-                <label>বিবরণ</label>
-                <input type="text" id="editNotes" value="${txn.notes || ''}" placeholder="বিবরণ">
-            </div>
-            <button class="edit-btn" onclick="saveEdit(${row})">সেভ করুন</button>
         `;
         document.getElementById('editModal').classList.add('show');
+        
+        setTimeout(() => { onEditTypeChange(); }, 50);
+    }
+
+    function onEditTypeChange() {
+        const type = document.getElementById('editType').value;
+        const catSelect = document.getElementById('editCategory');
+        const subSelect = document.getElementById('editSubCategory');
+        const toGroup = document.getElementById('editToGroup');
+        const cardGroup = document.getElementById('editCardGroup');
+        
+        catSelect.innerHTML = '<option value="">প্রধান খাত নির্বাচন করুন</option>';
+        subSelect.innerHTML = '<option value="">আগে প্রধান খাত নির্বাচন করুন</option>';
+        
+        toGroup.style.display = (type === 'স্থানান্তর') ? 'block' : 'none';
+        cardGroup.style.display = 'none';
+        
+        if (!type || !masterData.dataMap) return;
+        
+        const cats = [...new Set(masterData.dataMap.filter(item => item.type === type).map(item => item.category))];
+        cats.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c; opt.textContent = c;
+            catSelect.appendChild(opt);
+        });
+        
+        catSelect.onchange = onEditCategoryChange;
+    }
+
+    function onEditCategoryChange() {
+        const type = document.getElementById('editType').value;
+        const cat = document.getElementById('editCategory').value;
+        const subSelect = document.getElementById('editSubCategory');
+        
+        subSelect.innerHTML = '<option value="">উপ-খাত নির্বাচন করুন</option>';
+        if (!cat || !masterData.dataMap) return;
+        
+        const subs = masterData.dataMap.filter(item => item.type === type && item.category === cat).map(item => item.subCategory);
+        subs.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s; opt.textContent = s;
+            subSelect.appendChild(opt);
+        });
     }
 
     function closeEditModal() { 
@@ -655,6 +835,12 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
 
     function saveEdit(row) {
         const date = document.getElementById('editDate').value;
+        const type = document.getElementById('editType').value;
+        const cat = document.getElementById('editCategory').value;
+        const subCat = document.getElementById('editSubCategory').value;
+        const fromAcc = document.getElementById('editFrom').value;
+        const toAcc = document.getElementById('editTo').value;
+        const cardNet = document.getElementById('editCard').value;
         const amount = document.getElementById('editAmount').value;
         const notes = document.getElementById('editNotes').value;
         
@@ -667,6 +853,12 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         formData.append('action', 'updateTransaction');
         formData.append('row', row);
         formData.append('date', date);
+        formData.append('transactionType', type);
+        formData.append('category', cat);
+        formData.append('subCategory', subCat);
+        formData.append('fromAccount', fromAcc);
+        formData.append('toAccount', toAcc);
+        formData.append('cardNetwork', cardNet);
         formData.append('amount', amount);
         formData.append('notes', notes);
         
@@ -677,6 +869,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                     alert('লেনদেন সফলভাবে আপডেট হয়েছে!');
                     closeEditModal();
                     loadRecentTransactions();
+                    loadLoanSummary();
                     fetchDashboardData();
                 } else {
                     alert('আপডেট করতে সমস্যা: ' + (data.error || ''));
@@ -702,6 +895,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                 if (data.result === 'success') {
                     alert('লেনদেন সফলভাবে ডিলিট হয়েছে!');
                     loadRecentTransactions();
+                    loadLoanSummary();
                     fetchDashboardData();
                 } else {
                     alert('ডিলিট করতে সমস্যা: ' + (data.error || ''));
