@@ -252,6 +252,16 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
     <section class="view" id="view-home">
       <div class="page-title">ড্যাশবোর্ড</div>
 
+      <!-- নেট ওয়ার্থ কার্ড -->
+      <div class="net-worth-card" id="netWorthCard">
+        <div class="nw-label">💰 নেট ওয়ার্থ (Net Worth)</div>
+        <div class="nw-value" id="netWorthValue">৳ ০.০০</div>
+        <div class="nw-row">
+          <div class="nw-item">মোট সম্পদ <b id="totalAssets">৳ ০.০০</b></div>
+          <div class="nw-item">মোট দায় <b id="totalLiabilities">৳ ০.০০</b></div>
+        </div>
+      </div>
+
       <div class="grid">
         <div class="hero">
           <div><small>মোট ব্যালেন্স</small><div class="big" id="cardBalance">৳ ০.০০</div></div>
@@ -473,6 +483,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
 
                 window.__accounts = data.accounts || [];
                 renderKPI(data.summary, data.accounts);
+                renderNetWorth(data.summary);
                 renderMonthlyTable(data.summary);
                 renderAccountGrid(data.accounts);
                 renderCharts(data.summary, data.accounts);
@@ -485,6 +496,25 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                 skeleton.style.display = 'none';
                 errorMsg.style.display = 'block';
             });
+    }
+
+    function renderNetWorth(summary) {
+        let totalAssets = 0;
+        let totalLiabilities = 0;
+        
+        if (summary) {
+            enMonths.forEach(month => {
+                const d = summary[month] || {};
+                totalAssets += Number(d.Asset) || 0;
+                totalLiabilities += Number(d.Liability) || 0;
+            });
+        }
+        
+        const netWorth = totalAssets - totalLiabilities;
+        
+        document.getElementById('totalAssets').innerText = formatAmount(totalAssets);
+        document.getElementById('totalLiabilities').innerText = formatAmount(totalLiabilities);
+        document.getElementById('netWorthValue').innerText = formatAmount(netWorth);
     }
 
     function renderKPI(summary, accounts) {
@@ -614,7 +644,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
             .then(data => {
                 if (data.error) throw new Error(data.error);
                 
-                // প্রাপ্য
                 if (data.receivables && data.receivables.length > 0) {
                     recList.innerHTML = '';
                     data.receivables.forEach(item => {
@@ -627,7 +656,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                     recList.innerHTML = '<div class="empty">কোনো প্রাপ্য নেই</div>';
                 }
                 
-                // দেয়
                 if (data.payables && data.payables.length > 0) {
                     payList.innerHTML = '';
                     data.payables.forEach(item => {
