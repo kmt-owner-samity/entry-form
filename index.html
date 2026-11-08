@@ -33,7 +33,7 @@ body{font-family:'Hind Siliguri','Segoe UI',sans-serif;color:var(--ink);backgrou
 .brand i{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;display:grid;place-items:center;font-size:16px;transition:background .4s}
 .spacer{flex:1;min-width:10px}
 
-/* নেভিগেশন বার */
+/* নেভিগেশন */
 .nav{display:flex;gap:4px;padding:4px;border-radius:20px;width:100%;max-width:500px}
 .nav button, .nav a{flex:1;display:flex;justify-content:center;align-items:center;gap:6px;padding:10px 4px;border:none;background:none;border-radius:16px;color:var(--mute);font:600 12px 'Hind Siliguri',sans-serif;text-decoration:none;cursor:pointer;transition:.2s;text-align:center;white-space:nowrap}
 .nav i{font-size:14px}
@@ -45,11 +45,10 @@ body{font-family:'Hind Siliguri','Segoe UI',sans-serif;color:var(--ink);backgrou
 }
 .nav-m{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:40;width:min(95vw,500px);background:var(--glass);border:1px solid var(--edge);box-shadow:var(--shadow);display:flex;}
 
-/* View Control */
 .view{display:none}
 body[data-view=home] #view-home,body[data-view=accounts] #view-accounts,body[data-view=reports] #view-reports,body[data-view=entry] #view-entry{display:block}
 
-/* Skeleton Loading */
+/* Skeleton */
 #skeleton{display:none;padding:20px}
 .sk-hero{height:160px;border-radius:30px;background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);background-size:200% 100%;animation:shine 1.5s infinite;margin-bottom:16px}
 .sk-kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
@@ -96,8 +95,6 @@ tfoot td:first-child{background:#e6e9fb}
 .acc .ic{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;color:#fff;font-size:18px;margin-bottom:14px}
 .acc .n{font-weight:600;font-size:14px;color:var(--mute)}
 .acc .v{font-size:20px;font-weight:700;margin-top:2px}
-
-/* Account Percent Circle (বড় এবং % বার) */
 .acc-percent-wrap{position:absolute;top:12px;right:12px;width:56px;height:56px}
 .acc-percent-wrap svg{transform:rotate(-90deg)}
 .acc-percent-wrap .acc-pct-text{position:absolute;inset:0;display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--blue);font-family:'Inter',sans-serif}
@@ -119,7 +116,6 @@ tfoot td:first-child{background:#e6e9fb}
 .share-l{font-size:12px;color:var(--mute);margin-top:6px}
 .empty{padding:30px;text-align:center;color:var(--mute)}
 
-/* Transaction List */
 .txn-list{display:flex;flex-direction:column;gap:10px}
 .txn-item{display:flex;justify-content:space-between;align-items:center;padding:14px;background:#fff;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,0.04);gap:10px}
 .txn-left{display:flex;align-items:center;gap:12px;min-width:0}
@@ -135,7 +131,6 @@ tfoot td:first-child{background:#e6e9fb}
 .txn-btn.del{color:var(--coral)}
 .txn-btn.del:hover{background:#ffe3ea}
 
-/* ঋণ ও দেনার তালিকা */
 .loan-section{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:10px}
 .loan-card{padding:18px;border-radius:20px}
 .loan-card h3{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
@@ -146,7 +141,6 @@ tfoot td:first-child{background:#e6e9fb}
 .loan-amount{font-size:14px;font-weight:700}
 .loan-total{margin-top:12px;padding-top:12px;border-top:2px solid #e2e8f0;display:flex;justify-content:space-between;font-weight:700;font-size:15px}
 
-/* Net Worth Card */
 .net-worth-card{padding:24px;border-radius:24px;background:linear-gradient(135deg,#1b4965,#25617f);color:#fff;margin-bottom:20px;box-shadow:0 18px 40px rgba(27,73,101,.35)}
 .net-worth-card .nw-label{font-size:13px;opacity:.85;margin-bottom:4px}
 .net-worth-card .nw-value{font-size:clamp(28px,7vw,40px);font-weight:700;margin-bottom:14px}
@@ -154,14 +148,12 @@ tfoot td:first-child{background:#e6e9fb}
 .net-worth-card .nw-item{font-size:13px;opacity:.9}
 .net-worth-card .nw-item b{display:block;font-size:16px;margin-top:2px}
 
-/* Toast Notification */
 .toast-container{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:10px}
 .toast{background:#101a33;color:#fff;padding:14px 22px;border-radius:14px;font-size:14px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,0.2);animation:slideDown 0.3s ease;display:flex;align-items:center;gap:10px;min-width:260px}
 .toast.success{background:#047857}
 .toast.error{background:#b91c1c}
 @keyframes slideDown{from{transform:translateY(-30px);opacity:0}to{transform:translateY(0);opacity:1}}
 
-/* Edit Form Modal */
 .edit-form .edit-field{margin-bottom:14px}
 .edit-form .edit-field label{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--mute);margin-bottom:6px}
 .edit-form .edit-field label i{color:var(--blue)}
@@ -169,7 +161,6 @@ tfoot td:first-child{background:#e6e9fb}
 .edit-form .edit-field input:focus,.edit-form .edit-field select:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(51,71,255,.1)}
 .edit-form .edit-btn{width:100%;height:52px;margin-top:10px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;font:700 15px 'Hind Siliguri',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 10px 22px rgba(51,71,255,.25)}
 
-/* Entry Form */
 .form-container{width:100%;max-width:1120px;margin:0 auto}
 .form-card-outer{width:100%;padding:24px;border-radius:26px}
 .form-layout{display:flex;flex-direction:column;gap:14px}
@@ -201,10 +192,6 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
 button[type=submit]{width:100%;height:56px;margin-top:20px;border:none;border-radius:18px;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;font:700 16px 'Hind Siliguri',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 12px 26px var(--ac-shadow);transition:transform .15s,opacity .2s,background .4s}
 button[type=submit]:active{transform:scale(.98)}
 button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
-#statusMsg{display:none;margin-top:14px;padding:13px 16px;border-radius:14px;font-size:14px;font-weight:600;text-align:center}
-#statusMsg.success{display:block;color:#0a7d5c;background:#d9f6ec}
-#statusMsg.error{display:block;color:#c2264a;background:#ffe3ea}
-#statusMsg.loading{display:block;color:#2b4fd0;background:#e0e5ff}
 .foot{text-align:center;color:var(--mute);font-size:12px;margin-top:6px}
 
 @media(max-width:600px){
@@ -235,14 +222,12 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
   <header class="bar">
     <div class="bar-in glass">
       <div class="brand"><i class="fa-solid fa-wallet"></i><span>আমার হিসাব</span></div>
-      
       <nav class="nav nav-d" aria-label="প্রধান মেনু">
         <button class="on" data-v="home" onclick="showView('home')"><i class="fa-solid fa-house"></i>হোম</button>
         <button data-v="accounts" onclick="showView('accounts')"><i class="fa-solid fa-building-columns"></i>অ্যাকাউন্ট</button>
         <button data-v="reports" onclick="showView('reports')"><i class="fa-solid fa-chart-column"></i>রিপোর্ট</button>
         <button data-v="entry" onclick="showView('entry')"><i class="fa-solid fa-circle-plus"></i>নতুন এন্ট্রি</button>
       </nav>
-      
       <div class="spacer"></div>
       <div class="yr"><select id="yearFilter" onchange="fetchDashboardData()" aria-label="আর্থিক বছর">
         <option value="2026" selected>২০২৬</option><option value="2025">২০২৫</option><option value="2024">২০২৪</option>
@@ -293,7 +278,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         <div class="card glass"><h3>ঋণ ও দেনা <span>সারসংক্ষেপ</span></h3><div class="chart-box sm"><canvas id="loanChart"></canvas></div></div>
       </div>
 
-      <!-- নেট ওয়ার্থ ও মোট সম্পদ -->
       <div class="net-worth-card" id="netWorthCard" style="margin-top:20px">
         <div class="nw-label">💰 নেট ওয়ার্থ (Net Worth)</div>
         <div class="nw-value" id="netWorthValue">৳ ০.০০</div>
@@ -304,28 +288,24 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
       </div>
     </section>
 
-    <!-- অ্যাকাউন্ট পেজ -->
     <section class="view" id="view-accounts">
       <div class="sec" style="margin-top:6px"><span>অ্যাকাউন্ট সামারি</span></div>
       <div class="acc-grid" id="accountGrid"></div>
     </section>
 
-    <!-- রিপোর্ট পেজ -->
     <section class="view" id="view-reports">
       <div class="sec" style="margin-top:6px"><span>সাম্প্রতিক লেনদেন</span><a onclick="showAllTransactions()">সব দেখুন</a></div>
-      <div class="txn-list" id="recentTxnList">
-        <div class="empty">লোড হচ্ছে...</div>
-      </div>
+      <div class="txn-list" id="recentTxnList"><div class="empty">লোড হচ্ছে...</div></div>
 
       <div class="sec" style="margin-top:24px"><span>ঋণ ও দেনা</span><a onclick="showAllLoans()">সব দেখুন</a></div>
       <div class="loan-section" id="loanSection">
         <div class="loan-card glass" id="receivableCard">
-          <h3>🟢 প্রাপ্য (Receivable)</h3>
+          <h3>🟢 প্রাপ্য</h3>
           <div class="loan-list" id="receivableList"><div class="empty">লোড হচ্ছে...</div></div>
           <div class="loan-total"><span>মোট প্রাপ্য</span><span id="totalReceivable">৳ ০.০০</span></div>
         </div>
         <div class="loan-card glass" id="payableCard">
-          <h3>🔴 দেয় (Payable)</h3>
+          <h3>🔴 দেয়</h3>
           <div class="loan-list" id="payableList"><div class="empty">লোড হচ্ছে...</div></div>
           <div class="loan-total"><span>মোট দেয়</span><span id="totalPayable">৳ ০.০০</span></div>
         </div>
@@ -341,10 +321,8 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
       </div>
     </section>
 
-    <!-- এন্ট্রি পেজ -->
     <section class="view" id="view-entry">
       <div class="page-title">হিসাব এন্ট্রি করুন</div>
-      
       <div class="form-card-outer glass">
         <form id="financeForm" class="form-layout">
           <div class="form-hero">
@@ -360,49 +338,42 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
               <label for="date"><i class="fa-regular fa-calendar"></i>তারিখ <span class="required">*</span></label>
               <div class="ctl"><input type="text" id="date" name="date" placeholder="দিন/মাস/বছর" required></div>
             </div>
-
             <div class="field">
               <label for="transactionType"><i class="fa-solid fa-right-left"></i>লেনদেনের ধরন <span class="required">*</span></label>
               <div class="ctl"><select id="transactionType" name="transactionType" onchange="updateCategories(); setAccent(this.value);" required>
                 <option value="">ধরন নির্বাচন করুন</option></select></div>
             </div>
-
             <div class="field">
               <label for="category"><i class="fa-solid fa-layer-group"></i>প্রধান খাত <span class="required">*</span></label>
               <div class="ctl"><select id="category" name="category" onchange="updateSubCategories()" required disabled>
                 <option value="">আগে ধরন নির্বাচন করুন</option></select></div>
             </div>
-
             <div class="field">
               <label for="subCategory"><i class="fa-solid fa-tag"></i>উপ-খাত <span class="required">*</span></label>
-              <div class="ctl"><select id="subCategory" name="subCategory" required disabled>
+              <div class="ctl"><select id="subCategory" name="subCategory" onchange="updateBorrowerInput()" required disabled>
                 <option value="">আগে প্রধান খাত নির্বাচন করুন</option></select></div>
             </div>
-
             <div class="field" id="borrowerGroup" style="display:none">
-              <label for="borrower"><i class="fa-solid fa-user"></i><span id="borrowerLabel">ঋণগ্রহীতার নাম</span> <span class="required">*</span></label>
-              <div class="ctl"><select id="borrower" name="borrower">
-                <option value="">নির্বাচন করুন</option></select></div>
+              <label><i class="fa-solid fa-user"></i><span id="borrowerLabel">ঋণগ্রহীতার নাম</span> <span class="required">*</span></label>
+              <div class="ctl" id="borrowerWrapper">
+                <input type="text" id="borrowerInput" name="borrower" placeholder="যেমন: করিম">
+              </div>
             </div>
-
             <div class="field">
               <label for="fromAccount"><i class="fa-solid fa-wallet"></i>উৎস অ্যাকাউন্ট <span class="required">*</span></label>
               <div class="ctl"><select id="fromAccount" name="fromAccount" onchange="toggleCardNetwork()" required>
                 <option value="">অ্যাকাউন্ট নির্বাচন করুন</option></select></div>
             </div>
-
             <div class="field" id="toAccountGroup" style="display:none">
               <label for="toAccount"><i class="fa-solid fa-building-columns"></i>গন্তব্য অ্যাকাউন্ট <span class="required">*</span></label>
               <div class="ctl"><select id="toAccount" name="toAccount">
                 <option value="">অ্যাকাউন্ট নির্বাচন করুন</option></select></div>
             </div>
-
             <div class="field" id="cardNetworkGroup" style="display:none">
               <label for="cardNetwork"><i class="fa-regular fa-credit-card"></i>কার্ড নেটওয়ার্ক <span class="required">*</span></label>
               <div class="ctl"><select id="cardNetwork" name="cardNetwork">
                 <option value="">কার্ড নির্বাচন করুন</option></select></div>
             </div>
-
             <div class="field full">
               <label for="notes"><i class="fa-regular fa-note-sticky"></i>বিবরণ</label>
               <div class="ctl"><textarea id="notes" name="notes" placeholder="লেনদেনের বিবরণ লিখুন (ঐচ্ছিক)"></textarea></div>
@@ -472,9 +443,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
     let currentSummary = null;
     let currentLoans = { receivables: [], payables: [] };
 
-    window.onload = function() {
-        fetchDashboardData();
-    };
+    window.onload = function() { fetchDashboardData(); };
 
     function fetchDashboardData() {
         const year = document.getElementById('yearFilter').value;
@@ -492,25 +461,18 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         ])
         .then(([data, loanData]) => {
             if (data.error) throw new Error(data.error);
-            
             currentSummary = data.summary;
             window.__accounts = data.accounts || [];
             currentLoans = { receivables: loanData.receivables || [], payables: loanData.payables || [] };
-            
             renderKPI(data.summary, data.accounts);
             renderMonthlyTable(data.summary);
             renderAccountGrid(data.accounts);
             renderCharts(data.summary, data.accounts);
             renderNetWorthCard(data);
-            
             skeleton.style.display = 'none';
             content.style.display = 'block';
         })
-        .catch(err => {
-            console.error(err);
-            skeleton.style.display = 'none';
-            errorMsg.style.display = 'block';
-        });
+        .catch(err => { console.error(err); skeleton.style.display = 'none'; errorMsg.style.display = 'block'; });
     }
 
     function renderNetWorthCard(data) {
@@ -549,14 +511,10 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         const tfoot = document.getElementById('monthlyTableTotal');
         tbody.innerHTML = '';
         let totals = { Income: 0, Expense: 0, Surplus: 0, Investment: 0, Loan: 0, Asset: 0, Liability: 0 };
-
         const now = new Date();
         const currentMonthIdx = now.getMonth();
         const last3 = [];
-        for (let i = 2; i >= 0; i--) {
-            last3.push((currentMonthIdx - i + 12) % 12);
-        }
-
+        for (let i = 2; i >= 0; i--) { last3.push((currentMonthIdx - i + 12) % 12); }
         last3.forEach((idx) => {
             const month = enMonths[idx];
             const d = summary && summary[month] ? summary[month] : { Income: 0, Expense: 0, Surplus: 0, Investment: 0, Loan: 0, Asset: 0, Liability: 0 };
@@ -574,7 +532,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                 <td>${formatAmount(d.Liability)}</td>`;
             tbody.appendChild(row);
         });
-
         let totalSurplusClass = (totals.Surplus > 0) ? 'pos' : (totals.Surplus < 0 ? 'neg' : '');
         tfoot.innerHTML = `
             <td>মোট</td>
@@ -613,20 +570,16 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
     function renderAccountGrid(accounts) {
         const grid = document.getElementById('accountGrid');
         grid.innerHTML = '';
-
         if (!accounts || accounts.length === 0) {
             grid.innerHTML = '<div class="empty glass" style="grid-column: 1 / -1;">কোনো অ্যাকাউন্ট ডেটা পাওয়া যায়নি</div>';
             return;
         }
-
         let totalBalance = accounts.reduce((s, a) => s + Math.max(0, Number(a.currentBalance) || 0), 0);
-
         accounts.forEach((acc, i) => {
             const cls = (Number(acc.currentBalance) >= 0) ? 'pos' : 'neg';
             const percent = totalBalance > 0 ? Math.round((Math.max(0, Number(acc.currentBalance)) / totalBalance) * 100) : 0;
             const circumference = 2 * Math.PI * 22;
             const dashoffset = circumference * (1 - percent / 100);
-            
             const b = document.createElement('button');
             b.className = 'acc glass';
             b.innerHTML = `
@@ -673,12 +626,10 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
             .then(data => {
                 if (data.error) throw new Error(data.error);
                 currentLoans = { receivables: data.receivables || [], payables: data.payables || [] };
-                
                 const recRecent = currentLoans.receivables.slice(0, 2);
                 const payRecent = currentLoans.payables.slice(0, 2);
                 const recList = document.getElementById('receivableList');
                 const payList = document.getElementById('payableList');
-                
                 if (recRecent.length > 0) {
                     recList.innerHTML = '';
                     recRecent.forEach(item => {
@@ -688,7 +639,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                         recList.appendChild(div);
                     });
                 } else { recList.innerHTML = '<div class="empty">কোনো প্রাপ্য নেই</div>'; }
-                
                 if (payRecent.length > 0) {
                     payList.innerHTML = '';
                     payRecent.forEach(item => {
@@ -698,7 +648,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                         payList.appendChild(div);
                     });
                 } else { payList.innerHTML = '<div class="empty">কোনো দেয় নেই</div>'; }
-                
                 document.getElementById('totalReceivable').innerText = formatAmount(data.totalReceivable);
                 document.getElementById('totalPayable').innerText = formatAmount(data.totalPayable);
             })
@@ -764,7 +713,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                 <div class="txn-icon" style="background:${iconBg};color:${iconColor}"><i class="fa-solid ${iconClass}"></i></div>
                 <div class="txn-details">
                     <h4>${txn.subCategory || txn.category || 'লেনদেন'}</h4>
-                    <p>${txn.fromAccount} • ${txn.date} ${txn.notes ? '• '+txn.notes : ''} ${txn.borrower ? '• '+txn.borrower : ''}</p>
+                    <p>${txn.fromAccount} • ${txn.date} ${txn.borrower ? '• '+txn.borrower : ''} ${txn.notes ? '• '+txn.notes : ''}</p>
                 </div>
             </div>
             <div class="txn-right">
@@ -792,53 +741,20 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                 <button onclick="closeEditModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="edit-form">
-                <div class="edit-field">
-                    <label><i class="fa-regular fa-calendar"></i> তারিখ</label>
-                    <input type="date" id="editDate" value="${txn.date}">
-                </div>
-                <div class="edit-field">
-                    <label><i class="fa-solid fa-right-left"></i> লেনদেনের ধরন</label>
-                    <select id="editType" onchange="onEditTypeChange()">
-                        <option value="">ধরন নির্বাচন করুন</option>
-                        ${typeOptions}
-                    </select>
-                </div>
-                <div class="edit-field">
-                    <label><i class="fa-solid fa-layer-group"></i> প্রধান খাত</label>
-                    <select id="editCategory"><option value="${txn.category}">${txn.category || 'নির্বাচন করুন'}</option></select>
-                </div>
-                <div class="edit-field">
-                    <label><i class="fa-solid fa-tag"></i> উপ-খাত</label>
-                    <select id="editSubCategory"><option value="${txn.subCategory}">${txn.subCategory || 'নির্বাচন করুন'}</option></select>
-                </div>
+                <div class="edit-field"><label><i class="fa-regular fa-calendar"></i> তারিখ</label><input type="date" id="editDate" value="${txn.date}"></div>
+                <div class="edit-field"><label><i class="fa-solid fa-right-left"></i> ধরন</label><select id="editType" onchange="onEditTypeChange()"><option value="">নির্বাচন</option>${typeOptions}</select></div>
+                <div class="edit-field"><label><i class="fa-solid fa-layer-group"></i> খাত</label><select id="editCategory"><option value="${txn.category}">${txn.category}</option></select></div>
+                <div class="edit-field"><label><i class="fa-solid fa-tag"></i> উপ-খাত</label><select id="editSubCategory"><option value="${txn.subCategory}">${txn.subCategory}</option></select></div>
                 <div class="edit-field" id="editBorrowerGroup" style="${showBorrower ? '' : 'display:none'}">
                     <label><i class="fa-solid fa-user"></i> ঋণগ্রহীতা/দেনাদার</label>
-                    <select id="editBorrower">
-                        <option value="">নির্বাচন করুন</option>
-                        ${borrowerOptions}
-                    </select>
+                    <input type="text" id="editBorrower" value="${txn.borrower || ''}">
                 </div>
-                <div class="edit-field">
-                    <label><i class="fa-solid fa-wallet"></i> উৎস অ্যাকাউন্ট</label>
-                    <select id="editFrom"><option value="">অ্যাকাউন্ট নির্বাচন করুন</option>${fromOptions}</select>
-                </div>
-                <div class="edit-field" id="editToGroup" style="${txn.toAccount ? '' : 'display:none'}">
-                    <label><i class="fa-solid fa-building-columns"></i> গন্তব্য অ্যাকাউন্ট</label>
-                    <select id="editTo"><option value="">অ্যাকাউন্ট নির্বাচন করুন</option>${toOptions}</select>
-                </div>
-                <div class="edit-field" id="editCardGroup" style="${txn.cardNetwork ? '' : 'display:none'}">
-                    <label><i class="fa-regular fa-credit-card"></i> কার্ড নেটওয়ার্ক</label>
-                    <select id="editCard"><option value="">কার্ড নির্বাচন করুন</option>${cardOptions}</select>
-                </div>
-                <div class="edit-field">
-                    <label><i class="fa-solid fa-money-bill-wave"></i> পরিমাণ</label>
-                    <input type="number" id="editAmount" value="${txn.amount}" step="any">
-                </div>
-                <div class="edit-field">
-                    <label><i class="fa-regular fa-note-sticky"></i> বিবরণ</label>
-                    <input type="text" id="editNotes" value="${txn.notes || ''}">
-                </div>
-                <button class="edit-btn" onclick="saveEdit(${row})"><i class="fa-solid fa-check"></i> সেভ করুন</button>
+                <div class="edit-field"><label><i class="fa-solid fa-wallet"></i> উৎস</label><select id="editFrom"><option value="">নির্বাচন</option>${fromOptions}</select></div>
+                <div class="edit-field" id="editToGroup" style="${txn.toAccount ? '' : 'display:none'}"><label><i class="fa-solid fa-building-columns"></i> গন্তব্য</label><select id="editTo"><option value="">নির্বাচন</option>${toOptions}</select></div>
+                <div class="edit-field" id="editCardGroup" style="${txn.cardNetwork ? '' : 'display:none'}"><label><i class="fa-regular fa-credit-card"></i> কার্ড</label><select id="editCard"><option value="">নির্বাচন</option>${cardOptions}</select></div>
+                <div class="edit-field"><label><i class="fa-solid fa-money-bill-wave"></i> পরিমাণ</label><input type="number" id="editAmount" value="${txn.amount}" step="any"></div>
+                <div class="edit-field"><label><i class="fa-regular fa-note-sticky"></i> বিবরণ</label><input type="text" id="editNotes" value="${txn.notes || ''}"></div>
+                <button class="edit-btn" onclick="saveEdit(${row})"><i class="fa-solid fa-check"></i> সেভ</button>
             </div>`;
         document.getElementById('editModal').classList.add('show');
         setTimeout(() => { onEditTypeChange(); }, 50);
@@ -850,17 +766,14 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         const subSelect = document.getElementById('editSubCategory');
         const toGroup = document.getElementById('editToGroup');
         const borrowerGroup = document.getElementById('editBorrowerGroup');
-        
         catSelect.innerHTML = '<option value="">প্রধান খাত নির্বাচন করুন</option>';
         subSelect.innerHTML = '<option value="">আগে প্রধান খাত নির্বাচন করুন</option>';
         toGroup.style.display = (type === 'স্থানান্তর') ? 'block' : 'none';
         borrowerGroup.style.display = (type === 'ঋণ' || type === 'দায়') ? 'block' : 'none';
-        
         if (!type || !masterData.dataMap) return;
         const cats = [...new Set(masterData.dataMap.filter(item => item.type === type).map(item => item.category))];
         cats.forEach(c => {
-            const opt = document.createElement('option');
-            opt.value = c; opt.textContent = c;
+            const opt = document.createElement('option'); opt.value = c; opt.textContent = c;
             catSelect.appendChild(opt);
         });
         catSelect.onchange = onEditCategoryChange;
@@ -873,11 +786,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         subSelect.innerHTML = '<option value="">উপ-খাত নির্বাচন করুন</option>';
         if (!cat || !masterData.dataMap) return;
         const subs = masterData.dataMap.filter(item => item.type === type && item.category === cat).map(item => item.subCategory);
-        subs.forEach(s => {
-            const opt = document.createElement('option');
-            opt.value = s; opt.textContent = s;
-            subSelect.appendChild(opt);
-        });
+        subs.forEach(s => { const opt = document.createElement('option'); opt.value = s; opt.textContent = s; subSelect.appendChild(opt); });
     }
 
     function closeEditModal() { document.getElementById('editModal').classList.remove('show'); }
@@ -893,9 +802,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         const amount = document.getElementById('editAmount').value;
         const notes = document.getElementById('editNotes').value;
         const borrower = document.getElementById('editBorrower') ? document.getElementById('editBorrower').value : '';
-        
         if (!date || !amount) { showToast('তারিখ ও পরিমাণ দিন!', 'error'); return; }
-        
         const formData = new FormData();
         formData.append('action', 'updateTransaction');
         formData.append('row', row);
@@ -909,7 +816,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         formData.append('amount', amount);
         formData.append('notes', notes);
         formData.append('borrower', borrower);
-        
         fetch(scriptURL, { method: 'POST', body: formData })
             .then(res => res.json())
             .then(data => {
@@ -943,10 +849,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
     }
 
     const charts = {};
-    function mkChart(id, cfg) {
-        if (charts[id]) charts[id].destroy();
-        charts[id] = new Chart(document.getElementById(id), cfg);
-    }
+    function mkChart(id, cfg) { if (charts[id]) charts[id].destroy(); charts[id] = new Chart(document.getElementById(id), cfg); }
 
     function renderCharts(summary, accounts) {
         Chart.defaults.font.family = "'Hind Siliguri', sans-serif";
@@ -971,39 +874,24 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
             { label: 'ব্যয়', data: exp, borderColor: '#ff5c7a', backgroundColor: 'rgba(255,92,122,0.1)', fill: true, tension: .4, borderWidth: 2.5, pointRadius: 3 }
         ] }, options: lineOpts });
 
-        // বর্তমান মাসের আয়-ব্যয় অনুপাত
         const now = new Date();
         const cm = now.getMonth();
-        const cmLabel = bnMonths[cm] + ' ' + now.getFullYear();
-        document.getElementById('currentMonthLabel').textContent = cmLabel;
+        document.getElementById('currentMonthLabel').textContent = bnMonths[cm] + ' ' + now.getFullYear();
         const curInc = val(enMonths[cm], 'Income');
         const curExp = val(enMonths[cm], 'Expense');
-        mkChart('ratioChart', { type: 'doughnut', data: { 
-            labels: ['আয়', 'ব্যয়'], 
-            datasets: [{ data: (curInc + curExp) ? [curInc, curExp] : [1, 0], backgroundColor: ['#12b886', '#ff5c7a'], borderWidth: 3, borderColor: '#fff', hoverOffset: 6 }] 
-        }, options: donutOpts });
+        mkChart('ratioChart', { type: 'doughnut', data: { labels: ['আয়', 'ব্যয়'], datasets: [{ data: (curInc + curExp) ? [curInc, curExp] : [1, 0], backgroundColor: ['#12b886', '#ff5c7a'], borderWidth: 3, borderColor: '#fff', hoverOffset: 6 }] }, options: donutOpts });
 
         mkChart('saveChart', { type: 'bar', data: { labels, datasets: [
             { label: 'নিট সঞ্চয়', data: sur, backgroundColor: '#3347ff', borderRadius: 8, maxBarThickness: 18 },
             { label: 'বিনিয়োগ', data: inv, backgroundColor: '#8b5cf6', borderRadius: 8, maxBarThickness: 18 }
         ] }, options: barOpts });
 
-        // ঋণ ও দেনা Horizontal Bar Chart
         const totalRecv = (currentLoans.receivables || []).reduce((s, x) => s + x.amount, 0);
         const totalPay = (currentLoans.payables || []).reduce((s, x) => s + x.amount, 0);
         mkChart('loanChart', { type: 'bar', data: {
             labels: ['প্রাপ্য', 'দেয়'],
             datasets: [{ label: 'পরিমাণ', data: [totalRecv, totalPay], backgroundColor: ['#12b886', '#ff5c7a'], borderRadius: 8, maxBarThickness: 32 }]
-        }, options: { 
-            indexAxis: 'y',
-            responsive: true, 
-            maintainAspectRatio: false, 
-            plugins: { legend: { display: false }, tooltip: money }, 
-            scales: { 
-                x: { grid: { color: 'rgba(16,26,51,.06)' }, border: { display: false }, ticks: { callback: v => Math.abs(v) >= 1000 ? (v / 1000) + 'k' : v } },
-                y: { grid: { display: false }, border: { display: false } }
-            } 
-        } });
+        }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: money }, scales: { x: { grid: { color: 'rgba(16,26,51,.06)' }, border: { display: false }, ticks: { callback: v => Math.abs(v) >= 1000 ? (v / 1000) + 'k' : v } }, y: { grid: { display: false }, border: { display: false } } } } });
     }
 
     let formattedBackendDate = "";
@@ -1018,10 +906,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
     }
 
     const fp = flatpickr("#date", {
-        dateFormat: "d/m/Y",
-        defaultDate: "today",
-        allowInput: true,
-        disableMobile: true,
+        dateFormat: "d/m/Y", defaultDate: "today", allowInput: true, disableMobile: true,
         onReady: function(selectedDates) { if (selectedDates[0]) setBackendDate(selectedDates[0]); },
         onChange: function(selectedDates) { if (selectedDates[0]) setBackendDate(selectedDates[0]); }
     });
@@ -1043,9 +928,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         const typeSelect = document.getElementById("transactionType");
         typeSelect.innerHTML = '<option value="">ধরন নির্বাচন করুন</option>';
         masterData.types.forEach(type => {
-            const opt = document.createElement("option");
-            opt.value = type; opt.textContent = type;
-            typeSelect.appendChild(opt);
+            const opt = document.createElement("option"); opt.value = type; opt.textContent = type; typeSelect.appendChild(opt);
         });
         const fromSelect = document.getElementById("fromAccount");
         const toSelect = document.getElementById("toAccount");
@@ -1060,11 +943,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         masterData.cardNetworks.forEach(card => {
             const opt = document.createElement("option"); opt.value = card; opt.textContent = card; cardSelect.appendChild(opt);
         });
-        const borrowerSelect = document.getElementById("borrower");
-        borrowerSelect.innerHTML = '<option value="">নির্বাচন করুন</option>';
-        (masterData.borrowers || []).forEach(b => {
-            const opt = document.createElement("option"); opt.value = b; opt.textContent = b; borrowerSelect.appendChild(opt);
-        });
     }
 
     function updateCategories() {
@@ -1072,17 +950,28 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         const catSelect = document.getElementById("category");
         const subSelect = document.getElementById("subCategory");
         const toGroup = document.getElementById("toAccountGroup");
+        const cardGroup = document.getElementById("cardNetworkGroup");
         const borrowerGroup = document.getElementById("borrowerGroup");
         const borrowerLabel = document.getElementById("borrowerLabel");
+        const borrowerWrapper = document.getElementById("borrowerWrapper");
 
         catSelect.innerHTML = '<option value="">প্রধান খাত নির্বাচন করুন</option>';
         subSelect.innerHTML = '<option value="">আগে প্রধান খাত নির্বাচন করুন</option>';
         subSelect.disabled = true;
-
         toGroup.style.display = (type === "স্থানান্তর") ? "flex" : "none";
-        borrowerGroup.style.display = (type === "ঋণ" || type === "দায়") ? "flex" : "none";
-        if (type === "দায়") { borrowerLabel.textContent = "দেনাদারের নাম"; }
-        else { borrowerLabel.textContent = "ঋণগ্রহীতার নাম"; }
+        cardGroup.style.display = "none";
+        borrowerGroup.style.display = "none";
+
+        if (type === "ঋণ") {
+            borrowerGroup.style.display = "flex";
+            borrowerLabel.textContent = "ঋণগ্রহীতার নাম";
+            borrowerWrapper.innerHTML = `<input type="text" id="borrower" name="borrower" placeholder="যেমন: করিম">`;
+        } else if (type === "দায়") {
+            borrowerGroup.style.display = "flex";
+            borrowerLabel.textContent = "কার্ডের নাম";
+            cardGroup.style.display = "flex";
+            borrowerWrapper.innerHTML = `<select id="borrower" name="borrower"><option value="">নির্বাচন করুন</option>${(masterData.accounts || []).filter(a => a.includes('Card')).map(a => `<option value="${a}">${a}</option>`).join('')}</select>`;
+        }
 
         if (!type) { catSelect.disabled = true; return; }
         catSelect.disabled = false;
@@ -1100,9 +989,22 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         if (!cat) { subSelect.disabled = true; return; }
         subSelect.disabled = false;
         const filteredSubs = masterData.dataMap.filter(item => item.type === type && item.category === cat).map(item => item.subCategory);
-        filteredSubs.forEach(sub => {
-            const opt = document.createElement("option"); opt.value = sub; opt.textContent = sub; subSelect.appendChild(opt);
-        });
+        filteredSubs.forEach(sub => { const opt = document.createElement("option"); opt.value = sub; opt.textContent = sub; subSelect.appendChild(opt); });
+    }
+
+    function updateBorrowerInput() {
+        const type = document.getElementById("transactionType").value;
+        const sub = document.getElementById("subCategory").value;
+        const borrowerWrapper = document.getElementById("borrowerWrapper");
+        const borrowerLabel = document.getElementById("borrowerLabel");
+        if (type !== "ঋণ") return;
+        if (sub === "ঋণ পরিশোধ") {
+            borrowerLabel.textContent = "ঋণগ্রহীতার নাম";
+            borrowerWrapper.innerHTML = `<select id="borrower" name="borrower"><option value="">নির্বাচন করুন</option>${(masterData.borrowers || []).map(b => `<option value="${b}">${b}</option>`).join('')}</select>`;
+        } else {
+            borrowerLabel.textContent = "ঋণগ্রহীতার নাম";
+            borrowerWrapper.innerHTML = `<input type="text" id="borrower" name="borrower" placeholder="যেমন: করিম">`;
+        }
     }
 
     function toggleCardNetwork() {
@@ -1128,10 +1030,8 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         e.preventDefault();
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> সেভ হচ্ছে...';
-
         const formData = new FormData(form);
         formData.set('date', formattedBackendDate);
-
         fetch(scriptURL, { method: 'POST', body: formData })
         .then(response => response.json())
         .then(data => {
@@ -1150,10 +1050,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                 setAccent("");
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> লেনদেন সেভ করুন';
-                setTimeout(() => { 
-                    showView('home');
-                    fetchDashboardData();
-                }, 800);
+                setTimeout(() => { showView('home'); fetchDashboardData(); }, 800);
             } else { throw new Error(data.error || 'Server error'); }
         })
         .catch(error => {
