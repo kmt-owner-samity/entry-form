@@ -140,7 +140,6 @@ tfoot td:first-child{background:#e6e9fb}
 .loan-amount{font-size:14px;font-weight:700}
 .loan-total{margin-top:12px;padding-top:12px;border-top:2px solid #e2e8f0;display:flex;justify-content:space-between;font-weight:700;font-size:15px}
 
-/* Net Worth Summary Card - Light Background */
 .net-summary-card{padding:20px;border-radius:20px;background:#f8fafc;box-shadow:0 4px 15px rgba(0,0,0,0.04);margin-top:20px;border:1px solid #e2e8f0}
 .net-summary-card h3{font-size:15px;font-weight:700;margin-bottom:16px;color:var(--ink);display:flex;align-items:center;gap:8px}
 .net-summary-row{display:flex;gap:12px}
@@ -284,7 +283,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
 
       <div class="two" style="margin-top:14px">
         <div class="card glass"><h3>সঞ্চয় ও বিনিয়োগ <span>মাসভিত্তিক</span></h3><div class="chart-box"><canvas id="saveChart"></canvas></div></div>
-        <div class="card glass"><h3>ঋণ ও দেনা <span>সারসংক্ষেপ</span></h3><div class="chart-box sm"><canvas id="loanChart"></canvas></div></div>
+        <div class="card glass"><h3>ঋণ ও দেনা <span>সারসংক্ষেপ</span></h3><div class="chart-box sm" style="height:200px"><canvas id="loanChart"></canvas></div></div>
       </div>
 
       <div class="net-summary-card">
@@ -499,6 +498,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
             renderAccountGrid(data.accounts);
             renderCharts(data.summary, data.accounts);
             renderNetWorthCard(data);
+            renderLoanCards();
             skeleton.style.display = 'none';
             content.style.display = 'block';
         })
@@ -547,9 +547,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         const now = new Date();
         const currentMonthIdx = now.getMonth();
         const last3 = [];
-        for (let i = 0; i < 3; i++) {
-            last3.push((currentMonthIdx - i + 12) % 12);
-        }
+        for (let i = 0; i < 3; i++) { last3.push((currentMonthIdx - i + 12) % 12); }
 
         last3.forEach((idx) => {
             const month = enMonths[idx];
@@ -657,36 +655,40 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
     function closeModal() { document.getElementById('modal').classList.remove('show'); }
     document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeEditModal(); closeAllTxnModal(); closeAllLoanModal(); } });
 
+    function renderLoanCards() {
+        const recRecent = currentLoans.receivables.slice(0, 2);
+        const payRecent = currentLoans.payables.slice(0, 2);
+        const recList = document.getElementById('receivableList');
+        const payList = document.getElementById('payableList');
+        if (recRecent.length > 0) {
+            recList.innerHTML = '';
+            recRecent.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'loan-item';
+                div.innerHTML = `<span class="loan-name">${item.name}</span><span class="loan-amount pos">${formatAmount(item.amount)}</span>`;
+                recList.appendChild(div);
+            });
+        } else { recList.innerHTML = '<div class="empty">কোনো প্রাপ্য নেই</div>'; }
+        if (payRecent.length > 0) {
+            payList.innerHTML = '';
+            payRecent.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'loan-item';
+                div.innerHTML = `<span class="loan-name">${item.name}</span><span class="loan-amount neg">${formatAmount(item.amount)}</span>`;
+                payList.appendChild(div);
+            });
+        } else { payList.innerHTML = '<div class="empty">কোনো দেয় নেই</div>'; }
+        document.getElementById('totalReceivable').innerText = formatAmount(currentLoans.receivables.reduce((s, x) => s + x.amount, 0));
+        document.getElementById('totalPayable').innerText = formatAmount(currentLoans.payables.reduce((s, x) => s + x.amount, 0));
+    }
+
     function loadLoanSummary() {
         fetch(scriptURL + '?action=getLoanSummary')
             .then(res => res.json())
             .then(data => {
                 if (data.error) throw new Error(data.error);
                 currentLoans = { receivables: data.receivables || [], payables: data.payables || [] };
-                const recRecent = currentLoans.receivables.slice(0, 2);
-                const payRecent = currentLoans.payables.slice(0, 2);
-                const recList = document.getElementById('receivableList');
-                const payList = document.getElementById('payableList');
-                if (recRecent.length > 0) {
-                    recList.innerHTML = '';
-                    recRecent.forEach(item => {
-                        const div = document.createElement('div');
-                        div.className = 'loan-item';
-                        div.innerHTML = `<span class="loan-name">${item.name}</span><span class="loan-amount pos">${formatAmount(item.amount)}</span>`;
-                        recList.appendChild(div);
-                    });
-                } else { recList.innerHTML = '<div class="empty">কোনো প্রাপ্য নেই</div>'; }
-                if (payRecent.length > 0) {
-                    payList.innerHTML = '';
-                    payRecent.forEach(item => {
-                        const div = document.createElement('div');
-                        div.className = 'loan-item';
-                        div.innerHTML = `<span class="loan-name">${item.name}</span><span class="loan-amount neg">${formatAmount(item.amount)}</span>`;
-                        payList.appendChild(div);
-                    });
-                } else { payList.innerHTML = '<div class="empty">কোনো দেয় নেই</div>'; }
-                document.getElementById('totalReceivable').innerText = formatAmount(data.totalReceivable);
-                document.getElementById('totalPayable').innerText = formatAmount(data.totalPayable);
+                renderLoanCards();
             })
             .catch(err => console.error(err));
     }
@@ -925,10 +927,25 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
 
         const totalRecv = (currentLoans.receivables || []).reduce((s, x) => s + x.amount, 0);
         const totalPay = (currentLoans.payables || []).reduce((s, x) => s + x.amount, 0);
-        mkChart('loanChart', { type: 'bar', data: {
+        
+        // Semi-circle Doughnut Chart
+        mkChart('loanChart', { type: 'doughnut', data: {
             labels: ['প্রাপ্য', 'দেয়'],
-            datasets: [{ label: 'পরিমাণ', data: [totalRecv, totalPay], backgroundColor: ['#12b886', '#ff5c7a'], borderRadius: 8, maxBarThickness: 32 }]
-        }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: money }, scales: { x: { grid: { color: 'rgba(16,26,51,.06)' }, border: { display: false }, ticks: { callback: v => Math.abs(v) >= 1000 ? (v / 1000) + 'k' : v } }, y: { grid: { display: false }, border: { display: false } } } } });
+            datasets: [{ 
+                data: (totalRecv + totalPay) ? [totalRecv, totalPay] : [1, 0], 
+                backgroundColor: ['#12b886', '#ff5c7a'], 
+                borderWidth: 3, 
+                borderColor: '#fff', 
+                hoverOffset: 6 
+            }]
+        }, options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            cutout: '68%', 
+            circumference: 180, 
+            rotation: -90,
+            plugins: { legend: { display: false }, tooltip: money } 
+        } });
     }
 
     let formattedBackendDate = "";
@@ -1006,13 +1023,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
             borrowerGroup.style.display = "flex";
             borrowerLabel.textContent = "ঋণগ্রহীতার নাম";
             borrowerWrapper.innerHTML = `<input type="text" id="borrower" name="borrower" placeholder="যেমন: করিম">`;
-        } else if (type === "দায়") {
-            borrowerGroup.style.display = "flex";
-            cardGroup.style.display = "flex";
-            borrowerLabel.textContent = "কার্ডের নাম";
-            fromGroup.style.display = "none";
-            document.getElementById('fromAccount').required = false;
-            borrowerWrapper.innerHTML = `<select id="borrower" name="borrower"><option value="">নির্বাচন করুন</option>${(masterData.accounts || []).filter(a => a.includes('Card')).map(a => `<option value="${a}">${a}</option>`).join('')}</select>`;
         }
 
         if (!type) { catSelect.disabled = true; return; }
@@ -1041,13 +1051,33 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         const sub = document.getElementById("subCategory").value;
         const borrowerWrapper = document.getElementById("borrowerWrapper");
         const borrowerLabel = document.getElementById("borrowerLabel");
+        const cardGroup = document.getElementById("cardNetworkGroup");
+        const fromGroup = document.getElementById("fromAccountGroup");
+        
         if (type !== "ঋণ") return;
         
-        if (sub === "ঋণ পরিশোধ") {
+        // ক্রেডিট কার্ড বিল → কার্ড নেটওয়ার্ক + From Account লুকানো
+        if (sub === "ক্রেডিট কার্ড বিল") {
+            borrowerLabel.textContent = "কার্ডের নাম";
+            cardGroup.style.display = "flex";
+            fromGroup.style.display = "none";
+            document.getElementById('fromAccount').required = false;
+            borrowerWrapper.innerHTML = `<select id="borrower" name="borrower"><option value="">নির্বাচন করুন</option>${(masterData.accounts || []).filter(a => a.includes('Card')).map(a => `<option value="${a}">${a}</option>`).join('')}</select>`;
+        } 
+        // ঋণ পরিশোধ → ড্রপডাউন
+        else if (sub === "ঋণ পরিশোধ" || sub === "ঋণ/ধার পরিশোধ") {
             borrowerLabel.textContent = "ঋণগ্রহীতার নাম";
+            cardGroup.style.display = "none";
+            fromGroup.style.display = "flex";
+            document.getElementById('fromAccount').required = true;
             borrowerWrapper.innerHTML = `<select id="borrower" name="borrower"><option value="">নির্বাচন করুন</option>${(masterData.borrowers || []).map(b => `<option value="${b}">${b}</option>`).join('')}</select>`;
-        } else {
+        } 
+        // ঋণ প্রদান / ঋণ গ্রহণ → টেক্সট বক্স
+        else {
             borrowerLabel.textContent = "ঋণগ্রহীতার নাম";
+            cardGroup.style.display = "none";
+            fromGroup.style.display = "flex";
+            document.getElementById('fromAccount').required = true;
             borrowerWrapper.innerHTML = `<input type="text" id="borrower" name="borrower" placeholder="যেমন: করিম">`;
         }
     }
