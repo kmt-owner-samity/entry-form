@@ -27,19 +27,19 @@ body{font-family:'Hind Siliguri','Segoe UI',sans-serif;color:var(--ink);backgrou
 .b3{width:320px;height:320px;background:#a8ecd4;bottom:-100px;left:20%}
 .glass{background:var(--glass);border:1px solid var(--edge);box-shadow:var(--shadow);border-radius:26px}
 .wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 16px}
-.bar{position:sticky;top:0;z-index:30;padding:max(12px,env(safe-area-inset-top)) 0 10px}
-.bar-in{display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:22px;flex-wrap:nowrap;overflow:hidden}
+.bar{position:relative;top:auto;left:auto;right:auto;z-index:30;padding:max(12px,env(safe-area-inset-top)) 0 10px;transform:none;}
+.bar-in{display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:22px;flex-wrap:nowrap;overflow:visible;width:100%;min-width:0;position:relative;left:auto;right:auto;transform:none;}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;white-space:nowrap}
 .brand i{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;display:grid;place-items:center;font-size:16px;transition:background .4s}
-.spacer{flex:1;min-width:10px}
+.spacer{flex:1 1 auto;min-width:10px;pointer-events:none}
 
-.nav{display:flex;gap:4px;padding:4px;border-radius:20px;width:100%;max-width:500px;overflow:hidden}
+.nav{display:flex;gap:4px;padding:4px;border-radius:20px;width:auto;max-width:500px;min-width:0;flex:0 1 500px;overflow:hidden}
 .nav button, .nav a{flex:1;display:flex;justify-content:center;align-items:center;gap:6px;padding:10px 4px;border:none;background:none;border-radius:16px;color:var(--mute);font:600 12px 'Hind Siliguri',sans-serif;text-decoration:none;cursor:pointer;transition:.2s;text-align:center;white-space:nowrap;min-width:0}
 .nav i{font-size:14px}
 .nav .on{background:var(--ink);color:#fff}
 .nav-d{display:none}
 @media(min-width:900px){
-  .nav-d{display:flex;max-width:500px;margin:0 auto;flex-wrap:nowrap;}
+  .nav-d{display:flex;max-width:500px;min-width:0;margin:0 auto;flex:0 1 500px;flex-wrap:nowrap;}
   .nav-m{display:none !important;}
 }
 .nav-m{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:40;width:min(95vw,500px);background:var(--glass);border:1px solid var(--edge);box-shadow:var(--shadow);display:flex;}
@@ -199,7 +199,14 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
 .modal-table-wrap table{min-width:600px;font-size:12px}
 .modal-table-wrap th,.modal-table-wrap td{padding:8px 6px;font-size:11.5px}
 
+@media(max-width:899px){
+  .nav-d{display:none !important;}
+  .bar-in{gap:10px;}
+}
 @media(max-width:600px){
+  .bar-in{padding:9px 11px;}
+  .brand{flex:0 0 auto;}
+  .spacer{min-width:0;}
   .form-grid{grid-template-columns:1fr;}
   .full{grid-column:auto;}
   #amount{font-size:42px;}
@@ -363,7 +370,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
             </div>
             <div class="field">
               <label for="subCategory"><i class="fa-solid fa-tag"></i>উপ-খাত <span class="required">*</span></label>
-              <div class="ctl"><select id="subCategory" name="subCategory" onchange="updateBorrowerInput()" required disabled>
+              <div class="ctl"><select id="subCategory" name="subCategory" required disabled>
                 <option value="">আগে প্রধান খাত নির্বাচন করুন</option></select></div>
             </div>
             <div class="field" id="borrowerGroup" style="display:none">
@@ -979,23 +986,40 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
     }
 
     function loadMasterData() {
+        // API response arrays normalize করা হচ্ছে, যাতে null/string response হলেও form ভেঙে না যায়।
+        masterData.types = Array.isArray(masterData.types) ? masterData.types : [];
+        masterData.accounts = Array.isArray(masterData.accounts) ? masterData.accounts : [];
+        masterData.cardNetworks = Array.isArray(masterData.cardNetworks) ? masterData.cardNetworks : [];
+        masterData.borrowers = [...new Set(
+            (Array.isArray(masterData.borrowers) ? masterData.borrowers : [])
+                .map(name => String(name == null ? '' : name).trim())
+                .filter(Boolean)
+        )];
+        masterData.dataMap = Array.isArray(masterData.dataMap) ? masterData.dataMap : [];
+
         const typeSelect = document.getElementById("transactionType");
         typeSelect.innerHTML = '<option value="">ধরন নির্বাচন করুন</option>';
         masterData.types.forEach(type => {
-            const opt = document.createElement("option"); opt.value = type; opt.textContent = type; typeSelect.appendChild(opt);
+            const opt = document.createElement("option");
+            opt.value = type; opt.textContent = type; typeSelect.appendChild(opt);
         });
+
         const fromSelect = document.getElementById("fromAccount");
         const toSelect = document.getElementById("toAccount");
         fromSelect.innerHTML = '<option value="">অ্যাকাউন্ট নির্বাচন করুন</option>';
         toSelect.innerHTML = '<option value="">অ্যাকাউন্ট নির্বাচন করুন</option>';
         masterData.accounts.forEach(acc => {
-            const o1 = document.createElement("option"); o1.value = acc; o1.textContent = acc; fromSelect.appendChild(o1);
-            const o2 = document.createElement("option"); o2.value = acc; o2.textContent = acc; toSelect.appendChild(o2);
+            const o1 = document.createElement("option");
+            o1.value = acc; o1.textContent = acc; fromSelect.appendChild(o1);
+            const o2 = document.createElement("option");
+            o2.value = acc; o2.textContent = acc; toSelect.appendChild(o2);
         });
+
         const cardSelect = document.getElementById("cardNetwork");
         cardSelect.innerHTML = '<option value="">কার্ড নির্বাচন করুন</option>';
         masterData.cardNetworks.forEach(card => {
-            const opt = document.createElement("option"); opt.value = card; opt.textContent = card; cardSelect.appendChild(opt);
+            const opt = document.createElement("option");
+            opt.value = card; opt.textContent = card; cardSelect.appendChild(opt);
         });
     }
 
@@ -1009,6 +1033,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         const borrowerGroup = document.getElementById("borrowerGroup");
         const borrowerLabel = document.getElementById("borrowerLabel");
         const borrowerWrapper = document.getElementById("borrowerWrapper");
+        const fromSelect = document.getElementById("fromAccount");
 
         catSelect.innerHTML = '<option value="">প্রধান খাত নির্বাচন করুন</option>';
         subSelect.innerHTML = '<option value="">আগে প্রধান খাত নির্বাচন করুন</option>';
@@ -1016,20 +1041,35 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         toGroup.style.display = "none";
         cardGroup.style.display = "none";
         borrowerGroup.style.display = "none";
+
+        // প্রতিটি নতুন transaction type-এ From Account স্বাভাবিক অবস্থায় ফিরবে।
         fromGroup.style.display = "flex";
-        document.getElementById('fromAccount').required = true;
+        fromSelect.disabled = false;
+        fromSelect.required = true;
 
         if (type === "ঋণ") {
             borrowerGroup.style.display = "flex";
             borrowerLabel.textContent = "ঋণগ্রহীতার নাম";
-            borrowerWrapper.innerHTML = `<input type="text" id="borrower" name="borrower" placeholder="যেমন: করিম">`;
+            borrowerWrapper.innerHTML =
+                '<input type="text" id="borrower" name="borrower" placeholder="যেমন: করিম" autocomplete="off">';
         }
 
-        if (!type) { catSelect.disabled = true; return; }
+        if (!type) {
+            catSelect.disabled = true;
+            return;
+        }
+
         catSelect.disabled = false;
-        const filteredCats = [...new Set(masterData.dataMap.filter(item => item.type === type).map(item => item.category))];
+        const filteredCats = [...new Set(
+            masterData.dataMap
+                .filter(item => item.type === type)
+                .map(item => item.category)
+        )];
         filteredCats.forEach(cat => {
-            const opt = document.createElement("option"); opt.value = cat; opt.textContent = cat; catSelect.appendChild(opt);
+            const opt = document.createElement("option");
+            opt.value = cat;
+            opt.textContent = cat;
+            catSelect.appendChild(opt);
         });
     }
 
@@ -1037,48 +1077,109 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         const type = document.getElementById("transactionType").value;
         const cat = document.getElementById("category").value;
         const subSelect = document.getElementById("subCategory");
+
         subSelect.innerHTML = '<option value="">উপ-খাত নির্বাচন করুন</option>';
-        if (!cat) { subSelect.disabled = true; return; }
+        if (!cat) {
+            subSelect.disabled = true;
+            updateBorrowerInput();
+            return;
+        }
+
         subSelect.disabled = false;
-        const filteredSubs = masterData.dataMap.filter(item => item.type === type && item.category === cat).map(item => item.subCategory);
-        filteredSubs.forEach(sub => { const opt = document.createElement("option"); opt.value = sub; opt.textContent = sub; subSelect.appendChild(opt); });
-        
-        subSelect.onchange = function() { updateBorrowerInput(); };
+        const filteredSubs = [...new Set(
+            masterData.dataMap
+                .filter(item => item.type === type && item.category === cat)
+                .map(item => item.subCategory)
+        )];
+
+        filteredSubs.forEach(sub => {
+            const opt = document.createElement("option");
+            opt.value = sub;
+            opt.textContent = sub;
+            subSelect.appendChild(opt);
+        });
+
+        // Inline onchange-এর উপর নির্ভর না করে একবারই event handler বসানো।
+        subSelect.onchange = updateBorrowerInput;
+        updateBorrowerInput();
+    }
+
+    function fillBorrowerSelect(names, placeholderText) {
+        const wrapper = document.getElementById("borrowerWrapper");
+        const select = document.createElement("select");
+        select.id = "borrower";
+        select.name = "borrower";
+        select.innerHTML = "";
+
+        const first = document.createElement("option");
+        first.value = "";
+        first.textContent = placeholderText || "নির্বাচন করুন";
+        select.appendChild(first);
+
+        const cleanNames = [...new Set(
+            (Array.isArray(names) ? names : [])
+                .map(name => String(name == null ? "" : name).trim())
+                .filter(Boolean)
+        )];
+
+        cleanNames.forEach(name => {
+            const option = document.createElement("option");
+            option.value = name;
+            option.textContent = name;
+            select.appendChild(option);
+        });
+
+        if (cleanNames.length === 0) {
+            first.textContent = "কোনো নাম পাওয়া যায়নি";
+            select.disabled = true;
+        }
+
+        wrapper.replaceChildren(select);
     }
 
     function updateBorrowerInput() {
         const type = document.getElementById("transactionType").value;
-        const sub = document.getElementById("subCategory").value;
+        const sub = String(document.getElementById("subCategory").value || "").trim();
         const borrowerWrapper = document.getElementById("borrowerWrapper");
         const borrowerLabel = document.getElementById("borrowerLabel");
         const cardGroup = document.getElementById("cardNetworkGroup");
         const fromGroup = document.getElementById("fromAccountGroup");
-        
+        const fromSelect = document.getElementById("fromAccount");
+
         if (type !== "ঋণ") return;
-        
-        // ক্রেডিট কার্ড বিল → কার্ড নেটওয়ার্ক + From Account লুকানো
+
+        // ক্রেডিট কার্ড বিল: উৎস অ্যাকাউন্ট লুকানো ও validation থেকে সম্পূর্ণ বাদ।
         if (sub === "ক্রেডিট কার্ড বিল") {
             borrowerLabel.textContent = "কার্ডের নাম";
             cardGroup.style.display = "flex";
             fromGroup.style.display = "none";
-            document.getElementById('fromAccount').required = false;
-            borrowerWrapper.innerHTML = `<select id="borrower" name="borrower"><option value="">নির্বাচন করুন</option>${(masterData.accounts || []).filter(a => a.includes('Card')).map(a => `<option value="${a}">${a}</option>`).join('')}</select>`;
-        } 
-        // ঋণ পরিশোধ → ড্রপডাউন
+            fromSelect.required = false;
+            fromSelect.disabled = true;
+
+            const cardNames = (masterData.accounts || []).filter(name =>
+                /card|কার্ড/i.test(String(name))
+            );
+            fillBorrowerSelect(cardNames, "কার্ড নির্বাচন করুন");
+        }
+        // ঋণ পরিশোধ: backend-এর borrowers array-এর সব unique নাম দেখাবে।
         else if (sub === "ঋণ পরিশোধ" || sub === "ঋণ/ধার পরিশোধ") {
             borrowerLabel.textContent = "ঋণগ্রহীতার নাম";
             cardGroup.style.display = "none";
             fromGroup.style.display = "flex";
-            document.getElementById('fromAccount').required = true;
-            borrowerWrapper.innerHTML = `<select id="borrower" name="borrower"><option value="">নির্বাচন করুন</option>${(masterData.borrowers || []).map(b => `<option value="${b}">${b}</option>`).join('')}</select>`;
-        } 
-        // ঋণ প্রদান / ঋণ গ্রহণ → টেক্সট বক্স
+            fromSelect.disabled = false;
+            fromSelect.required = true;
+
+            fillBorrowerSelect(masterData.borrowers, "ঋণগ্রহীতা নির্বাচন করুন");
+        }
+        // ঋণ প্রদান / ঋণ গ্রহণ: নাম লেখার ইনপুট।
         else {
             borrowerLabel.textContent = "ঋণগ্রহীতার নাম";
             cardGroup.style.display = "none";
             fromGroup.style.display = "flex";
-            document.getElementById('fromAccount').required = true;
-            borrowerWrapper.innerHTML = `<input type="text" id="borrower" name="borrower" placeholder="যেমন: করিম">`;
+            fromSelect.disabled = false;
+            fromSelect.required = true;
+            borrowerWrapper.innerHTML =
+                '<input type="text" id="borrower" name="borrower" placeholder="যেমন: করিম" autocomplete="off">';
         }
     }
 
@@ -1086,7 +1187,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         const fromSelect = document.getElementById("fromAccount");
         const toSelect = document.getElementById("toAccount");
         const cardGroup = document.getElementById("cardNetworkGroup");
-        const fromValue = fromSelect.value;
+        const fromValue = fromSelect.value || "";
         toSelect.innerHTML = '<option value="">অ্যাকাউন্ট নির্বাচন করুন</option>';
         if (masterData.accounts) {
             masterData.accounts.forEach(acc => {
@@ -1122,7 +1223,12 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                 document.getElementById("toAccountGroup").style.display = "none";
                 document.getElementById("cardNetworkGroup").style.display = "none";
                 document.getElementById("borrowerGroup").style.display = "none";
+                document.getElementById("borrowerWrapper").innerHTML =
+                    '<input type="text" id="borrower" name="borrower" placeholder="যেমন: করিম">';
+                document.getElementById('fromAccount').disabled = false;
                 document.getElementById('fromAccount').required = true;
+                document.getElementById("fromAccountGroup").style.display = "flex";
+                document.getElementById("cardNetworkGroup").style.display = "none";
                 setAccent("");
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> লেনদেন সেভ করুন';
