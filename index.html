@@ -33,8 +33,8 @@ body{font-family:'Hind Siliguri','Segoe UI',sans-serif;color:var(--ink);backgrou
 .brand i{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;display:grid;place-items:center;font-size:16px;transition:background .4s}
 .spacer{flex:1;min-width:10px}
 
-.nav{display:flex;gap:4px;padding:4px;border-radius:20px;width:100%;max-width:500px}
-.nav button, .nav a{flex:1;display:flex;justify-content:center;align-items:center;gap:6px;padding:10px 4px;border:none;background:none;border-radius:16px;color:var(--mute);font:600 12px 'Hind Siliguri',sans-serif;text-decoration:none;cursor:pointer;transition:.2s;text-align:center;white-space:nowrap}
+.nav{display:flex;gap:4px;padding:4px;border-radius:20px;width:100%;max-width:500px;overflow:hidden}
+.nav button, .nav a{flex:1;display:flex;justify-content:center;align-items:center;gap:6px;padding:10px 4px;border:none;background:none;border-radius:16px;color:var(--mute);font:600 12px 'Hind Siliguri',sans-serif;text-decoration:none;cursor:pointer;transition:.2s;text-align:center;white-space:nowrap;min-width:0}
 .nav i{font-size:14px}
 .nav .on{background:var(--ink);color:#fff}
 .nav-d{display:none}
@@ -140,11 +140,12 @@ tfoot td:first-child{background:#e6e9fb}
 .loan-amount{font-size:14px;font-weight:700}
 .loan-total{margin-top:12px;padding-top:12px;border-top:2px solid #e2e8f0;display:flex;justify-content:space-between;font-weight:700;font-size:15px}
 
-.net-summary-card{padding:20px;border-radius:20px;background:#fff;box-shadow:var(--shadow);margin-top:20px}
+/* Net Worth Summary Card - Light Background */
+.net-summary-card{padding:20px;border-radius:20px;background:#f8fafc;box-shadow:0 4px 15px rgba(0,0,0,0.04);margin-top:20px;border:1px solid #e2e8f0}
 .net-summary-card h3{font-size:15px;font-weight:700;margin-bottom:16px;color:var(--ink);display:flex;align-items:center;gap:8px}
 .net-summary-row{display:flex;gap:12px}
 .net-summary-item{flex:1;padding:16px;border-radius:14px;text-align:center}
-.net-summary-item.nw{background:linear-gradient(135deg,#1b4965,#25617f);color:#fff}
+.net-summary-item.nw{background:#eef2ff;color:#3347ff}
 .net-summary-item.assets{background:#ecfdf5;color:#047857}
 .net-summary-item .lbl{font-size:12px;font-weight:600;opacity:.9}
 .net-summary-item .val{font-size:20px;font-weight:700;margin-top:6px;font-family:'Inter',sans-serif}
@@ -195,7 +196,6 @@ button[type=submit]:active{transform:scale(.98)}
 button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
 .foot{text-align:center;color:var(--mute);font-size:12px;margin-top:6px}
 
-/* Modal Table Fix - সব কলাম দেখা যাবে */
 .modal-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .modal-table-wrap table{min-width:600px;font-size:12px}
 .modal-table-wrap th,.modal-table-wrap td{padding:8px 6px;font-size:11.5px}
@@ -546,8 +546,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         let totals = { Income: 0, Expense: 0, Surplus: 0, Investment: 0, Loan: 0, Asset: 0, Liability: 0 };
         const now = new Date();
         const currentMonthIdx = now.getMonth();
-        
-        // বর্তমান মাস থেকে পিছনের ৩ মাস (বর্তমান মাস প্রথমে)
         const last3 = [];
         for (let i = 0; i < 3; i++) {
             last3.push((currentMonthIdx - i + 12) % 12);
