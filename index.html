@@ -140,7 +140,6 @@ tfoot td:first-child{background:#e6e9fb}
 .loan-amount{font-size:14px;font-weight:700}
 .loan-total{margin-top:12px;padding-top:12px;border-top:2px solid #e2e8f0;display:flex;justify-content:space-between;font-weight:700;font-size:15px}
 
-/* Net Worth Summary Card (Glass Style) */
 .net-summary-card{padding:20px;border-radius:20px;background:#fff;box-shadow:var(--shadow);margin-top:20px}
 .net-summary-card h3{font-size:15px;font-weight:700;margin-bottom:16px;color:var(--ink);display:flex;align-items:center;gap:8px}
 .net-summary-row{display:flex;gap:12px}
@@ -195,6 +194,11 @@ button[type=submit]{width:100%;height:56px;margin-top:20px;border:none;border-ra
 button[type=submit]:active{transform:scale(.98)}
 button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
 .foot{text-align:center;color:var(--mute);font-size:12px;margin-top:6px}
+
+/* Modal Table Fix - সব কলাম দেখা যাবে */
+.modal-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.modal-table-wrap table{min-width:600px;font-size:12px}
+.modal-table-wrap th,.modal-table-wrap td{padding:8px 6px;font-size:11.5px}
 
 @media(max-width:600px){
   .form-grid{grid-template-columns:1fr;}
@@ -258,7 +262,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         <div class="hero">
           <div>
             <small>মোট ব্যালেন্স <i class="fa-solid fa-eye-slash" id="eyeIcon" onclick="toggleBalance()"></i></small>
-            <div class="big" id="cardBalance">৳ ০.০০</div>
+            <div class="big" id="cardBalance">৳ ••••••••</div>
           </div>
           <div class="ring">
             <svg width="92" height="92" viewBox="0 0 92 92"><circle cx="46" cy="46" r="38" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="9"/><circle id="ringArc" cx="46" cy="46" r="38" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-dasharray="238.76" stroke-dashoffset="238.76" style="transition:stroke-dashoffset 1s ease"/></svg>
@@ -283,7 +287,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         <div class="card glass"><h3>ঋণ ও দেনা <span>সারসংক্ষেপ</span></h3><div class="chart-box sm"><canvas id="loanChart"></canvas></div></div>
       </div>
 
-      <!-- নেট ওয়ার্থ ও মোট সম্পদ (Glass Style) -->
       <div class="net-summary-card">
         <h3>💰 নেট ওয়ার্থ ও মোট সম্পদ</h3>
         <div class="net-summary-row">
@@ -543,8 +546,13 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         let totals = { Income: 0, Expense: 0, Surplus: 0, Investment: 0, Loan: 0, Asset: 0, Liability: 0 };
         const now = new Date();
         const currentMonthIdx = now.getMonth();
+        
+        // বর্তমান মাস থেকে পিছনের ৩ মাস (বর্তমান মাস প্রথমে)
         const last3 = [];
-        for (let i = 2; i >= 0; i--) { last3.push((currentMonthIdx - i + 12) % 12); }
+        for (let i = 0; i < 3; i++) {
+            last3.push((currentMonthIdx - i + 12) % 12);
+        }
+
         last3.forEach((idx) => {
             const month = enMonths[idx];
             const d = summary && summary[month] ? summary[month] : { Income: 0, Expense: 0, Surplus: 0, Investment: 0, Loan: 0, Asset: 0, Liability: 0 };
@@ -562,6 +570,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                 <td>${formatAmount(d.Liability)}</td>`;
             tbody.appendChild(row);
         });
+
         let totalSurplusClass = (totals.Surplus > 0) ? 'pos' : (totals.Surplus < 0 ? 'neg' : '');
         tfoot.innerHTML = `
             <td>মোট</td>
@@ -577,10 +586,10 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
     function showAllMonthly() {
         const sheet = document.getElementById('allTxnSheet');
         let html = '<div class="sheet-h"><div class="ic" style="background:var(--blue)"><i class="fa-solid fa-calendar"></i></div><b>সব মাসিক হিসাব</b><button onclick="closeAllTxnModal()"><i class="fa-solid fa-xmark"></i></button></div>';
-        html += '<div style="overflow-x:auto"><table style="font-size:12px"><thead><tr><th>মাস</th><th>আয়</th><th>ব্যয়</th><th>সঞ্চয়</th></tr></thead><tbody>';
+        html += '<div class="modal-table-wrap"><table><thead><tr><th>মাস</th><th>আয়</th><th>ব্যয়</th><th>সঞ্চয়</th><th>বিনিয়োগ</th><th>ঋণ/স্থানান্তর</th><th>সম্পদ</th><th>দায়</th></tr></thead><tbody>';
         enMonths.forEach((month, idx) => {
-            const d = currentSummary && currentSummary[month] ? currentSummary[month] : { Income: 0, Expense: 0, Surplus: 0 };
-            html += `<tr><td>${bnMonths[idx]}</td><td>${formatAmount(d.Income)}</td><td>${formatAmount(d.Expense)}</td><td>${formatAmount(d.Surplus)}</td></tr>`;
+            const d = currentSummary && currentSummary[month] ? currentSummary[month] : { Income: 0, Expense: 0, Surplus: 0, Investment: 0, Loan: 0, Asset: 0, Liability: 0 };
+            html += `<tr><td>${bnMonths[idx]}</td><td>${formatAmount(d.Income)}</td><td>${formatAmount(d.Expense)}</td><td>${formatAmount(d.Surplus)}</td><td>${formatAmount(d.Investment)}</td><td>${formatAmount(d.Loan)}</td><td>${formatAmount(d.Asset)}</td><td>${formatAmount(d.Liability)}</td></tr>`;
         });
         html += '</tbody></table></div>';
         sheet.innerHTML = html;
@@ -993,6 +1002,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         cardGroup.style.display = "none";
         borrowerGroup.style.display = "none";
         fromGroup.style.display = "flex";
+        document.getElementById('fromAccount').required = true;
 
         if (type === "ঋণ") {
             borrowerGroup.style.display = "flex";
@@ -1002,7 +1012,8 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
             borrowerGroup.style.display = "flex";
             cardGroup.style.display = "flex";
             borrowerLabel.textContent = "কার্ডের নাম";
-            fromGroup.style.display = "none"; // দায়ের ক্ষেত্রে From Account লুকানো
+            fromGroup.style.display = "none";
+            document.getElementById('fromAccount').required = false;
             borrowerWrapper.innerHTML = `<select id="borrower" name="borrower"><option value="">নির্বাচন করুন</option>${(masterData.accounts || []).filter(a => a.includes('Card')).map(a => `<option value="${a}">${a}</option>`).join('')}</select>`;
         }
 
@@ -1024,7 +1035,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         const filteredSubs = masterData.dataMap.filter(item => item.type === type && item.category === cat).map(item => item.subCategory);
         filteredSubs.forEach(sub => { const opt = document.createElement("option"); opt.value = sub; opt.textContent = sub; subSelect.appendChild(opt); });
         
-        // উপ-খাত সিলেক্ট করলে ঋণগ্রহীতা ইনপুট আপডেট
         subSelect.onchange = function() { updateBorrowerInput(); };
     }
 
@@ -1084,6 +1094,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                 document.getElementById("toAccountGroup").style.display = "none";
                 document.getElementById("cardNetworkGroup").style.display = "none";
                 document.getElementById("borrowerGroup").style.display = "none";
+                document.getElementById('fromAccount').required = true;
                 setAccent("");
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> লেনদেন সেভ করুন';
