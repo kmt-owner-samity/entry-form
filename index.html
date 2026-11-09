@@ -211,7 +211,6 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
 .modal-table-wrap table{min-width:600px;font-size:12px}
 .modal-table-wrap th,.modal-table-wrap td{padding:8px 6px;font-size:11.5px}
 
-/* Confirm Dialog */
 .confirm-dialog{position:fixed;inset:0;z-index:100;background:rgba(16,26,51,.5);display:none;align-items:center;justify-content:center}
 .confirm-dialog.show{display:flex}
 .confirm-box{background:#fff;border-radius:20px;padding:24px;max-width:340px;width:90%;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.2)}
@@ -222,7 +221,6 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
 .confirm-box .btn-cancel{background:#eef1f8;color:var(--ink)}
 .confirm-box .btn-ok{background:#dc2626;color:#fff}
 
-/* Pagination */
 .pagination{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:16px}
 .pagination button{width:36px;height:36px;border:none;border-radius:8px;background:#eef1f8;color:var(--ink);font-weight:700;cursor:pointer}
 .pagination button.on{background:var(--blue);color:#fff}
@@ -465,17 +463,12 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
     const bnMonths = ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"];
     const bnMonthsShort = ["জানু", "ফেব", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্ট", "অক্টো", "নভে", "ডিসে"];
     const enMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
 
     let balanceVisible = false, realBalanceValue = 0;
 
     function formatAmount(value) {
         const number = Number(value) || 0;
         return "৳ " + number.toLocaleString('en-BD', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-
-    function toBn(num) {
-        return String(num).replace(/\d/g, d => bnDigits[d]);
     }
 
     function toggleBalance() {
@@ -501,7 +494,6 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
         setTimeout(() => { toast.remove(); }, 3000);
     }
 
-    // Custom confirm dialog
     let confirmResolve = null;
     function showConfirm(title, message) {
         document.getElementById('confirmTitle').innerText = title;
@@ -530,14 +522,13 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
     let currentLoans = { receivables: [], payables: [] };
 
     window.onload = function() {
-        // বছর ৫টি: বর্তমান ± ২
         const currentYear = new Date().getFullYear();
         const yearSelect = document.getElementById('yearFilter');
         yearSelect.innerHTML = '';
         for (let y = currentYear - 2; y <= currentYear + 2; y++) {
             const opt = document.createElement('option');
             opt.value = y;
-            opt.textContent = toBn(y);
+            opt.textContent = y;
             if (y === currentYear) opt.selected = true;
             yearSelect.appendChild(opt);
         }
@@ -600,7 +591,7 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
         if (balanceVisible) el.innerText = formatAmount(totalBalance);
         else el.innerText = '৳ ••••••••';
         const rate = totalIncome > 0 ? Math.max(0, Math.min(100, ((totalIncome - totalExpense) / totalIncome) * 100)) : 0;
-        document.getElementById('ringPct').innerText = toBn(Math.round(rate)) + '%';
+        document.getElementById('ringPct').innerText = Math.round(rate) + '%';
         document.getElementById('ringArc').style.strokeDashoffset = 238.76 * (1 - rate / 100);
     }
 
@@ -664,7 +655,7 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
             b.innerHTML = `
                 <div class="acc-percent-wrap">
                     <svg width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="22" fill="none" stroke="#e3e7f4" stroke-width="5"/><circle cx="28" cy="28" r="22" fill="none" stroke="#3347ff" stroke-width="5" stroke-linecap="round" stroke-dasharray="${circumference}" stroke-dashoffset="${dashoffset}"/></svg>
-                    <div class="acc-pct-text">${toBn(percent)}%</div>
+                    <div class="acc-pct-text">${percent}%</div>
                 </div>
                 <div class="ic" style="background:${palette[i % palette.length]}"><i class="fa-solid ${accIcon(acc.name)}"></i></div>
                 <div class="n">${acc.name || 'নাম নেই'}</div>
@@ -686,7 +677,7 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
             <div class="row"><span>মোট খরচ</span><b class="neg">${formatAmount(acc.totalOut)}</b></div>
             <div class="cur"><span>বর্তমান ব্যালেন্স</span><b class="${cls}">${formatAmount(acc.currentBalance)}</b></div>
             <div class="share"><i style="width:${share}%"></i></div>
-            <div class="share-l">মোট ব্যালেন্সের ${toBn(Math.round(share))}% এই অ্যাকাউন্টে</div>`;
+            <div class="share-l">মোট ব্যালেন্সের ${Math.round(share)}% এই অ্যাকাউন্টে</div>`;
         document.getElementById('modal').classList.add('show');
     }
     function closeModal() { document.getElementById('modal').classList.remove('show'); }
@@ -749,7 +740,6 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
     }
     function closeAllLoanModal() { document.getElementById('allLoanModal').classList.remove('show'); }
 
-    // All transactions pagination (current month only)
     let currentTransactions = [];
     let currentTxnPage = 1;
     const TXNS_PER_PAGE = 10;
@@ -772,7 +762,6 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
 
     function showAllTransactions(page) {
         currentTxnPage = page || 1;
-        // বর্তমান মাসের লেনদেন ফিল্টার
         const now = new Date();
         const curYear = now.getFullYear(), curMonth = now.getMonth();
         const monthTxns = currentTransactions.filter(t => {
@@ -784,7 +773,8 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
         const start = (currentTxnPage - 1) * TXNS_PER_PAGE;
         const pageData = monthTxns.slice(start, start + TXNS_PER_PAGE);
 
-        let html = '<div class="sheet-h"><div class="ic" style="background:var(--blue)"><i class="fa-solid fa-list"></i></div><b>সব লেনদেন (এই মাস)</b><button onclick="closeAllTxnModal()"><i class="fa-solid fa-xmark"></i></button></div>';
+        const monthName = bnMonths[curMonth] + ' ' + curYear;
+        let html = '<div class="sheet-h"><div class="ic" style="background:var(--blue)"><i class="fa-solid fa-list"></i></div><b>সব লেনদেন (' + monthName + ')</b><button onclick="closeAllTxnModal()"><i class="fa-solid fa-xmark"></i></button></div>';
         html += '<div class="txn-list" id="allTxnListInner"></div>';
         html += '<div class="pagination" id="txnPagination"></div>';
         document.getElementById('allTxnSheet').innerHTML = html;
@@ -798,7 +788,7 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
         pg.innerHTML = '';
         for (let p = 1; p <= totalPages; p++) {
             const btn = document.createElement('button');
-            btn.textContent = toBn(p);
+            btn.textContent = p;
             if (p === currentTxnPage) btn.className = 'on';
             btn.onclick = () => showAllTransactions(p);
             pg.appendChild(btn);
@@ -833,6 +823,8 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
     }
 
     function editTxn(row) {
+        // "সব লেনদেন" মোডাল ক্লোজ করে দেব
+        closeAllTxnModal();
         const txn = currentTransactions.find(t => t.row === row);
         if (!txn) return;
         const typeOptions = masterData.types.map(t => `<option value="${t}" ${t === txn.type ? 'selected' : ''}>${t}</option>`).join('');
@@ -975,7 +967,7 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
 
         const now = new Date();
         const cm = now.getMonth();
-        document.getElementById('currentMonthLabel').textContent = bnMonths[cm] + ' ' + toBn(now.getFullYear());
+        document.getElementById('currentMonthLabel').textContent = bnMonths[cm] + ' ' + now.getFullYear();
         const curInc = val(enMonths[cm], 'Income');
         const curExp = val(enMonths[cm], 'Expense');
         mkChart('ratioChart', { type: 'doughnut', data: { labels: ['আয়', 'ব্যয়'], datasets: [{ data: (curInc + curExp) ? [curInc, curExp] : [1, 0], backgroundColor: ['#12b886', '#ff5c7a'], borderWidth: 3, borderColor: '#fff', hoverOffset: 6 }] }, options: donutOpts });
@@ -1139,7 +1131,6 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
 
     form.addEventListener('submit', e => {
         e.preventDefault();
-        // Validity check only for visible required fields
         const bad = [...form.querySelectorAll('[required]')].find(el => el.offsetParent !== null && !el.value);
         if (bad) { showToast('সব * চিহ্নিত ঘর পূরণ করুন!', 'error'); bad.focus(); return; }
         submitBtn.disabled = true;
@@ -1163,11 +1154,8 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
                 document.getElementById("borrowerGroup").style.display = "none";
                 document.getElementById('fromAccount').required = true;
                 setAccent("");
-                // নতুন ঋণগ্রহীতার নাম masterData.borrowers-এ যোগ করে দেব (রিফ্রেশ ছাড়াই)
                 const b = (formData.get('borrower') || '').toString().trim();
-                if (b && !masterData.borrowers.includes(b)) {
-                    masterData.borrowers.push(b);
-                }
+                if (b && !masterData.borrowers.includes(b)) { masterData.borrowers.push(b); }
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> লেনদেন সেভ করুন';
                 setTimeout(() => { showView('home'); fetchDashboardData(); }, 800);
