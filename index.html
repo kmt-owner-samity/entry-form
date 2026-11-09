@@ -535,35 +535,52 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
         fetchDashboardData();
     };
 
-    function fetchDashboardData() {
-        const year = document.getElementById('yearFilter').value;
-        const skeleton = document.getElementById('skeleton');
-        const content = document.getElementById('content');
-        const errorMsg = document.getElementById('errorMsg');
+function fetchDashboardData() {
+    const year = document.getElementById('yearFilter').value;
+    const skeleton = document.getElementById('skeleton');
+    const content = document.getElementById('content');
+    const errorMsg = document.getElementById('errorMsg');
 
-        skeleton.style.display = 'block';
-        content.style.display = 'none';
-        errorMsg.style.display = 'none';
+    skeleton.style.display = 'block';
+    content.style.display = 'none';
+    errorMsg.style.display = 'none';
 
-        Promise.all([
-            fetch(scriptURL + '?year=' + year).then(r => r.json()),
-            fetch(scriptURL + '?action=getLoanSummary').then(r => r.json())
-        ])
-        .then(([data, loanData]) => {
+    // ড্যাশবোর্ড ডেটা ফেচ
+    fetch(scriptURL + '?year=' + year)
+        .then(r => r.json())
+        .then(data => {
             if (data.error) throw new Error(data.error);
             currentSummary = data.summary;
             window.__accounts = data.accounts || [];
-            currentLoans = { receivables: loanData.receivables || [], payables: loanData.payables || [] };
             renderKPI(data.summary, data.accounts);
             renderMonthlyTable(data.summary);
             renderAccountGrid(data.accounts);
-            renderCharts(data.summary, data.accounts);
             renderNetWorthCard(data);
             skeleton.style.display = 'none';
             content.style.display = 'block';
         })
-        .catch(err => { console.error(err); skeleton.style.display = 'none'; errorMsg.style.display = 'block'; });
-    }
+        .catch(err => {
+            console.error('Dashboard data error:', err);
+            skeleton.style.display = 'none';
+            errorMsg.style.display = 'block';
+        });
+
+    // ঋণ সারসংক্ষেপ আলাদাভাবে ফেচ (এরর হলেও ড্যাশবোর্ড কাজ করবে)
+    fetch(scriptURL + '?action=getLoanSummary')
+        .then(r => r.json())
+        .then(loanData => {
+            if (!loanData.error) {
+                currentLoans = { receivables: loanData.receivables || [], payables: loanData.payables || [] };
+            }
+            renderLoanCards();
+            renderCharts(currentSummary, window.__accounts);
+        })
+        .catch(err => {
+            console.error('Loan summary error:', err);
+            // ঋণ ডেটা ফেচ না হলেও চার্ট রেন্ডার হবে (খালি ডেটা দিয়ে)
+            renderCharts(currentSummary, window.__accounts);
+        });
+}
 
     function renderNetWorthCard(data) {
         document.getElementById('netWorthValue').innerText = formatAmount(data.netWorth || 0);
