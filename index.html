@@ -19,52 +19,22 @@ body[data-type=income]{--a1:#0b9f73;--a2:#2fd4a3;--ac:#12b886;--ac-soft:rgba(18,
 body[data-type=expense]{--a1:#e63a5e;--a2:#ff8a65;--ac:#ff5c7a;--ac-soft:rgba(255,92,122,.16);--ac-shadow:rgba(255,92,122,.35)}
 body[data-type=transfer]{--a1:#1f7ae0;--a2:#4cc3ff;--ac:#2b8cf0;--ac-soft:rgba(43,140,240,.16);--ac-shadow:rgba(43,140,240,.35)}
 body[data-type=invest]{--a1:#6d3fe8;--a2:#b08cff;--ac:#8b5cf6;--ac-soft:rgba(139,92,246,.16);--ac-shadow:rgba(139,92,246,.35)}
-
-/* ====== স্লাইডিং সমস্যার মূল সমাধান ====== */
-html {
-    overflow-x: clip !important;
-    overscroll-behavior-x: none !important;
-}
-body {
-    overflow-x: clip !important;
-    overscroll-behavior-x: none !important;
-}
-
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'Hind Siliguri','Segoe UI',sans-serif;color:var(--ink);background:var(--bg);min-height:100vh;padding-bottom:40px}
-
+html{overflow-x:clip!important;overscroll-behavior-x:none!important}
+body{font-family:'Hind Siliguri','Segoe UI',sans-serif;color:var(--ink);background:var(--bg);min-height:100vh;padding-bottom:40px;overflow-x:clip!important}
 .blob{position:fixed;border-radius:50%;filter:blur(70px);opacity:.55;pointer-events:none;z-index:0}
 .b1{width:340px;height:340px;background:#9fb0ff;top:-90px;left:-70px}
 .b2{width:300px;height:300px;background:#ffc2cf;top:30%;right:-100px}
 .b3{width:320px;height:320px;background:#a8ecd4;bottom:-100px;left:20%}
-
 .glass{background:var(--glass);border:1px solid var(--edge);box-shadow:var(--shadow);border-radius:26px}
 .wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 16px}
-
-/* হেডার - সম্পূর্ণ স্ট্যাটিক */
-.bar {
-    position: static !important;
-    transform: none !important;
-    touch-action: pan-y;
-    z-index: 30;
-    padding: max(12px, env(safe-area-inset-top)) 0 10px;
-}
-.bar-in {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 10px 14px;
-    border-radius: 22px;
-    flex-wrap: nowrap;
-    overflow: clip !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-}
+.bar{position:static!important;transform:none!important;touch-action:pan-y;z-index:30;padding:max(12px,env(safe-area-inset-top)) 0 10px}
+.bar-in{display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:22px;flex-wrap:nowrap;overflow:clip!important;min-width:0!important;max-width:100%!important}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;white-space:nowrap}
 .brand i{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;display:grid;place-items:center;font-size:16px;transition:background .4s}
 .spacer{flex:1;min-width:10px}
 
-.nav{display:flex;gap:4px;padding:4px;border-radius:20px;width:100%;max-width:500px;overflow:clip !important}
+.nav{display:flex;gap:4px;padding:4px;border-radius:20px;width:100%;max-width:500px;overflow:clip!important}
 .nav button, .nav a{flex:1;display:flex;justify-content:center;align-items:center;gap:6px;padding:10px 4px;border:none;background:none;border-radius:16px;color:var(--mute);font:600 12px 'Hind Siliguri',sans-serif;text-decoration:none;cursor:pointer;transition:.2s;text-align:center;white-space:nowrap;min-width:0}
 .nav i{font-size:14px}
 .nav .on{background:var(--ink);color:#fff}
@@ -85,8 +55,7 @@ body[data-view=home] #view-home,body[data-view=accounts] #view-accounts,body[dat
 .sk-chart{height:220px;border-radius:20px;background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);background-size:200% 100%;animation:shine 1.5s infinite;margin-bottom:16px}
 @keyframes shine{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-/* গ্রিড - minmax(0, 1fr) দিয়ে স্লাইডিং ঠিক */
-.grid{display:grid;gap:14px;grid-template-columns:minmax(0,1fr) !important}
+.grid{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)!important}
 .hero{position:relative;overflow:hidden;padding:24px;border-radius:30px;color:#fff;background:linear-gradient(135deg,#2338e8,#6a4cf0 60%,#8b5cf6);box-shadow:0 18px 40px rgba(51,71,255,.35);display:flex;justify-content:space-between;align-items:center;gap:12px}
 .hero::before{content:"";position:absolute;width:240px;height:240px;border-radius:50%;right:-70px;top:-90px;background:rgba(255,255,255,.12)}
 .hero small{font-size:13px;opacity:.85;display:flex;align-items:center;gap:8px}
@@ -105,11 +74,9 @@ body[data-view=home] #view-home,body[data-view=accounts] #view-accounts,body[dat
 .card{padding:18px;min-width:0}
 .card h3{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
 .card h3 span{font-size:12px;color:var(--mute);font-weight:500}
-
 .chart-box{position:relative;height:250px;min-width:0}
 .chart-box.sm{height:230px}
-canvas{max-width:100% !important}
-
+canvas{max-width:100%!important}
 .sec{display:flex;justify-content:space-between;align-items:center;margin:24px 2px 12px;font-weight:700;font-size:16px}
 .sec a{font-size:13px;color:var(--blue);font-weight:600;cursor:pointer;text-decoration:none;padding:6px 12px;border-radius:8px;background:#eef2ff;transition:.2s}
 .sec a:hover{background:#e0e7ff}
@@ -121,8 +88,7 @@ td{padding:12px;text-align:right;font-weight:500;border-top:1px solid rgba(16,26
 th:first-child,td:first-child{text-align:left;font-weight:700;position:sticky;left:0;background:#f3f5fa}
 tfoot td{font-weight:700;background:rgba(51,71,255,.08)}
 tfoot td:first-child{background:#e6e9fb}
-
-.two{display:grid;gap:14px;grid-template-columns:minmax(0,1fr) !important}
+.two{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)!important}
 .pos{color:var(--mint)}.neg{color:var(--coral)}
 .acc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
 .acc{padding:18px;cursor:pointer;text-align:left;font-family:inherit;color:inherit;transition:transform .2s;position:relative}
@@ -179,9 +145,12 @@ tfoot td:first-child{background:#e6e9fb}
 .net-summary-card{padding:20px;border-radius:20px;background:#f8fafc;box-shadow:0 4px 15px rgba(0,0,0,0.04);margin-top:20px;border:1px solid #e2e8f0}
 .net-summary-card h3{font-size:15px;font-weight:700;margin-bottom:16px;color:var(--ink);display:flex;align-items:center;gap:8px}
 .net-summary-row{display:flex;gap:12px}
-.net-summary-item{flex:1;padding:16px;border-radius:14px;text-align:center}
+.net-summary-item{flex:1;padding:16px;border-radius:14px;text-align:center;position:relative}
+.net-summary-item .ic{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;font-size:15px;margin:0 auto 8px}
 .net-summary-item.nw{background:#eef2ff;color:#3347ff}
+.net-summary-item.nw .ic{background:#dde5ff}
 .net-summary-item.assets{background:#ecfdf5;color:#047857}
+.net-summary-item.assets .ic{background:#d1fae5}
 .net-summary-item .lbl{font-size:12px;font-weight:600;opacity:.9}
 .net-summary-item .val{font-size:20px;font-weight:700;margin-top:6px;font-family:'Inter',sans-serif}
 
@@ -196,7 +165,10 @@ tfoot td:first-child{background:#e6e9fb}
 .edit-form .edit-field label i{color:var(--blue)}
 .edit-form .edit-field input,.edit-form .edit-field select{width:100%;height:48px;padding:0 14px;border:1px solid #dde2ef;border-radius:12px;font-family:inherit;font-size:15px;color:var(--ink);background:#f8fafc;outline:none;transition:.2s}
 .edit-form .edit-field input:focus,.edit-form .edit-field select:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(51,71,255,.1)}
-.edit-form .edit-btn{width:100%;height:52px;margin-top:10px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;font:700 15px 'Hind Siliguri',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 10px 22px rgba(51,71,255,.25)}
+.edit-btn-row{display:flex;gap:10px;margin-top:10px}
+.edit-btn{flex:1;height:52px;border:none;border-radius:14px;font:700 15px 'Hind Siliguri',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.edit-btn.cancel{background:#eef1f8;color:var(--ink)}
+.edit-btn.save{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;box-shadow:0 10px 22px rgba(51,71,255,.25)}
 
 .form-container{width:100%;max-width:1120px;margin:0 auto}
 .form-card-outer{width:100%;padding:24px;border-radius:26px}
@@ -226,24 +198,44 @@ input:focus,select:focus,textarea:focus{border-color:var(--ac);background:#fff;b
 select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
 .flatpickr-calendar{border-radius:16px!important;box-shadow:0 16px 40px rgba(40,56,110,.2)!important;font-family:'Hind Siliguri',sans-serif}
 .flatpickr-day.selected{background:var(--ac)!important;border-color:var(--ac)!important}
-button[type=submit]{width:100%;height:56px;margin-top:20px;border:none;border-radius:18px;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;font:700 16px 'Hind Siliguri',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 12px 26px var(--ac-shadow);transition:transform .15s,opacity .2s,background .4s}
-button[type=submit]:active{transform:scale(.98)}
-button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
+
+.btn-row{display:flex;gap:10px;margin-top:20px}
+.btn-row button{flex:1;height:56px;border:none;border-radius:18px;font:700 16px 'Hind Siliguri',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .15s,opacity .2s,background .4s}
+.btn-row button:active{transform:scale(.98)}
+.btn-row .btn-save{background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;box-shadow:0 12px 26px var(--ac-shadow)}
+.btn-row .btn-cancel{background:#eef1f8;color:var(--ink);max-width:120px;flex:0 0 120px}
+.btn-row button:disabled{opacity:.6;cursor:not-allowed}
 .foot{text-align:center;color:var(--mute);font-size:12px;margin-top:6px}
 
 .modal-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .modal-table-wrap table{min-width:600px;font-size:12px}
 .modal-table-wrap th,.modal-table-wrap td{padding:8px 6px;font-size:11.5px}
 
+/* Confirm Dialog */
+.confirm-dialog{position:fixed;inset:0;z-index:100;background:rgba(16,26,51,.5);display:none;align-items:center;justify-content:center}
+.confirm-dialog.show{display:flex}
+.confirm-box{background:#fff;border-radius:20px;padding:24px;max-width:340px;width:90%;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.2)}
+.confirm-box h3{font-size:17px;font-weight:700;margin-bottom:8px}
+.confirm-box p{font-size:14px;color:var(--mute);margin-bottom:20px}
+.confirm-box .btns{display:flex;gap:10px}
+.confirm-box button{flex:1;height:44px;border:none;border-radius:10px;font:700 14px 'Hind Siliguri',sans-serif;cursor:pointer}
+.confirm-box .btn-cancel{background:#eef1f8;color:var(--ink)}
+.confirm-box .btn-ok{background:#dc2626;color:#fff}
+
+/* Pagination */
+.pagination{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:16px}
+.pagination button{width:36px;height:36px;border:none;border-radius:8px;background:#eef1f8;color:var(--ink);font-weight:700;cursor:pointer}
+.pagination button.on{background:var(--blue);color:#fff}
+.pagination button:disabled{opacity:.4;cursor:not-allowed}
+
 @media(min-width:900px){
   body{padding-bottom:40px}
   .bar-in{gap:20px}
-  .grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr) !important}
-  .two{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  .grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr)!important}
+  .two{grid-template-columns:repeat(2,minmax(0,1fr))!important}
   .ov{align-items:center}.sheet{border-radius:28px}
   .hero{flex-direction:column;align-items:flex-start;justify-content:center;gap:34px}
 }
-
 @media(max-width:600px){
   .form-grid{grid-template-columns:1fr;}
   .full{grid-column:auto;}
@@ -252,13 +244,11 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
   .loan-section{grid-template-columns:1fr;}
   .net-summary-row{flex-direction:column;}
 }
-
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body data-view="home">
 <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
-
 <div class="toast-container" id="toastContainer"></div>
 
 <div class="wrap">
@@ -272,18 +262,15 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         <button data-v="entry" onclick="showView('entry')"><i class="fa-solid fa-circle-plus"></i>নতুন এন্ট্রি</button>
       </nav>
       <div class="spacer"></div>
-      <div class="yr"><select id="yearFilter" onchange="fetchDashboardData()" aria-label="আর্থিক বছর">
-        <option value="2026" selected>২০২৬</option><option value="2025">২০২৫</option><option value="2024">২০২৪</option>
-      </select></div>
+      <div class="yr">
+        <select id="yearFilter" onchange="fetchDashboardData()" aria-label="আর্থিক বছর"></select>
+      </div>
     </div>
   </header>
 
   <div id="skeleton">
     <div class="sk-hero"></div>
-    <div class="sk-kpis">
-      <div class="sk-kpi"></div><div class="sk-kpi"></div>
-      <div class="sk-kpi"></div><div class="sk-kpi"></div>
-    </div>
+    <div class="sk-kpis"><div class="sk-kpi"></div><div class="sk-kpi"></div><div class="sk-kpi"></div><div class="sk-kpi"></div></div>
     <div class="sk-chart"></div>
     <div class="sk-chart"></div>
   </div>
@@ -293,7 +280,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
   <main id="content" style="display:none">
     <section class="view" id="view-home">
       <div class="page-title">ড্যাশবোর্ড</div>
-
       <div class="grid">
         <div class="hero">
           <div>
@@ -327,10 +313,12 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         <h3>💰 নেট ওয়ার্থ ও মোট সম্পদ</h3>
         <div class="net-summary-row">
           <div class="net-summary-item nw">
+            <div class="ic"><i class="fa-solid fa-coins"></i></div>
             <div class="lbl">নেট ওয়ার্থ</div>
             <div class="val" id="netWorthValue">৳ ০.০০</div>
           </div>
           <div class="net-summary-item assets">
+            <div class="ic"><i class="fa-solid fa-building-columns"></i></div>
             <div class="lbl">মোট সম্পদ</div>
             <div class="val" id="totalAssets">৳ ০.০০</div>
           </div>
@@ -345,18 +333,18 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
 
     <section class="view" id="view-reports">
       <div class="sec" style="margin-top:6px"><span>সাম্প্রতিক লেনদেন</span><a onclick="showAllTransactions()">সব দেখুন</a></div>
-      <div class="txn-list" id="recentTxnList"><div class="empty">লোড হচ্ছে...</div></div>
+      <div class="txn-list" id="recentTxnList"></div>
 
       <div class="sec" style="margin-top:24px"><span>ঋণ ও দেনা</span><a onclick="showAllLoans()">সব দেখুন</a></div>
       <div class="loan-section" id="loanSection">
         <div class="loan-card glass" id="receivableCard">
           <h3>🟢 প্রাপ্য</h3>
-          <div class="loan-list" id="receivableList"><div class="empty">লোড হচ্ছে...</div></div>
+          <div class="loan-list" id="receivableList"></div>
           <div class="loan-total"><span>মোট প্রাপ্য</span><span id="totalReceivable">৳ ০.০০</span></div>
         </div>
         <div class="loan-card glass" id="payableCard">
           <h3>🔴 দেয়</h3>
-          <div class="loan-list" id="payableList"><div class="empty">লোড হচ্ছে...</div></div>
+          <div class="loan-list" id="payableList"></div>
           <div class="loan-total"><span>মোট দেয়</span><span id="totalPayable">৳ ০.০০</span></div>
         </div>
       </div>
@@ -374,7 +362,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
     <section class="view" id="view-entry">
       <div class="page-title">হিসাব এন্ট্রি করুন</div>
       <div class="form-card-outer glass">
-        <form id="financeForm" class="form-layout">
+        <form id="financeForm" class="form-layout" novalidate>
           <div class="form-hero">
             <label for="amount">পরিমাণ <span class="required" style="color:#fff">*</span></label>
             <div class="amt-row"><span>৳</span>
@@ -400,7 +388,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
             </div>
             <div class="field">
               <label for="subCategory"><i class="fa-solid fa-tag"></i>উপ-খাত <span class="required">*</span></label>
-              <div class="ctl"><select id="subCategory" name="subCategory" required disabled>
+              <div class="ctl"><select id="subCategory" name="subCategory" onchange="updateBorrowerInput()" required disabled>
                 <option value="">আগে প্রধান খাত নির্বাচন করুন</option></select></div>
             </div>
             <div class="field" id="borrowerGroup" style="display:none">
@@ -430,9 +418,11 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
             </div>
           </div>
 
-          <button type="submit" id="submitBtn"><i class="fa-solid fa-check"></i> লেনদেন সেভ করুন</button>
+          <div class="btn-row">
+            <button type="button" class="btn-cancel" onclick="showView('home')"><i class="fa-solid fa-xmark"></i> বাতিল</button>
+            <button type="submit" id="submitBtn" class="btn-save"><i class="fa-solid fa-check"></i> লেনদেন সেভ করুন</button>
+          </div>
         </form>
-        <p class="foot"><i class="fa-solid fa-lock"></i> সব লেনদেন নিরাপদে গুগল শিটে সেভ হবে</p>
       </div>
     </section>
   </main>
@@ -445,31 +435,47 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
   <button data-v="entry" onclick="showView('entry')"><i class="fa-solid fa-circle-plus"></i>এন্ট্রি</button>
 </nav>
 
-<div class="ov" id="modal" onclick="if(event.target===this)closeModal()" role="dialog" aria-modal="true">
+<div class="ov" id="modal" onclick="if(event.target===this)closeModal()">
   <div class="sheet" id="sheet"></div>
 </div>
-<div class="ov" id="editModal" onclick="if(event.target===this)closeEditModal()" role="dialog" aria-modal="true">
+<div class="ov" id="editModal">
   <div class="sheet" id="editSheet"></div>
 </div>
-<div class="ov" id="allTxnModal" onclick="if(event.target===this)closeAllTxnModal()" role="dialog" aria-modal="true">
+<div class="ov" id="allTxnModal" onclick="if(event.target===this)closeAllTxnModal()">
   <div class="sheet" id="allTxnSheet"></div>
 </div>
-<div class="ov" id="allLoanModal" onclick="if(event.target===this)closeAllLoanModal()" role="dialog" aria-modal="true">
+<div class="ov" id="allLoanModal" onclick="if(event.target===this)closeAllLoanModal()">
   <div class="sheet" id="allLoanSheet"></div>
+</div>
+
+<div class="confirm-dialog" id="confirmDialog">
+  <div class="confirm-box">
+    <h3 id="confirmTitle">নিশ্চিত করুন</h3>
+    <p id="confirmMessage">আপনি কি নিশ্চিত?</p>
+    <div class="btns">
+      <button class="btn-cancel" onclick="closeConfirm(false)">বাতিল</button>
+      <button class="btn-ok" onclick="closeConfirm(true)">ওকে</button>
+    </div>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbyNkZhEYgVZPS4IGJUT4fbESwStiRFe_XWusBVZmnrxkIoXsoSiJJZuBW6ZXBngZwv1/exec';
     const bnMonths = ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"];
+    const bnMonthsShort = ["জানু", "ফেব", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্ট", "অক্টো", "নভে", "ডিসে"];
     const enMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
 
-    let balanceVisible = false;
-    let realBalanceValue = 0;
+    let balanceVisible = false, realBalanceValue = 0;
 
     function formatAmount(value) {
         const number = Number(value) || 0;
         return "৳ " + number.toLocaleString('en-BD', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function toBn(num) {
+        return String(num).replace(/\d/g, d => bnDigits[d]);
     }
 
     function toggleBalance() {
@@ -495,6 +501,20 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         setTimeout(() => { toast.remove(); }, 3000);
     }
 
+    // Custom confirm dialog
+    let confirmResolve = null;
+    function showConfirm(title, message) {
+        document.getElementById('confirmTitle').innerText = title;
+        document.getElementById('confirmMessage').innerText = message;
+        document.getElementById('confirmDialog').classList.add('show');
+        return new Promise(resolve => { confirmResolve = resolve; });
+    }
+    function closeConfirm(result) {
+        document.getElementById('confirmDialog').classList.remove('show');
+        if (confirmResolve) confirmResolve(result);
+        confirmResolve = null;
+    }
+
     function showView(v) {
         document.body.dataset.view = v;
         document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
@@ -503,13 +523,26 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
             setTimeout(() => { Object.values(charts).forEach(c => { try { c.resize(); } catch(e) {} }); }, 100);
         }
         if (v === 'entry') { initForm(); }
-        if (v === 'reports') { loadRecentTransactions(); loadLoanSummary(); }
+        if (v === 'reports') { renderReportPage(); }
     }
 
     let currentSummary = null;
     let currentLoans = { receivables: [], payables: [] };
 
-    window.onload = function() { fetchDashboardData(); };
+    window.onload = function() {
+        // বছর ৫টি: বর্তমান ± ২
+        const currentYear = new Date().getFullYear();
+        const yearSelect = document.getElementById('yearFilter');
+        yearSelect.innerHTML = '';
+        for (let y = currentYear - 2; y <= currentYear + 2; y++) {
+            const opt = document.createElement('option');
+            opt.value = y;
+            opt.textContent = toBn(y);
+            if (y === currentYear) opt.selected = true;
+            yearSelect.appendChild(opt);
+        }
+        fetchDashboardData();
+    };
 
     function fetchDashboardData() {
         const year = document.getElementById('yearFilter').value;
@@ -535,7 +568,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
             renderAccountGrid(data.accounts);
             renderCharts(data.summary, data.accounts);
             renderNetWorthCard(data);
-            renderLoanCards();
             skeleton.style.display = 'none';
             content.style.display = 'block';
         })
@@ -558,21 +590,17 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
             });
         }
         let totalBalance = 0;
-        if (accounts && accounts.length > 0) {
-            accounts.forEach(acc => { totalBalance += Number(acc.currentBalance) || 0; });
-        }
+        if (accounts && accounts.length > 0) accounts.forEach(acc => { totalBalance += Number(acc.currentBalance) || 0; });
         realBalanceValue = totalBalance;
         document.getElementById('cardIncome').innerText = formatAmount(totalIncome);
         document.getElementById('cardExpense').innerText = formatAmount(totalExpense);
         document.getElementById('cardSurplus').innerText = formatAmount(totalIncome - totalExpense);
         document.getElementById('cardInvestment').innerText = formatAmount(totalInvestment);
-        
         const el = document.getElementById('cardBalance');
         if (balanceVisible) el.innerText = formatAmount(totalBalance);
         else el.innerText = '৳ ••••••••';
-
         const rate = totalIncome > 0 ? Math.max(0, Math.min(100, ((totalIncome - totalExpense) / totalIncome) * 100)) : 0;
-        document.getElementById('ringPct').innerText = Math.round(rate) + '%';
+        document.getElementById('ringPct').innerText = toBn(Math.round(rate)) + '%';
         document.getElementById('ringArc').style.strokeDashoffset = 238.76 * (1 - rate / 100);
     }
 
@@ -584,36 +612,18 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         const now = new Date();
         const currentMonthIdx = now.getMonth();
         const last3 = [];
-        for (let i = 0; i < 3; i++) { last3.push((currentMonthIdx - i + 12) % 12); }
-
+        for (let i = 0; i < 3; i++) last3.push((currentMonthIdx - i + 12) % 12);
         last3.forEach((idx) => {
             const month = enMonths[idx];
             const d = summary && summary[month] ? summary[month] : { Income: 0, Expense: 0, Surplus: 0, Investment: 0, Loan: 0, Asset: 0, Liability: 0 };
             Object.keys(totals).forEach(k => totals[k] += Number(d[k]) || 0);
             const row = document.createElement('tr');
             let surplusClass = (Number(d.Surplus) > 0) ? 'pos' : (Number(d.Surplus) < 0 ? 'neg' : '');
-            row.innerHTML = `
-                <td>${bnMonths[idx]}</td>
-                <td>${formatAmount(d.Income)}</td>
-                <td>${formatAmount(d.Expense)}</td>
-                <td class="${surplusClass}">${formatAmount(d.Surplus)}</td>
-                <td>${formatAmount(d.Investment)}</td>
-                <td>${formatAmount(d.Loan)}</td>
-                <td>${formatAmount(d.Asset)}</td>
-                <td>${formatAmount(d.Liability)}</td>`;
+            row.innerHTML = `<td>${bnMonths[idx]}</td><td>${formatAmount(d.Income)}</td><td>${formatAmount(d.Expense)}</td><td class="${surplusClass}">${formatAmount(d.Surplus)}</td><td>${formatAmount(d.Investment)}</td><td>${formatAmount(d.Loan)}</td><td>${formatAmount(d.Asset)}</td><td>${formatAmount(d.Liability)}</td>`;
             tbody.appendChild(row);
         });
-
         let totalSurplusClass = (totals.Surplus > 0) ? 'pos' : (totals.Surplus < 0 ? 'neg' : '');
-        tfoot.innerHTML = `
-            <td>মোট</td>
-            <td>${formatAmount(totals.Income)}</td>
-            <td>${formatAmount(totals.Expense)}</td>
-            <td class="${totalSurplusClass}">${formatAmount(totals.Surplus)}</td>
-            <td>${formatAmount(totals.Investment)}</td>
-            <td>${formatAmount(totals.Loan)}</td>
-            <td>${formatAmount(totals.Asset)}</td>
-            <td>${formatAmount(totals.Liability)}</td>`;
+        tfoot.innerHTML = `<td>মোট</td><td>${formatAmount(totals.Income)}</td><td>${formatAmount(totals.Expense)}</td><td class="${totalSurplusClass}">${formatAmount(totals.Surplus)}</td><td>${formatAmount(totals.Investment)}</td><td>${formatAmount(totals.Loan)}</td><td>${formatAmount(totals.Asset)}</td><td>${formatAmount(totals.Liability)}</td>`;
     }
 
     function showAllMonthly() {
@@ -642,10 +652,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
     function renderAccountGrid(accounts) {
         const grid = document.getElementById('accountGrid');
         grid.innerHTML = '';
-        if (!accounts || accounts.length === 0) {
-            grid.innerHTML = '<div class="empty glass" style="grid-column: 1 / -1;">কোনো অ্যাকাউন্ট ডেটা পাওয়া যায়নি</div>';
-            return;
-        }
+        if (!accounts || accounts.length === 0) { grid.innerHTML = '<div class="empty glass" style="grid-column: 1 / -1;">কোনো অ্যাকাউন্ট ডেটা পাওয়া যায়নি</div>'; return; }
         let totalBalance = accounts.reduce((s, a) => s + Math.max(0, Number(a.currentBalance) || 0), 0);
         accounts.forEach((acc, i) => {
             const cls = (Number(acc.currentBalance) >= 0) ? 'pos' : 'neg';
@@ -656,11 +663,8 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
             b.className = 'acc glass';
             b.innerHTML = `
                 <div class="acc-percent-wrap">
-                    <svg width="56" height="56" viewBox="0 0 56 56">
-                        <circle cx="28" cy="28" r="22" fill="none" stroke="#e3e7f4" stroke-width="5"/>
-                        <circle cx="28" cy="28" r="22" fill="none" stroke="#3347ff" stroke-width="5" stroke-linecap="round" stroke-dasharray="${circumference}" stroke-dashoffset="${dashoffset}"/>
-                    </svg>
-                    <div class="acc-pct-text">${percent}%</div>
+                    <svg width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="22" fill="none" stroke="#e3e7f4" stroke-width="5"/><circle cx="28" cy="28" r="22" fill="none" stroke="#3347ff" stroke-width="5" stroke-linecap="round" stroke-dasharray="${circumference}" stroke-dashoffset="${dashoffset}"/></svg>
+                    <div class="acc-pct-text">${toBn(percent)}%</div>
                 </div>
                 <div class="ic" style="background:${palette[i % palette.length]}"><i class="fa-solid ${accIcon(acc.name)}"></i></div>
                 <div class="n">${acc.name || 'নাম নেই'}</div>
@@ -676,21 +680,23 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         const share = total > 0 ? Math.max(0, Number(acc.currentBalance) || 0) / total * 100 : 0;
         const cls = (Number(acc.currentBalance) >= 0) ? 'pos' : 'neg';
         document.getElementById('sheet').innerHTML = `
-            <div class="sheet-h">
-                <div class="ic" style="background:${palette[i % palette.length]}"><i class="fa-solid ${accIcon(acc.name)}"></i></div>
-                <b>${acc.name || 'নাম নেই'}</b>
-                <button onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
-            </div>
+            <div class="sheet-h"><div class="ic" style="background:${palette[i % palette.length]}"><i class="fa-solid ${accIcon(acc.name)}"></i></div><b>${acc.name || 'নাম নেই'}</b><button onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
             <div class="row"><span>ওপেনিং ব্যালেন্স</span><b>${formatAmount(acc.openingBalance)}</b></div>
             <div class="row"><span>মোট জমা</span><b class="pos">${formatAmount(acc.totalIn)}</b></div>
             <div class="row"><span>মোট খরচ</span><b class="neg">${formatAmount(acc.totalOut)}</b></div>
             <div class="cur"><span>বর্তমান ব্যালেন্স</span><b class="${cls}">${formatAmount(acc.currentBalance)}</b></div>
             <div class="share"><i style="width:${share}%"></i></div>
-            <div class="share-l">মোট ব্যালেন্সের ${Math.round(share)}% এই অ্যাকাউন্টে</div>`;
+            <div class="share-l">মোট ব্যালেন্সের ${toBn(Math.round(share))}% এই অ্যাকাউন্টে</div>`;
         document.getElementById('modal').classList.add('show');
     }
     function closeModal() { document.getElementById('modal').classList.remove('show'); }
     document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeEditModal(); closeAllTxnModal(); closeAllLoanModal(); } });
+
+    function renderReportPage() {
+        loadRecentTransactions();
+        renderLoanCards();
+        renderMonthlyTable(currentSummary);
+    }
 
     function renderLoanCards() {
         const recRecent = currentLoans.receivables.slice(0, 2);
@@ -733,19 +739,21 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
     function showAllLoans() {
         let html = '<div class="sheet-h"><div class="ic" style="background:var(--blue)"><i class="fa-solid fa-handshake"></i></div><b>সব ঋণ ও দেনা</b><button onclick="closeAllLoanModal()"><i class="fa-solid fa-xmark"></i></button></div>';
         html += '<h4 style="margin-bottom:10px;color:#047857">🟢 প্রাপ্য</h4>';
-        if (currentLoans.receivables.length > 0) {
-            currentLoans.receivables.forEach(item => { html += `<div class="loan-item"><span class="loan-name">${item.name}</span><span class="loan-amount pos">${formatAmount(item.amount)}</span></div>`; });
-        } else { html += '<div class="empty">কোনো প্রাপ্য নেই</div>'; }
+        if (currentLoans.receivables.length > 0) currentLoans.receivables.forEach(item => { html += `<div class="loan-item"><span class="loan-name">${item.name}</span><span class="loan-amount pos">${formatAmount(item.amount)}</span></div>`; });
+        else html += '<div class="empty">কোনো প্রাপ্য নেই</div>';
         html += '<h4 style="margin:16px 0 10px;color:#b91c1c">🔴 দেয়</h4>';
-        if (currentLoans.payables.length > 0) {
-            currentLoans.payables.forEach(item => { html += `<div class="loan-item"><span class="loan-name">${item.name}</span><span class="loan-amount neg">${formatAmount(item.amount)}</span></div>`; });
-        } else { html += '<div class="empty">কোনো দেয় নেই</div>'; }
+        if (currentLoans.payables.length > 0) currentLoans.payables.forEach(item => { html += `<div class="loan-item"><span class="loan-name">${item.name}</span><span class="loan-amount neg">${formatAmount(item.amount)}</span></div>`; });
+        else html += '<div class="empty">কোনো দেয় নেই</div>';
         document.getElementById('allLoanSheet').innerHTML = html;
         document.getElementById('allLoanModal').classList.add('show');
     }
     function closeAllLoanModal() { document.getElementById('allLoanModal').classList.remove('show'); }
 
+    // All transactions pagination (current month only)
     let currentTransactions = [];
+    let currentTxnPage = 1;
+    const TXNS_PER_PAGE = 10;
+
     function loadRecentTransactions() {
         const container = document.getElementById('recentTxnList');
         container.innerHTML = '<div class="empty">লোড হচ্ছে...</div>';
@@ -762,15 +770,39 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
             .catch(err => { console.error(err); container.innerHTML = '<div class="empty">লোড সমস্যা</div>'; });
     }
 
-    function showAllTransactions() {
-        let html = '<div class="sheet-h"><div class="ic" style="background:var(--blue)"><i class="fa-solid fa-list"></i></div><b>সব লেনদেন</b><button onclick="closeAllTxnModal()"><i class="fa-solid fa-xmark"></i></button></div>';
+    function showAllTransactions(page) {
+        currentTxnPage = page || 1;
+        // বর্তমান মাসের লেনদেন ফিল্টার
+        const now = new Date();
+        const curYear = now.getFullYear(), curMonth = now.getMonth();
+        const monthTxns = currentTransactions.filter(t => {
+            const d = new Date(t.date);
+            return d.getFullYear() === curYear && d.getMonth() === curMonth;
+        });
+        const totalPages = Math.max(1, Math.ceil(monthTxns.length / TXNS_PER_PAGE));
+        if (currentTxnPage > totalPages) currentTxnPage = totalPages;
+        const start = (currentTxnPage - 1) * TXNS_PER_PAGE;
+        const pageData = monthTxns.slice(start, start + TXNS_PER_PAGE);
+
+        let html = '<div class="sheet-h"><div class="ic" style="background:var(--blue)"><i class="fa-solid fa-list"></i></div><b>সব লেনদেন (এই মাস)</b><button onclick="closeAllTxnModal()"><i class="fa-solid fa-xmark"></i></button></div>';
         html += '<div class="txn-list" id="allTxnListInner"></div>';
+        html += '<div class="pagination" id="txnPagination"></div>';
         document.getElementById('allTxnSheet').innerHTML = html;
         document.getElementById('allTxnModal').classList.add('show');
+
         const inner = document.getElementById('allTxnListInner');
-        const recent10 = currentTransactions.slice(0, 10);
-        if (recent10.length === 0) { inner.innerHTML = '<div class="empty">কোনো লেনদেন নেই</div>'; }
-        else { recent10.forEach(txn => inner.appendChild(createTxnElement(txn))); }
+        if (pageData.length === 0) inner.innerHTML = '<div class="empty">এই মাসে কোনো লেনদেন নেই</div>';
+        else pageData.forEach(txn => inner.appendChild(createTxnElement(txn)));
+
+        const pg = document.getElementById('txnPagination');
+        pg.innerHTML = '';
+        for (let p = 1; p <= totalPages; p++) {
+            const btn = document.createElement('button');
+            btn.textContent = toBn(p);
+            if (p === currentTxnPage) btn.className = 'on';
+            btn.onclick = () => showAllTransactions(p);
+            pg.appendChild(btn);
+        }
     }
     function closeAllTxnModal() { document.getElementById('allTxnModal').classList.remove('show'); }
 
@@ -807,30 +839,24 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         const fromOptions = masterData.accounts.map(a => `<option value="${a}" ${a === txn.fromAccount ? 'selected' : ''}>${a}</option>`).join('');
         const toOptions = masterData.accounts.map(a => `<option value="${a}" ${a === txn.toAccount ? 'selected' : ''}>${a}</option>`).join('');
         const cardOptions = masterData.cardNetworks.map(c => `<option value="${c}" ${c === txn.cardNetwork ? 'selected' : ''}>${c}</option>`).join('');
-        const borrowerOptions = (masterData.borrowers || []).map(b => `<option value="${b}" ${b === txn.borrower ? 'selected' : ''}>${b}</option>`).join('');
         const showBorrower = (txn.type === 'ঋণ' || txn.type === 'দায়');
-        
         document.getElementById('editSheet').innerHTML = `
-            <div class="sheet-h">
-                <div class="ic" style="background:var(--blue)"><i class="fa-solid fa-pen"></i></div>
-                <b>লেনদেন এডিট করুন</b>
-                <button onclick="closeEditModal()"><i class="fa-solid fa-xmark"></i></button>
-            </div>
+            <div class="sheet-h"><div class="ic" style="background:var(--blue)"><i class="fa-solid fa-pen"></i></div><b>লেনদেন এডিট করুন</b><button onclick="closeEditModal()"><i class="fa-solid fa-xmark"></i></button></div>
             <div class="edit-form">
                 <div class="edit-field"><label><i class="fa-regular fa-calendar"></i> তারিখ</label><input type="date" id="editDate" value="${txn.date}"></div>
                 <div class="edit-field"><label><i class="fa-solid fa-right-left"></i> ধরন</label><select id="editType" onchange="onEditTypeChange()"><option value="">নির্বাচন</option>${typeOptions}</select></div>
                 <div class="edit-field"><label><i class="fa-solid fa-layer-group"></i> খাত</label><select id="editCategory"><option value="${txn.category}">${txn.category}</option></select></div>
                 <div class="edit-field"><label><i class="fa-solid fa-tag"></i> উপ-খাত</label><select id="editSubCategory"><option value="${txn.subCategory}">${txn.subCategory}</option></select></div>
-                <div class="edit-field" id="editBorrowerGroup" style="${showBorrower ? '' : 'display:none'}">
-                    <label><i class="fa-solid fa-user"></i> ঋণগ্রহীতা/দেনাদার</label>
-                    <input type="text" id="editBorrower" value="${txn.borrower || ''}">
-                </div>
+                <div class="edit-field" id="editBorrowerGroup" style="${showBorrower ? '' : 'display:none'}"><label><i class="fa-solid fa-user"></i> ঋণগ্রহীতা/দেনাদার</label><input type="text" id="editBorrower" value="${txn.borrower || ''}"></div>
                 <div class="edit-field"><label><i class="fa-solid fa-wallet"></i> উৎস</label><select id="editFrom"><option value="">নির্বাচন</option>${fromOptions}</select></div>
                 <div class="edit-field" id="editToGroup" style="${txn.toAccount ? '' : 'display:none'}"><label><i class="fa-solid fa-building-columns"></i> গন্তব্য</label><select id="editTo"><option value="">নির্বাচন</option>${toOptions}</select></div>
                 <div class="edit-field" id="editCardGroup" style="${txn.cardNetwork ? '' : 'display:none'}"><label><i class="fa-regular fa-credit-card"></i> কার্ড</label><select id="editCard"><option value="">নির্বাচন</option>${cardOptions}</select></div>
                 <div class="edit-field"><label><i class="fa-solid fa-money-bill-wave"></i> পরিমাণ</label><input type="number" id="editAmount" value="${txn.amount}" step="any"></div>
                 <div class="edit-field"><label><i class="fa-regular fa-note-sticky"></i> বিবরণ</label><input type="text" id="editNotes" value="${txn.notes || ''}"></div>
-                <button class="edit-btn" onclick="saveEdit(${row})"><i class="fa-solid fa-check"></i> সেভ</button>
+                <div class="edit-btn-row">
+                    <button class="edit-btn cancel" onclick="closeEditModal()"><i class="fa-solid fa-xmark"></i> বাতিল</button>
+                    <button class="edit-btn save" onclick="saveEdit(${row})"><i class="fa-solid fa-check"></i> আপডেট</button>
+                </div>
             </div>`;
         document.getElementById('editModal').classList.add('show');
         setTimeout(() => { onEditTypeChange(); }, 50);
@@ -848,10 +874,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         borrowerGroup.style.display = (type === 'ঋণ' || type === 'দায়') ? 'block' : 'none';
         if (!type || !masterData.dataMap) return;
         const cats = [...new Set(masterData.dataMap.filter(item => item.type === type).map(item => item.category))];
-        cats.forEach(c => {
-            const opt = document.createElement('option'); opt.value = c; opt.textContent = c;
-            catSelect.appendChild(opt);
-        });
+        cats.forEach(c => { const opt = document.createElement('option'); opt.value = c; opt.textContent = c; catSelect.appendChild(opt); });
         catSelect.onchange = onEditCategoryChange;
     }
 
@@ -878,7 +901,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         const amount = document.getElementById('editAmount').value;
         const notes = document.getElementById('editNotes').value;
         const borrower = document.getElementById('editBorrower') ? document.getElementById('editBorrower').value : '';
-        if (!date || !amount) { showToast('তারিখ ও পরিমাণ দিন!', 'error'); return; }
+        if (!date || !type || !cat || !subCat || !amount) { showToast('সব * চিহ্নিত ঘর পূরণ করুন!', 'error'); return; }
         const formData = new FormData();
         formData.append('action', 'updateTransaction');
         formData.append('row', row);
@@ -901,13 +924,14 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                     fetchDashboardData();
                     loadRecentTransactions();
                     loadLoanSummary();
-                } else { showToast('আপডেট সমস্যা', 'error'); }
+                } else showToast('আপডেট সমস্যা', 'error');
             })
             .catch(err => { console.error(err); showToast('আপডেট সমস্যা', 'error'); });
     }
 
-    function deleteTxn(row) {
-        if (!confirm('আপনি কি নিশ্চিত এই লেনদেনটি ডিলিট করতে চান?')) return;
+    async function deleteTxn(row) {
+        const ok = await showConfirm('লেনদেন ডিলিট', 'আপনি কি নিশ্চিত এই লেনদেনটি ডিলিট করতে চান?');
+        if (!ok) return;
         const formData = new FormData();
         formData.append('action', 'deleteTransaction');
         formData.append('row', row);
@@ -919,7 +943,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                     fetchDashboardData();
                     loadRecentTransactions();
                     loadLoanSummary();
-                } else { showToast('ডিলিট সমস্যা', 'error'); }
+                } else showToast('ডিলিট সমস্যা', 'error');
             })
             .catch(err => { console.error(err); showToast('ডিলিট সমস্যা', 'error'); });
     }
@@ -931,12 +955,11 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         Chart.defaults.font.family = "'Hind Siliguri', sans-serif";
         Chart.defaults.color = '#6b7592';
         const val = (m, k) => Number(summary && summary[m] ? summary[m][k] : 0) || 0;
-        const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const labels = bnMonthsShort;
         const inc = enMonths.map(m => val(m, 'Income'));
         const exp = enMonths.map(m => val(m, 'Expense'));
         const sur = enMonths.map(m => val(m, 'Surplus'));
         const inv = enMonths.map(m => val(m, 'Investment'));
-
         const legend = { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8 } };
         const money = { callbacks: { label: c => ' ' + (c.dataset.label || c.label) + ': ' + formatAmount(c.parsed.y !== undefined ? c.parsed.y : c.parsed) } };
         const yAxis = { grid: { color: 'rgba(16,26,51,.06)' }, border: { display: false }, ticks: { callback: v => Math.abs(v) >= 1000 ? (v / 1000) + 'k' : v } };
@@ -952,7 +975,7 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
 
         const now = new Date();
         const cm = now.getMonth();
-        document.getElementById('currentMonthLabel').textContent = bnMonths[cm] + ' ' + now.getFullYear();
+        document.getElementById('currentMonthLabel').textContent = bnMonths[cm] + ' ' + toBn(now.getFullYear());
         const curInc = val(enMonths[cm], 'Income');
         const curExp = val(enMonths[cm], 'Expense');
         mkChart('ratioChart', { type: 'doughnut', data: { labels: ['আয়', 'ব্যয়'], datasets: [{ data: (curInc + curExp) ? [curInc, curExp] : [1, 0], backgroundColor: ['#12b886', '#ff5c7a'], borderWidth: 3, borderColor: '#fff', hoverOffset: 6 }] }, options: donutOpts });
@@ -964,25 +987,10 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
 
         const totalRecv = (currentLoans.receivables || []).reduce((s, x) => s + x.amount, 0);
         const totalPay = (currentLoans.payables || []).reduce((s, x) => s + x.amount, 0);
-        
-        // Semi-circle Doughnut Chart
         mkChart('loanChart', { type: 'doughnut', data: {
             labels: ['প্রাপ্য', 'দেয়'],
-            datasets: [{ 
-                data: (totalRecv + totalPay) ? [totalRecv, totalPay] : [1, 0], 
-                backgroundColor: ['#12b886', '#ff5c7a'], 
-                borderWidth: 3, 
-                borderColor: '#fff', 
-                hoverOffset: 6 
-            }]
-        }, options: { 
-            responsive: true, 
-            maintainAspectRatio: false, 
-            cutout: '68%', 
-            circumference: 180, 
-            rotation: -90,
-            plugins: { legend: { display: false }, tooltip: money } 
-        } });
+            datasets: [{ data: (totalRecv + totalPay) ? [totalRecv, totalPay] : [1, 0], backgroundColor: ['#12b886', '#ff5c7a'], borderWidth: 3, borderColor: '#fff', hoverOffset: 6 }]
+        }, options: { responsive: true, maintainAspectRatio: false, cutout: '68%', circumference: 180, rotation: -90, plugins: { legend: { display: false }, tooltip: money } } });
     }
 
     let formattedBackendDate = "";
@@ -1046,7 +1054,6 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         const borrowerGroup = document.getElementById("borrowerGroup");
         const borrowerLabel = document.getElementById("borrowerLabel");
         const borrowerWrapper = document.getElementById("borrowerWrapper");
-
         catSelect.innerHTML = '<option value="">প্রধান খাত নির্বাচন করুন</option>';
         subSelect.innerHTML = '<option value="">আগে প্রধান খাত নির্বাচন করুন</option>';
         subSelect.disabled = true;
@@ -1055,13 +1062,11 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         borrowerGroup.style.display = "none";
         fromGroup.style.display = "flex";
         document.getElementById('fromAccount').required = true;
-
         if (type === "ঋণ") {
             borrowerGroup.style.display = "flex";
             borrowerLabel.textContent = "ঋণগ্রহীতার নাম";
             borrowerWrapper.innerHTML = `<input type="text" id="borrower" name="borrower" placeholder="যেমন: করিম">`;
         }
-
         if (!type) { catSelect.disabled = true; return; }
         catSelect.disabled = false;
         const filteredCats = [...new Set(masterData.dataMap.filter(item => item.type === type).map(item => item.category))];
@@ -1078,8 +1083,9 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         if (!cat) { subSelect.disabled = true; return; }
         subSelect.disabled = false;
         const filteredSubs = masterData.dataMap.filter(item => item.type === type && item.category === cat).map(item => item.subCategory);
-        filteredSubs.forEach(sub => { const opt = document.createElement("option"); opt.value = sub; opt.textContent = sub; subSelect.appendChild(opt); });
-        
+        filteredSubs.forEach(sub => {
+            const opt = document.createElement("option"); opt.value = sub; opt.textContent = sub; subSelect.appendChild(opt);
+        });
         subSelect.onchange = function() { updateBorrowerInput(); };
     }
 
@@ -1090,24 +1096,20 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
         const borrowerLabel = document.getElementById("borrowerLabel");
         const cardGroup = document.getElementById("cardNetworkGroup");
         const fromGroup = document.getElementById("fromAccountGroup");
-        
         if (type !== "ঋণ") return;
-        
         if (sub === "ক্রেডিট কার্ড বিল") {
             borrowerLabel.textContent = "কার্ডের নাম";
             cardGroup.style.display = "flex";
             fromGroup.style.display = "none";
             document.getElementById('fromAccount').required = false;
             borrowerWrapper.innerHTML = `<select id="borrower" name="borrower"><option value="">নির্বাচন করুন</option>${(masterData.accounts || []).filter(a => a.includes('Card')).map(a => `<option value="${a}">${a}</option>`).join('')}</select>`;
-        } 
-        else if (sub === "ঋণ পরিশোধ" || sub === "ঋণ/ধার পরিশোধ") {
+        } else if (sub === "ঋণ পরিশোধ" || sub === "ঋণ/ধার পরিশোধ") {
             borrowerLabel.textContent = "ঋণগ্রহীতার নাম";
             cardGroup.style.display = "none";
             fromGroup.style.display = "flex";
             document.getElementById('fromAccount').required = true;
             borrowerWrapper.innerHTML = `<select id="borrower" name="borrower"><option value="">নির্বাচন করুন</option>${(masterData.borrowers || []).map(b => `<option value="${b}">${b}</option>`).join('')}</select>`;
-        } 
-        else {
+        } else {
             borrowerLabel.textContent = "ঋণগ্রহীতার নাম";
             cardGroup.style.display = "none";
             fromGroup.style.display = "flex";
@@ -1137,6 +1139,9 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
 
     form.addEventListener('submit', e => {
         e.preventDefault();
+        // Validity check only for visible required fields
+        const bad = [...form.querySelectorAll('[required]')].find(el => el.offsetParent !== null && !el.value);
+        if (bad) { showToast('সব * চিহ্নিত ঘর পূরণ করুন!', 'error'); bad.focus(); return; }
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> সেভ হচ্ছে...';
         const formData = new FormData(form);
@@ -1158,6 +1163,11 @@ button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
                 document.getElementById("borrowerGroup").style.display = "none";
                 document.getElementById('fromAccount').required = true;
                 setAccent("");
+                // নতুন ঋণগ্রহীতার নাম masterData.borrowers-এ যোগ করে দেব (রিফ্রেশ ছাড়াই)
+                const b = (formData.get('borrower') || '').toString().trim();
+                if (b && !masterData.borrowers.includes(b)) {
+                    masterData.borrowers.push(b);
+                }
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> লেনদেন সেভ করুন';
                 setTimeout(() => { showView('home'); fetchDashboardData(); }, 800);
