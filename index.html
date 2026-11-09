@@ -823,7 +823,6 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
     }
 
     function editTxn(row) {
-        // "সব লেনদেন" মোডাল ক্লোজ করে দেব
         closeAllTxnModal();
         const txn = currentTransactions.find(t => t.row === row);
         if (!txn) return;
@@ -979,10 +978,24 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
 
         const totalRecv = (currentLoans.receivables || []).reduce((s, x) => s + x.amount, 0);
         const totalPay = (currentLoans.payables || []).reduce((s, x) => s + x.amount, 0);
+        const loanHasData = (totalRecv + totalPay) > 0;
         mkChart('loanChart', { type: 'doughnut', data: {
-            labels: ['প্রাপ্য', 'দেয়'],
-            datasets: [{ data: (totalRecv + totalPay) ? [totalRecv, totalPay] : [1, 0], backgroundColor: ['#12b886', '#ff5c7a'], borderWidth: 3, borderColor: '#fff', hoverOffset: 6 }]
-        }, options: { responsive: true, maintainAspectRatio: false, cutout: '68%', circumference: 180, rotation: -90, plugins: { legend: { display: false }, tooltip: money } } });
+            labels: loanHasData ? ['প্রাপ্য', 'দেয়'] : ['কোনো ডেটা নেই'],
+            datasets: [{ 
+                data: loanHasData ? [totalRecv, totalPay] : [1], 
+                backgroundColor: loanHasData ? ['#12b886', '#ff5c7a'] : ['#e2e8f0'], 
+                borderWidth: 3, 
+                borderColor: '#fff', 
+                hoverOffset: 6 
+            }]
+        }, options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            cutout: '68%', 
+            circumference: 180, 
+            rotation: -90,
+            plugins: { legend: { display: false }, tooltip: loanHasData ? money : { enabled: false } } 
+        } });
     }
 
     let formattedBackendDate = "";
