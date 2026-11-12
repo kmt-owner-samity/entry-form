@@ -295,7 +295,7 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
           <div class="kpi glass"><div class="ic" style="background:#d9f6ec;color:var(--mint)"><i class="fa-solid fa-arrow-trend-up"></i></div><small>বছরের মোট আয়</small><div class="v" id="cardIncome">৳ 0.00</div></div>
           <div class="kpi glass"><div class="ic" style="background:#ffe1e8;color:var(--coral)"><i class="fa-solid fa-arrow-trend-down"></i></div><small>বছরের মোট ব্যয়</small><div class="v" id="cardExpense">৳ 0.00</div></div>
           <div class="kpi glass"><div class="ic" style="background:#e0e5ff;color:var(--blue)"><i class="fa-solid fa-piggy-bank"></i></div><small>বছরের নিট সঞ্চয়</small><div class="v" id="cardSurplus">৳ 0.00</div></div>
-          <div class="kpi glass"><div class="ic" style="background:#ece4ff;color:var(--violet)"><i class="fa-solid fa-seedling"></i></div><small>বছরের মোট বিনিয়োগ</small><div class="v" id="cardInvestment">৳ 0.00</div></div>
+          <div class="kpi glass"><div class="ic" style="background:#ece4ff;color:var(--violet)"><i class="fa-solid fa-seedling"></i></div><small>বছরের নিট বিনিয়োগ</small><div class="v" id="cardInvestment">৳ 0.00</div></div>
         </div>
       </div>
 
@@ -352,7 +352,7 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
       <div class="sec" style="margin-top:24px"><span>মাসিক হিসাব</span><a onclick="showAllMonthly()">সব দেখুন</a></div>
       <div class="card glass" style="padding:8px">
         <div class="tw"><table>
-          <thead><tr><th>মাস</th><th>আয়</th><th>ব্যয়</th><th>সঞ্চয়</th><th>বিনিয়োগ</th><th>ঋণ/স্থানান্তর</th><th>সম্পদ</th><th>দায়</th></tr></thead>
+          <thead><tr><th>মাস</th><th>আয়</th><th>ব্যয়</th><th>সঞ্চয়</th><th>বিনিয়োগ</th><th>ঋণ</th><th>সম্পদ</th><th>দায়</th></tr></thead>
           <tbody id="monthlyTableBody"></tbody>
           <tfoot><tr id="monthlyTableTotal"></tr></tfoot>
         </table></div>
@@ -394,14 +394,14 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
             <div class="field" id="repayDirectionGroup" style="display:none">
               <label><i class="fa-solid fa-arrows-left-right"></i>দিক <span class="required">*</span></label>
               <div class="radio-group">
-                <label><input type="radio" name="repayDir" value="paid" checked onchange="onRepayDirChange()"> আমি দিলাম</label>
-                <label><input type="radio" name="repayDir" value="received" onchange="onRepayDirChange()"> আমি পেলাম</label>
+                <label><input type="radio" name="repayDir" value="paid" checked onchange="onRepayDirChange()"> <span class="dl-paid">আমি দিলাম</span></label>
+                <label><input type="radio" name="repayDir" value="received" onchange="onRepayDirChange()"> <span class="dl-recv">আমি পেলাম</span></label>
               </div>
             </div>
             <div class="field" id="borrowerGroup" style="display:none">
               <label><i class="fa-solid fa-user"></i><span id="borrowerLabel">ঋণগ্রহীতার নাম</span> <span class="required">*</span></label>
               <div class="ctl" id="borrowerWrapper">
-                <input type="text" id="borrower" name="borrower" placeholder="যেমন: করিম">
+                <input type="text" id="borrower" name="borrower" list="nameList" placeholder="যেমন: করিম">
               </div>
             </div>
             <div class="field" id="fromAccountGroup">
@@ -442,6 +442,7 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
   <button data-v="entry" onclick="showView('entry')"><i class="fa-solid fa-circle-plus"></i>এন্ট্রি</button>
 </nav>
 
+<datalist id="nameList"></datalist>
 <div class="ov" id="modal" onclick="if(event.target===this)closeModal()"><div class="sheet" id="sheet"></div></div>
 <div class="ov" id="editModal"><div class="sheet" id="editSheet"></div></div>
 <div class="ov" id="allTxnModal" onclick="if(event.target===this)closeAllTxnModal()"><div class="sheet" id="allTxnSheet"></div></div>
@@ -638,6 +639,7 @@ async function refreshAll(showLoader){
       showToast('মাস্টার ডেটা লোড হয়নি' + (master && master.error ? ': ' + master.error : '') + ' — ফর্মের তালিকা পুরোনো/খালি থাকতে পারে', 'error');
     }
 
+    updateNameList();
     renderKPI(dash.summary, dash.accounts);
     renderMonthlyTable(dash.summary);
     renderAccountGrid(dash.accounts);
@@ -666,6 +668,13 @@ async function refreshAll(showLoader){
 }
 
 function fetchDashboardData(){ refreshAll(); }
+
+function updateNameList(){
+  const cards = new Set(masterData.cards || []);
+  const names = [...new Set(currentTransactions.filter(t => t.type === T.LOAN && t.borrower && !cards.has(t.borrower) && !/card|কার্ড/i.test(t.borrower)).map(t => t.borrower))];
+  const dl = document.getElementById('nameList');
+  if (dl) dl.innerHTML = names.map(n => `<option value="${esc(n)}">`).join('');
+}
 
 function showWarnings(){
   let html = '<div class="sheet-h"><div class="ic" style="background:#f59e0b"><i class="fa-solid fa-triangle-exclamation"></i></div><b>সতর্কতা (' + currentWarnings.length + ')</b><button onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>';
@@ -734,7 +743,7 @@ function renderMonthlyTable(summary){
 function showAllMonthly(){
   const sheet = document.getElementById('allTxnSheet');
   let html = '<div class="sheet-h"><div class="ic" style="background:var(--blue)"><i class="fa-solid fa-calendar"></i></div><b>সব মাসিক হিসাব</b><button onclick="closeAllTxnModal()"><i class="fa-solid fa-xmark"></i></button></div>';
-  html += '<div class="modal-table-wrap"><table><thead><tr><th>মাস</th><th>আয়</th><th>ব্যয়</th><th>সঞ্চয়</th><th>বিনিয়োগ</th><th>ঋণ/স্থানান্তর</th><th>সম্পদ</th><th>দায়</th></tr></thead><tbody>';
+  html += '<div class="modal-table-wrap"><table><thead><tr><th>মাস</th><th>আয়</th><th>ব্যয়</th><th>সঞ্চয়</th><th>বিনিয়োগ</th><th>ঋণ</th><th>সম্পদ</th><th>দায়</th></tr></thead><tbody>';
   enMonths.forEach((month, idx)=>{
     const d = currentSummary && currentSummary[month] ? currentSummary[month] : { Income:0, Expense:0, Surplus:0, Investment:0, Loan:0, Asset:0, Liability:0 };
     html += `<tr><td>${bnMonths[idx]}</td><td>${formatAmount(d.Income)}</td><td>${formatAmount(d.Expense)}</td><td>${formatAmount(d.Surplus)}</td><td>${formatAmount(d.Investment)}</td><td>${formatAmount(d.Loan)}</td><td>${formatAmount(d.Asset)}</td><td>${formatAmount(d.Liability)}</td></tr>`;
@@ -784,7 +793,7 @@ function openModal(i){
   const acc = window.__accounts[i];
   const share = accPercent(acc, window.__accounts);
   const cls = (Number(acc.currentBalance)>=0)?'pos':'neg';
-  const note = isLiquid(acc) ? ('মোট ব্যালেন্সের ' + Math.round(share) + '% এই অ্যাকাউন্টে') : 'এই ধরনের অ্যাকাউন্ট মোট ব্যালেন্সে ধরা হয় না';
+  const note = isLiquid(acc) ? ('মোট ব্যালেন্সের ' + Math.round(share) + '% এই অ্যাকাউন্টে') : (acc.type==='Card' ? 'ঋণাত্মক ব্যালেন্স = কার্ডের বকেয়া; নেট ওয়ার্থে "দেয়" হিসেবে ধরা হয়' : 'এই ধরনের অ্যাকাউন্ট মোট ব্যালেন্সে ধরা হয় না');
   document.getElementById('sheet').innerHTML = `
     <div class="sheet-h"><div class="ic" style="background:${palette[i%palette.length]}"><i class="fa-solid ${accIcon(acc.name, acc.type)}"></i></div><b>${esc(acc.name)||'নাম নেই'}</b><button onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
     <div class="row"><span>ধরন</span><b>${esc(acc.type)||'—'}</b></div>
@@ -898,7 +907,8 @@ const findTxn = key => currentTransactions.find(t => txnKey(t) === key);
 function txnFlow(t){
   const type = nfc(t.type), sub = nfc(t.subCategory);
   if (type === T.INCOME) return 'in';
-  if (type === T.EXPENSE || type === T.INVEST) return 'out';
+  if (type === T.INVEST) return t.repayDir === 'received' ? 'in' : 'out';
+  if (type === T.EXPENSE) return 'out';
   if (type === T.LOAN){
     if (sub === SUBCATS.LOAN_TAKE) return 'in';
     if (sub === SUBCATS.LOAN_GIVE) return 'out';
@@ -924,7 +934,7 @@ function createTxnElement(txn){
     <div class="txn-left">
       <div class="txn-icon" style="background:${iconBg};color:${iconColor}"><i class="fa-solid ${iconClass}"></i></div>
       <div class="txn-details">
-        <h4>${esc(txn.subCategory || txn.category) || 'লেনদেন'}</h4>
+        <h4>${esc(txn.subCategory || txn.category) || 'লেনদেন'}${(txn.type===T.INVEST && txn.repayDir==='received') ? ' (ফেরত)' : ''}</h4>
         <p>${meta}</p>
       </div>
     </div>
@@ -945,12 +955,12 @@ function fieldRules(type, sub){
     fromLabel: 'উৎস অ্যাকাউন্ট', toLabel: 'গন্তব্য অ্যাকাউন্ট',
     showFrom: true, showTo: false, showCard: false,
     borrowerLabel: 'ঋণগ্রহীতার নাম', borrowerKind: 'none',
-    showRepayDir: false,
+    showRepayDir: false, dirKind: 'loan',
     fromRequired: true, toRequired: false, borrowerRequired: false
   };
   if (type === T.INCOME){ r.fromLabel = 'যে অ্যাকাউন্টে আয় জমা হলো'; }
   else if (type === T.EXPENSE){ r.fromLabel = 'যে অ্যাকাউন্ট থেকে ব্যয় হলো'; }
-  else if (type === T.INVEST){ r.fromLabel = 'যে অ্যাকাউন্ট থেকে বিনিয়োগ হলো'; }
+  else if (type === T.INVEST){ r.fromLabel = 'যে অ্যাকাউন্ট থেকে বিনিয়োগ হলো'; r.showRepayDir = true; r.dirKind = 'invest'; }
   else if (type === T.TRANSFER){
     r.fromLabel = 'যে অ্যাকাউন্ট থেকে পাঠানো হলো';
     r.toLabel = 'যে অ্যাকাউন্টে জমা হলো';
@@ -980,8 +990,17 @@ function fieldRules(type, sub){
 }
 
 // দিক অনুযায়ী লেবেল (ঋণ পরিশোধ)
-function repayFromLabel(dir){
+function repayFromLabel(dir, kind){
+  if (kind === 'invest') return dir === 'received' ? 'যে অ্যাকাউন্টে ফেরত/মেয়াদপূর্তির টাকা এলো' : 'যে অ্যাকাউন্ট থেকে বিনিয়োগ হলো';
   return dir === 'received' ? 'যে অ্যাকাউন্টে টাকা এলো' : 'যে অ্যাকাউন্ট থেকে পরিশোধ হলো';
+}
+function dirText(kind, which){
+  if (kind === 'invest') return which === 'paid' ? 'বিনিয়োগ (ক্রয়)' : 'ফেরত/মেয়াদপূর্তি';
+  return which === 'paid' ? 'আমি দিলাম' : 'আমি পেলাম';
+}
+function setDirLabels(root, kind){
+  root.querySelectorAll('.dl-paid').forEach(e => e.textContent = dirText(kind, 'paid'));
+  root.querySelectorAll('.dl-recv').forEach(e => e.textContent = dirText(kind, 'recv'));
 }
 function repayBorrowerLabel(dir){
   return dir === 'received' ? 'ঋণগ্রহীতার নাম (যিনি শোধ করলেন)' : 'ঋণদাতার নাম (যাকে শোধ করলাম)';
@@ -1012,11 +1031,12 @@ function applyFieldRules(formEl, rules){
   // কার্ড-নেটওয়ার্ক: নিয়ম অনুযায়ী, নয়তো উৎস অ্যাকাউন্টের ধরন Card হলে
   const fromType = (window.__accounts||[]).find(a=>a.name===(fromSel&&fromSel.value))?.type || '';
   cardGroup.style.display = (rules.showCard || (rules.showFrom && fromType==='Card')) ? 'flex' : 'none';
-  if (fromLabel) fromLabel.textContent = rules.showRepayDir ? repayFromLabel(formEl.querySelector('input[name=repayDir]:checked')?.value) : rules.fromLabel;
+  if (fromLabel) fromLabel.textContent = rules.showRepayDir ? repayFromLabel(formEl.querySelector('input[name=repayDir]:checked')?.value, rules.dirKind) : rules.fromLabel;
   if (toLabel) toLabel.textContent = rules.toLabel;
-  if (borrowerLabel) borrowerLabel.textContent = rules.showRepayDir ? repayBorrowerLabel(formEl.querySelector('input[name=repayDir]:checked')?.value) : rules.borrowerLabel;
+  if (borrowerLabel) borrowerLabel.textContent = (rules.showRepayDir && rules.dirKind === 'loan') ? repayBorrowerLabel(formEl.querySelector('input[name=repayDir]:checked')?.value) : rules.borrowerLabel;
   if (fromSel) fromSel.required = rules.fromRequired;
   if (toSel) toSel.required = rules.toRequired;
+  setDirLabels(formEl, rules.dirKind);
   return rules;
 }
 
@@ -1054,7 +1074,7 @@ function editTxn(key){
       <div class="edit-field"><label><i class="fa-solid fa-layer-group"></i> খাত</label><select id="editCategory" onchange="onEditCategoryChange()"></select></div>
       <div class="edit-field"><label><i class="fa-solid fa-tag"></i> উপ-খাত</label><select id="editSubCategory" onchange="onEditSubCategoryChange()"></select></div>
       <div class="edit-field" id="editRepayDirGroup" style="display:none"><label><i class="fa-solid fa-arrows-left-right"></i> দিক</label>
-        <div class="radio-group"><label><input type="radio" name="editRepayDir" value="paid" onchange="onEditRepayDirChange()"> আমি দিলাম</label><label><input type="radio" name="editRepayDir" value="received" onchange="onEditRepayDirChange()"> আমি পেলাম</label></div>
+        <div class="radio-group"><label><input type="radio" name="editRepayDir" value="paid" onchange="onEditRepayDirChange()"> <span class="dl-paid">আমি দিলাম</span></label><label><input type="radio" name="editRepayDir" value="received" onchange="onEditRepayDirChange()"> <span class="dl-recv">আমি পেলাম</span></label></div>
       </div>
       <div class="edit-field" id="editBorrowerGroup" style="display:none"><label><i class="fa-solid fa-user"></i> <span id="editBorrowerLabel">ঋণগ্রহীতা</span></label><div id="editBorrowerWrapper"></div></div>
       <div class="edit-field" id="editFromGroup"><label><i class="fa-solid fa-wallet"></i> <span id="editFromLabel">উৎস</span></label><select id="editFrom" onchange="onEditFromChange()"><option value="">নির্বাচন</option>${optsHtml(masterData.accounts, txn.fromAccount)}</select></div>
@@ -1147,13 +1167,14 @@ function applyEditFieldRules(type, sub, borrowerValue){
   document.getElementById('editBorrowerGroup').style.display = (rules.borrowerKind !== 'none') ? 'block' : 'none';
   document.getElementById('editRepayDirGroup').style.display = rules.showRepayDir ? 'block' : 'none';
   const dir = document.querySelector('input[name=editRepayDir]:checked')?.value;
-  document.getElementById('editFromLabel').textContent = rules.showRepayDir ? repayFromLabel(dir) : rules.fromLabel;
+  document.getElementById('editFromLabel').textContent = rules.showRepayDir ? repayFromLabel(dir, rules.dirKind) : rules.fromLabel;
   document.getElementById('editToLabel').textContent = rules.toLabel;
-  document.getElementById('editBorrowerLabel').textContent = rules.showRepayDir ? repayBorrowerLabel(dir) : rules.borrowerLabel;
+  document.getElementById('editBorrowerLabel').textContent = (rules.showRepayDir && rules.dirKind === 'loan') ? repayBorrowerLabel(dir) : rules.borrowerLabel;
+  setDirLabels(document.getElementById('editSheet'), rules.dirKind);
 
   const w = document.getElementById('editBorrowerWrapper');
   if (rules.borrowerKind === 'text'){
-    w.innerHTML = `<input type="text" id="editBorrower" value="${esc(borrowerValue || '')}" placeholder="যেমন: করিম">`;
+    w.innerHTML = `<input type="text" id="editBorrower" list="nameList" value="${esc(borrowerValue || '')}" placeholder="যেমন: করিম">`;
   } else if (rules.borrowerKind === 'select'){
     w.innerHTML = `<select id="editBorrower"><option value="">নির্বাচন করুন</option>${optsHtml(repayNames(dir), borrowerValue||'')}</select>`;
   } else if (rules.borrowerKind === 'card'){
@@ -1394,7 +1415,7 @@ function onCategoryChange(){
   subSelect.innerHTML = '<option value="">উপ-খাত নির্বাচন করুন</option>';
   if (!cat){ subSelect.disabled = true; onSubCategoryChange(); return; }
   subSelect.disabled = false;
-  (masterData.dataMap||[]).filter(d=>d.type===type && d.category===cat).forEach(d=>{
+  (masterData.dataMap||[]).filter(d=>d.type===type && d.category===cat && d.subCategory!==SUBCATS.CARD_DUE).forEach(d=>{
     const opt = document.createElement('option'); opt.value = d.subCategory; opt.textContent = d.subCategory; subSelect.appendChild(opt);
   });
   onSubCategoryChange(); // উপ-খাত রিসেট হয়েছে — নিয়ম আবার প্রয়োগ
@@ -1412,7 +1433,7 @@ function renderBorrowerControl(rules){
   const wrapper = document.getElementById('borrowerWrapper');
   const dir = document.querySelector('#financeForm input[name=repayDir]:checked')?.value || 'paid';
   if (rules.borrowerKind === 'text'){
-    wrapper.innerHTML = `<input type="text" id="borrower" name="borrower" placeholder="যেমন: করিম">`;
+    wrapper.innerHTML = `<input type="text" id="borrower" name="borrower" list="nameList" placeholder="যেমন: করিম">`;
   } else if (rules.borrowerKind === 'select'){
     const people = repayNames(dir);
     if (people.length === 0){
@@ -1434,9 +1455,10 @@ function renderBorrowerControl(rules){
 
 function onRepayDirChange(){
   const dir = document.querySelector('#financeForm input[name=repayDir]:checked')?.value;
-  document.getElementById('fromLabelText').textContent = repayFromLabel(dir);
-  document.getElementById('borrowerLabel').textContent = repayBorrowerLabel(dir);
-  renderBorrowerControl(currentFormRules()); // দিক অনুযায়ী নামের তালিকা বদলায়
+  const rules = currentFormRules();
+  document.getElementById('fromLabelText').textContent = repayFromLabel(dir, rules.dirKind);
+  if (rules.dirKind === 'loan') document.getElementById('borrowerLabel').textContent = repayBorrowerLabel(dir);
+  renderBorrowerControl(rules); // দিক অনুযায়ী নামের তালিকা বদলায়
 }
 
 function onFromAccountChange(){
@@ -1485,6 +1507,10 @@ form.addEventListener('submit', async e=>{
   if (bad){ showToast('সব * চিহ্নিত ঘর পূরণ করুন!', 'error'); bad.focus(); return; }
   const amt = parseAmount(document.getElementById('amount').value);
   if (isNaN(amt)){ showToast('সঠিক পরিমাণ লিখুন (০-র চেয়ে বড়)!', 'error'); document.getElementById('amount').focus(); return; }
+
+  const typedDate = fp.parseDate(document.getElementById('date').value, 'd/m/Y');
+  if (!typedDate){ showToast('সঠিক তারিখ দিন (দিন/মাস/বছর)!', 'error'); document.getElementById('date').focus(); return; }
+  setBackendDate(typedDate);
 
   const rules = currentFormRules();
   const type = document.getElementById('transactionType').value;
