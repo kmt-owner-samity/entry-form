@@ -214,6 +214,10 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
 .pagination button{width:36px;height:36px;border:none;border-radius:8px;background:#eef1f8;color:var(--ink);font-weight:700;cursor:pointer}
 .pagination button.on{background:var(--blue);color:#fff}
 .pagination button:disabled{opacity:.4;cursor:not-allowed}
+.pagination span{color:var(--mute);padding:0 2px}
+.acc-txn-btn{width:100%;margin-top:14px;padding:12px;border:none;border-radius:12px;background:var(--blue);color:#fff;font-weight:700;font-size:14px;cursor:pointer}
+.txn-details p.txn-bal{margin-top:2px;font-size:11px;color:var(--mute)}
+.txn-details p.txn-bal b{color:var(--ink)}
 .refresh-btn{width:36px;height:36px;border:none;border-radius:50%;background:#eef1f8;color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:14px;transition:.2s;flex-shrink:0}
 .refresh-btn:hover{background:#e0e5ff}
 .refresh-btn.warn{background:#fff3d6;color:#b45309}
@@ -641,6 +645,7 @@ async function refreshAll(showLoader){
     }
 
     updateNameList();
+    if (accTxnView && document.getElementById('allTxnModal').classList.contains('show')) showAccountTxns(accTxnView.name, accTxnView.page);
     { const vi = document.getElementById('verInfo'); if (vi) vi.textContent = 'ফ্রন্টএন্ড ' + FRONT_VER + ' · ব্যাকএন্ড ' + (dash.version || 'পুরোনো (সংস্করণ নেই)'); }
     renderKPI(dash.summary, dash.accounts);
     renderMonthlyTable(dash.summary);
@@ -805,10 +810,124 @@ function openModal(i){
     <div class="row"><span>মোট ব্যয়</span><b class="neg">${formatAmount(acc.totalOut)}</b></div>
     <div class="cur"><span>বর্তমান ব্যালেন্স</span><b class="${cls}">${formatAmount(acc.currentBalance)}</b></div>
     <div class="share"><i style="width:${share}%"></i></div>
-    <div class="share-l">${note}</div>`;
+    <div class="share-l">${note}</div>
+    <button class="acc-txn-btn" onclick="showAccountTxns(${i},1)"><i class="fa-solid fa-list"></i> লেনদেন দেখুন</button>`;
   document.getElementById('modal').classList.add('show');
 }
 function closeModal(){ document.getElementById('modal').classList.remove('show'); }
+
+// ==========================================
+// অ্যাকাউন্ট-ভিত্তিক লেনদেন (চলমান ব্যালেন্স সহ)
+// নিয়ম ব্যাকএন্ডের rowEffects_-এর সাথে একই
+// ==========================================
+let accTxnView = null; // { name, page } — খোলা থাকলে এডিট/ডিলিটের পর আবার আঁকা হয়
+const ACC_TXNS_PER_PAGE = 10;
+
+function txnEffects(t){
+  const type = nfc(t.type), sub = nfc(t.subCategory), amt = Number(t.amount) || 0;
+  const f = nfc(t.fromAccount), to = nfc(t.toAccount), dir = t.repayDir || '';
+  const e = [];
+  if (type === T.INCOME) e.push([f, amt]);
+  else if (type === T.EXPENSE) e.push([f, -amt]);
+  else if (type === T.INVEST) e.push([f, dir === 'received' ? amt : -amt]);
+  else if (type === T.TRANSFER){ e.push([f, -amt]); e.push([to, amt]); }
+  else if (type === T.LOAN){
+    if (sub === SUBCATS.LOAN_TAKE) e.push([f, amt]);
+    else if (sub === SUBCATS.LOAN_GIVE) e.push([f, -amt]);
+    else if (sub === SUBCATS.LOAN_REPAY) e.push([f, dir === 'received' ? amt : -amt]);
+    else if (sub === SUBCATS.CARD_DUE) e.push([nfc(t.borrower), -amt]); // পুরোনো কার্ড-বিল সারি
+  }
+  return e;
+}
+
+// পুরোনো → নতুন ক্রমে চলমান ব্যালেন্স বের করে
+function buildAccountLedger(acc){
+  const name = nfc(acc.name);
+  const list = currentTransactions.slice().sort((a, b) =>
+    String(a.date).localeCompare(String(b.date)) || (Number(a.row) || 0) - (Number(b.row) || 0));
+  let bal = Number(acc.openingBalance) || 0;
+  const out = [];
+  list.forEach(t => {
+    let delta = 0, hit = false;
+    txnEffects(t).forEach(([n, d]) => { if (n === name){ delta += d; hit = true; } });
+    if (hit){ bal = Math.round((bal + delta) * 100) / 100; out.push({ t, delta, bal }); }
+  });
+  return out;
+}
+
+function pageWindow(total, cur){
+  const set = new Set([1, total, cur - 1, cur, cur + 1].filter(p => p >= 1 && p <= total));
+  const arr = [...set].sort((a, b) => a - b), res = [];
+  arr.forEach((p, i) => { if (i > 0 && p - arr[i-1] > 1) res.push('…'); res.push(p); });
+  return res;
+}
+
+function showAccountTxns(ref, page){
+  const accs = window.__accounts || [];
+  const acc = (typeof ref === 'number') ? accs[ref] : accs.find(a => nfc(a.name) === nfc(ref));
+  if (!acc) return;
+  closeModal();
+  const idx = accs.indexOf(acc);
+  const ledger = buildAccountLedger(acc).reverse(); // নতুন আগে
+  const totalPages = Math.max(1, Math.ceil(ledger.length / ACC_TXNS_PER_PAGE));
+  const cur = Math.min(Math.max(1, page || 1), totalPages);
+  accTxnView = { name: acc.name, page: cur };
+  const start = (cur - 1) * ACC_TXNS_PER_PAGE;
+  const pageData = ledger.slice(start, start + ACC_TXNS_PER_PAGE);
+  const balCls = (Number(acc.currentBalance) >= 0) ? 'pos' : 'neg';
+
+  let html = `<div class="sheet-h"><div class="ic" style="background:${palette[idx % palette.length]}"><i class="fa-solid ${accIcon(acc.name, acc.type)}"></i></div><b>${esc(acc.name) || 'নাম নেই'}</b><button onclick="closeAllTxnModal()"><i class="fa-solid fa-xmark"></i></button></div>`;
+  html += `<div class="row"><span>বর্তমান ব্যালেন্স</span><b class="${balCls}">${formatAmount(acc.currentBalance)}</b></div>`;
+  html += `<div class="row"><span>মোট লেনদেন</span><b>${ledger.length} টি</b></div>`;
+  html += '<div style="margin:10px 0"><a onclick="backToAccount()" style="cursor:pointer;color:var(--blue);font-weight:700;font-size:13px"><i class="fa-solid fa-chevron-left"></i> অ্যাকাউন্টের সারাংশ</a></div>';
+  html += '<div class="txn-list" id="accTxnListInner"></div><div class="pagination" id="accTxnPagination"></div>';
+  document.getElementById('allTxnSheet').innerHTML = html;
+  document.getElementById('allTxnModal').classList.add('show');
+
+  const inner = document.getElementById('accTxnListInner');
+  if (pageData.length === 0) inner.innerHTML = '<div class="empty">এই অ্যাকাউন্টে কোনো লেনদেন নেই</div>';
+  pageData.forEach(e => {
+    const el = createTxnElement(e.t);
+    const isIn = e.delta > 0, isOut = e.delta < 0;
+    const ic = el.querySelector('.txn-icon');
+    ic.style.background = isIn ? '#d9f6ec' : (isOut ? '#ffe1e8' : '#e0e5ff');
+    ic.style.color = isIn ? 'var(--mint)' : (isOut ? 'var(--coral)' : 'var(--blue)');
+    ic.querySelector('i').className = 'fa-solid ' + (isIn ? 'fa-arrow-down' : (isOut ? 'fa-arrow-up' : 'fa-right-left'));
+    const am = el.querySelector('.txn-amount');
+    am.className = 'txn-amount ' + (isIn ? 'pos' : (isOut ? 'neg' : ''));
+    am.textContent = (isIn ? '+' : (isOut ? '-' : '')) + formatAmount(Math.abs(e.delta));
+    el.querySelector('.txn-details').insertAdjacentHTML('beforeend',
+      `<p class="txn-bal">ব্যালেন্স: <b class="${e.bal >= 0 ? 'pos' : 'neg'}">${formatAmount(e.bal)}</b></p>`);
+    inner.appendChild(el);
+  });
+  if (cur === totalPages){
+    inner.insertAdjacentHTML('beforeend',
+      `<div class="txn-item" style="background:#f8fafc"><div class="txn-details"><h4>ওপেনিং ব্যালেন্স</h4></div><div class="txn-amount">${formatAmount(acc.openingBalance)}</div></div>`);
+  }
+
+  const pg = document.getElementById('accTxnPagination');
+  pg.innerHTML = '';
+  if (totalPages > 1){
+    const mk = (label, p, dis, on) => {
+      const b = document.createElement('button'); b.innerHTML = label; b.disabled = !!dis;
+      if (on) b.className = 'on'; b.onclick = () => showAccountTxns(acc.name, p); return b;
+    };
+    pg.appendChild(mk('<i class="fa-solid fa-chevron-left"></i>', cur - 1, cur === 1));
+    pageWindow(totalPages, cur).forEach(p => {
+      if (p === '…'){ const s = document.createElement('span'); s.textContent = '…'; pg.appendChild(s); }
+      else pg.appendChild(mk(String(p), p, false, p === cur));
+    });
+    pg.appendChild(mk('<i class="fa-solid fa-chevron-right"></i>', cur + 1, cur === totalPages));
+  }
+}
+
+function backToAccount(){
+  const n = accTxnView ? accTxnView.name : null;
+  closeAllTxnModal();
+  const i = (window.__accounts || []).findIndex(a => nfc(a.name) === nfc(n));
+  if (i >= 0) openModal(i);
+}
+
 document.addEventListener('keydown', e=>{ if (e.key==='Escape'){ if (document.getElementById('confirmDialog').classList.contains('show')){ closeConfirm(false); return; } closeModal(); closeEditModal(); closeAllTxnModal(); closeAllLoanModal(); } });
 
 function renderReportPage(){
@@ -859,6 +978,7 @@ function loadRecentTransactions(){
 let currentTxnPage = 1;
 const TXNS_PER_PAGE = 10;
 function showAllTransactions(page){
+  accTxnView = null;
   if (!txnMonthCursor) txnMonthCursor = latestTxnMonth();
   currentTxnPage = page || 1;
   const { y, m } = txnMonthCursor;
@@ -900,7 +1020,7 @@ function txnMonthNext(){
   let { y, m } = txnMonthCursor; m++; if (m>11){ m=0; y++; }
   txnMonthCursor = { y, m }; showAllTransactions(1);
 }
-function closeAllTxnModal(){ document.getElementById('allTxnModal').classList.remove('show'); }
+function closeAllTxnModal(){ accTxnView = null; document.getElementById('allTxnModal').classList.remove('show'); }
 
 // লেনদেনের চাবি: id থাকলে id, না থাকলে সারি নম্বর (মাইগ্রেশনের আগের সারির জন্য)
 const txnKey = t => t.id ? t.id : ('row:' + t.row);
@@ -1249,7 +1369,7 @@ async function deleteTxn(key){
       showToast('লেনদেন ডিলিট হয়েছে!', 'success');
       // তালিকা থেকে সাথে সাথে বাদ দিয়ে খোলা "সব লেনদেন" মডাল আবার আঁকা (একই পেজেই থাকে)
       currentTransactions = currentTransactions.filter(t => txnKey(t) !== key);
-      if (document.getElementById('allTxnModal').classList.contains('show')) showAllTransactions(currentTxnPage);
+      if (document.getElementById('allTxnModal').classList.contains('show')){ if (accTxnView) showAccountTxns(accTxnView.name, accTxnView.page); else showAllTransactions(currentTxnPage); }
       if (document.body.dataset.view === 'reports') loadRecentTransactions();
       refreshAll();
     }
