@@ -361,6 +361,7 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
           <tfoot><tr id="monthlyTableTotal"></tr></tfoot>
         </table></div>
       </div>
+          <div class="sec" style="margin-top:24px"><span>মোছা লেনদেন</span><a onclick="showDeleted()">ফেরান / দেখুন</a></div>
     </section>
 
     <section class="view" id="view-entry">
@@ -466,7 +467,7 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
 <script>
-const scriptURL = 'https://script.google.com/macros/s/AKfycbzm-aq0OS-aZnoG7Zq_ksmdrlX6ansbcvwPHicCM6cK4J9AoL_OmquzgnPvfR_kBKqY/exec';
+const scriptURL = 'https://script.google.com/macros/s/AKfycbyzBVbA-vjw5oeExqbzLOzSqRleKku91g1o5LKwfDveQJjROVrXMm_42rNOHVj0V659/exec';
 const bnMonths = ["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
 const enMonths = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const enMonthsShort = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -676,7 +677,7 @@ async function refreshAll(showLoader){
 
 function fetchDashboardData(){ refreshAll(); }
 
-const FRONT_VER = 'v3-invest-dir';
+const FRONT_VER = 'v4-step1';
 function updateNameList(){
   const cards = new Set(masterData.cards || []);
   const names = [...new Set(currentTransactions.filter(t => t.type === T.LOAN && t.borrower && !cards.has(t.borrower) && !/card|কার্ড/i.test(t.borrower)).map(t => t.borrower))];
@@ -862,23 +863,41 @@ function pageWindow(total, cur){
   return res;
 }
 
-function showAccountTxns(ref, page){
+// বছর অনুযায়ী ছেঁকে নেয়; startBal = ওই বছরের শুরুর ব্যালেন্স (চলমান ব্যালেন্স সব সময়ের ওপরই হিসাব করা)
+function ledgerForYear(ledger, year, opening){
+  if (year === 'all') return { rows: ledger, startBal: Number(opening) || 0 };
+  const rows = ledger.filter(e => String(e.t.date).slice(0, 4) === String(year));
+  let startBal = Number(opening) || 0;
+  ledger.forEach(e => { if (String(e.t.date).slice(0, 4) < String(year)) startBal = e.bal; });
+  return { rows, startBal };
+}
+
+function showAccountTxns(ref, page, year){
   const accs = window.__accounts || [];
   const acc = (typeof ref === 'number') ? accs[ref] : accs.find(a => nfc(a.name) === nfc(ref));
   if (!acc) return;
   closeModal();
   const idx = accs.indexOf(acc);
-  const ledger = buildAccountLedger(acc).reverse(); // নতুন আগে
+  if (year === undefined) year = (accTxnView && nfc(accTxnView.name) === nfc(acc.name)) ? accTxnView.year : 'all';
+
+  const full = buildAccountLedger(acc);                       // পুরোনো → নতুন, সব বছর
+  const years = [...new Set(full.map(e => String(e.t.date).slice(0, 4)))].sort().reverse();
+  if (year !== 'all' && !years.includes(String(year))) year = 'all';
+  const { rows, startBal } = ledgerForYear(full, year, acc.openingBalance);
+  const ledger = rows.slice().reverse();                      // নতুন আগে
   const totalPages = Math.max(1, Math.ceil(ledger.length / ACC_TXNS_PER_PAGE));
   const cur = Math.min(Math.max(1, page || 1), totalPages);
-  accTxnView = { name: acc.name, page: cur };
+  accTxnView = { name: acc.name, page: cur, year };
   const start = (cur - 1) * ACC_TXNS_PER_PAGE;
   const pageData = ledger.slice(start, start + ACC_TXNS_PER_PAGE);
   const balCls = (Number(acc.currentBalance) >= 0) ? 'pos' : 'neg';
 
   let html = `<div class="sheet-h"><div class="ic" style="background:${palette[idx % palette.length]}"><i class="fa-solid ${accIcon(acc.name, acc.type)}"></i></div><b>${esc(acc.name) || 'নাম নেই'}</b><button onclick="closeAllTxnModal()"><i class="fa-solid fa-xmark"></i></button></div>`;
   html += `<div class="row"><span>বর্তমান ব্যালেন্স</span><b class="${balCls}">${formatAmount(acc.currentBalance)}</b></div>`;
-  html += `<div class="row"><span>মোট লেনদেন</span><b>${ledger.length} টি</b></div>`;
+  html += `<div class="row"><span>লেনদেন</span><b>${ledger.length} টি${year !== 'all' ? ' (সব: ' + full.length + ')' : ''}</b></div>`;
+  html += `<div class="row"><span>বছর</span><select onchange="showAccountTxns(${idx},1,this.value)" style="height:34px;border-radius:10px;padding:0 10px;font-size:13px;border:1px solid #e3e8f4;background:#fff">` +
+          `<option value="all"${year === 'all' ? ' selected' : ''}>সব বছর</option>` +
+          years.map(y => `<option value="${y}"${String(year) === y ? ' selected' : ''}>${y}</option>`).join('') + '</select></div>';
   html += '<div style="margin:10px 0"><a onclick="backToAccount()" style="cursor:pointer;color:var(--blue);font-weight:700;font-size:13px"><i class="fa-solid fa-chevron-left"></i> অ্যাকাউন্টের সারাংশ</a></div>';
   html += '<div class="txn-list" id="accTxnListInner"></div><div class="pagination" id="accTxnPagination"></div>';
   document.getElementById('allTxnSheet').innerHTML = html;
@@ -901,8 +920,9 @@ function showAccountTxns(ref, page){
     inner.appendChild(el);
   });
   if (cur === totalPages){
+    const label = year === 'all' ? 'ওপেনিং ব্যালেন্স' : (year + ' সালের শুরুর ব্যালেন্স');
     inner.insertAdjacentHTML('beforeend',
-      `<div class="txn-item" style="background:#f8fafc"><div class="txn-details"><h4>ওপেনিং ব্যালেন্স</h4></div><div class="txn-amount">${formatAmount(acc.openingBalance)}</div></div>`);
+      `<div class="txn-item" style="background:#f8fafc"><div class="txn-details"><h4>${label}</h4></div><div class="txn-amount">${formatAmount(startBal)}</div></div>`);
   }
 
   const pg = document.getElementById('accTxnPagination');
@@ -910,7 +930,7 @@ function showAccountTxns(ref, page){
   if (totalPages > 1){
     const mk = (label, p, dis, on) => {
       const b = document.createElement('button'); b.innerHTML = label; b.disabled = !!dis;
-      if (on) b.className = 'on'; b.onclick = () => showAccountTxns(acc.name, p); return b;
+      if (on) b.className = 'on'; b.onclick = () => showAccountTxns(acc.name, p, year); return b;
     };
     pg.appendChild(mk('<i class="fa-solid fa-chevron-left"></i>', cur - 1, cur === 1));
     pageWindow(totalPages, cur).forEach(p => {
@@ -919,6 +939,46 @@ function showAccountTxns(ref, page){
     });
     pg.appendChild(mk('<i class="fa-solid fa-chevron-right"></i>', cur + 1, cur === totalPages));
   }
+}
+
+// ==========================================
+// মোছা লেনদেন — দেখা ও ফেরানো
+// ==========================================
+async function showDeleted(){
+  accTxnView = null;
+  const sheet = document.getElementById('allTxnSheet');
+  sheet.innerHTML = '<div class="sheet-h"><b>মোছা লেনদেন</b><button onclick="closeAllTxnModal()"><i class="fa-solid fa-xmark"></i></button></div><div class="empty">লোড হচ্ছে…</div>';
+  document.getElementById('allTxnModal').classList.add('show');
+  try {
+    const r = await callGet('action=getDeletedList');
+    if (r.error) throw new Error(r.error);
+    const items = r.items || [];
+    let html = '<div class="sheet-h"><b>মোছা লেনদেন</b><button onclick="closeAllTxnModal()"><i class="fa-solid fa-xmark"></i></button></div>';
+    html += '<p style="font-size:12px;color:var(--mute);margin:0 0 10px">সর্বশেষ ৫০টি। "ফেরান" চাপলে লেনদেনটি আবার তালিকায় ফিরবে।</p>';
+    if (!items.length) html += '<div class="empty">কোনো মোছা লেনদেন নেই</div>';
+    else html += '<div class="txn-list">' + items.map(it => {
+      const dirTxt = (it.type === T.INVEST && it.repayDir === 'received') ? ' (ফেরত)' : '';
+      const acct = it.toAccount ? (it.fromAccount + ' → ' + it.toAccount) : it.fromAccount;
+      const meta = [acct, it.date, it.borrower, it.notes].filter(Boolean).map(esc).join(' • ');
+      return `<div class="txn-item"><div class="txn-left"><div class="txn-details"><h4>${esc(it.subCategory || it.category || it.type)}${dirTxt} — ${formatAmount(it.amount)}</h4><p>${meta}</p><p>মোছা হয়েছে: ${esc(it.deletedAt)}</p></div></div><div class="txn-right"><button class="txn-btn edit" style="font-weight:700;font-size:12px;border-radius:10px;padding:6px 10px" onclick="restoreDeleted('${esc(it.id)}')">ফেরান</button></div></div>`;
+    }).join('') + '</div>';
+    sheet.innerHTML = html;
+  } catch(err){
+    sheet.innerHTML = '<div class="sheet-h"><b>মোছা লেনদেন</b><button onclick="closeAllTxnModal()"><i class="fa-solid fa-xmark"></i></button></div><div class="empty">লোড ব্যর্থ: ' + esc(err.message) + '</div>';
+  }
+}
+
+async function restoreDeleted(id){
+  const ok = await showConfirm('লেনদেন ফেরান', 'এই লেনদেনটি আবার তালিকায় ফিরিয়ে আনবেন?');
+  if (!ok) return;
+  const fd = new FormData();
+  fd.append('action', 'restoreTransaction');
+  fd.append('id', id);
+  try {
+    const d = await callPost(fd);
+    if (d.result === 'success'){ showToast('লেনদেন ফিরেছে!', 'success'); refreshAll(); showDeleted(); }
+    else showToast('ফেরানো যায়নি: ' + (d.error || ''), 'error');
+  } catch(err){ showToast('ফেরানো যায়নি: ' + err.message, 'error'); }
 }
 
 function backToAccount(){
