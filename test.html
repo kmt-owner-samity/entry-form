@@ -183,7 +183,7 @@ tfoot td:first-child{background:#e6e9fb}
 .field>label i{color:var(--ac);width:14px;font-size:12px;transition:color .4s}
 .required{color:var(--coral)}
 .ctl{position:relative}
-input[type=text],select,textarea{width:100%;height:50px;padding:0 14px;background:rgba(255,255,255,.75);border:1px solid rgba(16,26,51,.08);border-radius:14px;color:var(--ink);font:500 15px 'Hind Siliguri',sans-serif;outline:none;transition:.2s}
+input[type=text],input[type=number],input[type=date],select,textarea{width:100%;height:50px;padding:0 14px;background:rgba(255,255,255,.75);border:1px solid rgba(16,26,51,.08);border-radius:14px;color:var(--ink);font:500 15px 'Hind Siliguri',sans-serif;outline:none;transition:.2s}
 select{appearance:none;-webkit-appearance:none;padding-right:38px;cursor:pointer}
 .ctl:has(select)::after{content:"\f078";font:900 10px 'Font Awesome 6 Free';position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--mute);pointer-events:none}
 textarea{height:84px;padding:13px 14px;resize:none}
@@ -244,7 +244,12 @@ body{font-variant-numeric:tabular-nums}
 .cc,.iv{padding:14px;border-radius:16px;display:grid;gap:8px}
 .cc-top,.iv-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .cc-top b,.iv-top b{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cc-edit,.iv-edit{border:none;background:#eef1f8;border-radius:10px;padding:5px 10px;font-size:12px;font-weight:700;color:var(--ink);cursor:pointer;flex-shrink:0}
+.ibtn{width:34px;height:34px;border-radius:50%;border:none;background:#eef1f8;color:var(--blue);display:grid;place-items:center;cursor:pointer;flex-shrink:0;font-size:13px;transition:transform .15s}
+.ibtn:active{transform:scale(.92)}
+.iv-hero{display:flex;gap:10px;padding:14px 16px;border-radius:16px;margin-bottom:10px}
+.iv-hero div{flex:1}.iv-hero small{display:block;font-size:11px;color:var(--mute);font-weight:700}.iv-hero b{font-size:19px}
+.iv-sub{font-size:12px;color:var(--mute)}
+.sec-sub.warnline{color:#b45309;background:#fff3d6;border-radius:10px;padding:7px 10px;margin:0 0 10px}
 .bar-t{height:8px;background:#e8ecf7;border-radius:6px;overflow:hidden}
 .bar-t i{display:block;height:100%;border-radius:6px;background:var(--blue)}
 .bar-t i.w{background:#f59e0b}.bar-t i.d{background:var(--coral)}
@@ -254,7 +259,11 @@ body{font-variant-numeric:tabular-nums}
 .iv-amt{font-size:16px;font-weight:800}
 .fld{display:grid;gap:4px;margin:8px 0}
 .fld label{font-size:12px;font-weight:700;color:var(--mute)}
-.fld input,.fld select{height:40px;border-radius:10px;border:1px solid #dde2ef;padding:0 10px;font-size:14px;font-family:inherit;background:#fff;width:100%;box-sizing:border-box}
+.fld input,.fld select{height:48px;border-radius:14px;border:1px solid rgba(16,26,51,.08);padding:0 14px;font:500 15px 'Hind Siliguri',sans-serif;color:var(--ink);background:rgba(255,255,255,.75);width:100%;box-sizing:border-box;outline:none;transition:.2s}
+.fld input:focus,.fld select:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(51,71,255,.1)}
+.fld select{appearance:none;-webkit-appearance:none;padding-right:36px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' fill='none' stroke='%23737b94' stroke-width='2'/></svg>");background-repeat:no-repeat;background-position:right 14px center}
+input[type=date]{-webkit-appearance:none;appearance:none;min-height:50px}
+input[type=number]{-moz-appearance:textfield}
 .btn-row2{display:flex;gap:8px;margin-top:14px}
 .btn-row2 button{flex:1;padding:11px;border:none;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;background:#eef1f8;color:var(--ink)}
 .btn-row2 button.pri{background:var(--blue);color:#fff}
@@ -305,7 +314,7 @@ body{font-variant-numeric:tabular-nums}
         <button data-v="entry" onclick="showView('entry')"><i class="fa-solid fa-circle-plus"></i>নতুন এন্ট্রি</button>
       </nav>
       <div class="spacer"></div>
-      <select id="yearFilter" onchange="fetchDashboardData()" aria-label="আর্থিক বছর" style="height:36px;border-radius:10px;padding:0 10px;font-size:13px;background:#eef1f8;border:1px solid #dde2ef;font-family:inherit;width:auto"></select>
+      <select id="yearFilter" onchange="refreshAll(true)" aria-label="আর্থিক বছর" style="height:36px;border-radius:10px;padding:0 10px;font-size:13px;background:#eef1f8;border:1px solid #dde2ef;font-family:inherit;width:auto"></select>
       <button class="refresh-btn bell-btn" id="bellBtn" title="নোটিফিকেশন" onclick="showNotifications()"><i class="fa-solid fa-bell"></i><span class="bell-badge" id="bellBadge" style="display:none">0</span></button>
       <button class="refresh-btn" id="refreshBtn" title="রিফ্রেশ" onclick="refreshAll(true)"><i class="fa-solid fa-rotate"></i></button>
     </div>
@@ -402,8 +411,7 @@ body{font-variant-numeric:tabular-nums}
           <tfoot><tr id="monthlyTableTotal"></tr></tfoot>
         </table></div>
       </div>
-          <div class="sec" style="margin-top:24px"><span>মোছা লেনদেন</span><a onclick="showDeleted()">ফেরান / দেখুন</a></div>
-    </section>
+        </section>
 
     <section class="view" id="view-entry">
       <div class="page-title">হিসাব এন্ট্রি করুন</div>
@@ -452,7 +460,7 @@ body{font-variant-numeric:tabular-nums}
             </div>
             <div class="field" id="invNameGroup" style="display:none">
               <label><i class="fa-solid fa-seedling"></i>বিনিয়োগের নাম (ঐচ্ছিক)</label>
-              <div class="ctl"><input type="text" id="invName" name="invName" placeholder="যেমন: ৫ বছর মেয়াদী সঞ্চয়পত্র"></div>
+              <div class="ctl"><input type="text" id="invName" name="invName" list="invNameList" placeholder="একই নাম দিলে একই কার্ডে জমা হবে (যেমন: ডিপিএস)"></div>
             </div>
             <div class="field" id="invRateGroup" style="display:none">
               <label><i class="fa-solid fa-percent"></i>মুনাফার হার % (ঐচ্ছিক)</label>
@@ -464,7 +472,7 @@ body{font-variant-numeric:tabular-nums}
             </div>
             <div class="field" id="invIdGroup" style="display:none">
               <label><i class="fa-solid fa-link"></i>কোন বিনিয়োগ ফেরত? (ঐচ্ছিক)</label>
-              <div class="ctl"><select id="invId" name="invId"><option value="">তালিকার বাইরে / পুরোনো</option></select></div>
+              <div class="ctl"><select id="invId" name="invId"><option value="">তালিকায় নেই (শুধু হিসাব)</option></select></div>
             </div>
             <div class="field" id="fromAccountGroup">
               <label for="fromAccount"><i class="fa-solid fa-wallet"></i><span id="fromLabelText">উৎস অ্যাকাউন্ট</span> <span class="required">*</span></label>
@@ -505,7 +513,8 @@ body{font-variant-numeric:tabular-nums}
 </nav>
 
 <datalist id="nameList"></datalist>
-<div id="verInfo" style="text-align:center;font-size:11px;opacity:.55;padding:10px 0 90px"></div>
+<datalist id="invNameList"></datalist>
+<div style="height:90px"></div>
 <div class="ov" id="modal" onclick="if(event.target===this)closeModal()"><div class="sheet" id="sheet"></div></div>
 <div class="ov" id="editModal"><div class="sheet" id="editSheet"></div></div>
 <div class="ov" id="allTxnModal" onclick="if(event.target===this)closeAllTxnModal()"><div class="sheet" id="allTxnSheet"></div></div>
@@ -524,7 +533,7 @@ body{font-variant-numeric:tabular-nums}
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
 <script>
-const scriptURL = 'https://script.google.com/macros/s/AKfycbzfyhaN_tdAQ1CV_GS8NZpQpnnF9uvTEEwAWfguskiY6K69ZDJcaq1P2RkanixRXTEf/exec';
+const scriptURL = 'https://script.google.com/macros/s/AKfycbzc4LBK1p2ICYWYuKSQDV_v6QyPfW8enQehrHUBIwgDgLFxGbeawsqZcm8F85B30BkQGw/exec';
 const bnMonths = ["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
 const enMonths = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const enMonthsShort = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -598,38 +607,15 @@ function showView(v){
 }
 
 // ==========================================
-// নেটওয়ার্ক + ঐচ্ছিক অ্যাক্সেস কোড
-// (সার্ভারে API_TOKEN সেট থাকলে অ্যাপ প্রথমবার কোড চায়; কোড ব্রাউজারেই থাকে, কোডে নয়)
+// নেটওয়ার্ক (সব অনুরোধ POST-এ)
 // ==========================================
-const TOKEN_KEY = 'hisab_token';
-function getToken(){ try { return localStorage.getItem(TOKEN_KEY) || ''; } catch(e){ return ''; } }
-function setToken(t){ try { localStorage.setItem(TOKEN_KEY, t); } catch(e){} }
-let tokenDeclinedAt = 0;
-function askToken(usedToken){
-  if (getToken() !== usedToken) return true;           // অন্য রিকোয়েস্ট ইতিমধ্যে নতুন কোড বসিয়েছে
-  if (Date.now() - tokenDeclinedAt < 5000) return false;
-  const t = prompt('অ্যাক্সেস কোড দিন:');
-  if (!t){ tokenDeclinedAt = Date.now(); return false; }
-  setToken(t.trim());
-  return true;
-}
-const tsParam = () => '&_ts=' + Date.now();
-
-// পড়ার অনুরোধও POST-এ যায় — অ্যাক্সেস কোড URL-এ থাকে না
 async function callGet(qs){
   const fd = new FormData();
   new URLSearchParams(qs).forEach((v, k) => fd.append(k, v));
   return callPost(fd);
 }
 async function callPost(formData){
-  for (let attempt = 0; attempt < 3; attempt++){
-    const used = getToken();
-    formData.set('token', used);
-    const r = await fetch(scriptURL, { method:'POST', body: formData }).then(x=>x.json());
-    if (r && r.error === 'UNAUTHORIZED'){ if (askToken(used)) continue; throw new Error('অ্যাক্সেস কোড প্রয়োজন'); }
-    return r;
-  }
-  throw new Error('অ্যাক্সেস কোড সঠিক নয়');
+  return fetch(scriptURL, { method:'POST', body: formData }).then(x => x.json());
 }
 
 // ==========================================
@@ -661,10 +647,10 @@ window.onload = function(){
 
 let refreshing = false, refreshQueued = false, lastStamp = '', masterLoadedOnce = false;
 let currentInvestments = [], currentAlerts = [];
-const CACHE_KEY = 'hisab_cache_v5';
-function saveCache(year, data){ try { localStorage.setItem(CACHE_KEY, JSON.stringify({ fv: FRONT_VER, year: String(year), t: Date.now(), data })); } catch(e){} }
+const CACHE_KEY = 'hisab_cache_v6';
+function saveCache(year, data){ try { localStorage.setItem(CACHE_KEY, JSON.stringify({ year: String(year), t: Date.now(), data })); } catch(e){} }
 function loadCache(year){
-  try { const c = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null'); if (c && c.fv === FRONT_VER && c.year === String(year) && c.data && c.data.dash) return c; } catch(e){}
+  try { const c = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null'); if (c && c.year === String(year) && c.data && c.data.dash) return c; } catch(e){}
   return null;
 }
 
@@ -689,7 +675,7 @@ function applyBootstrap(b){
 
   updateNameList();
   fillInvReturnSelect();
-  { const vi = document.getElementById('verInfo'); if (vi) vi.textContent = 'ফ্রন্টএন্ড ' + FRONT_VER + ' · ব্যাকএন্ড ' + (b.version || dash.version || 'পুরোনো (সংস্করণ নেই)'); }
+  fillInvNameList();
   renderKPI(dash.summary, dash.accounts);
   renderMonthlyTable(dash.summary);
   renderAccountGrid(dash.accounts);
@@ -817,7 +803,7 @@ function syncInvestFields(rules){
 function fillInvReturnSelect(){
   const s = document.getElementById('invId'); if (!s) return;
   const cur = s.value;
-  s.innerHTML = '<option value="">তালিকার বাইরে / পুরোনো</option>' +
+  s.innerHTML = '<option value="">— কার্ড বাছব না —</option>' +
     currentInvestments.filter(i => i.status === 'active').map(i => `<option value="${esc(i.id)}">${esc(i.name)} — ${formatAmount(i.amount)}</option>`).join('');
   s.value = cur;
 }
@@ -830,7 +816,7 @@ function renderCardSection(){
   const accs = window.__accounts || [];
   if (!accs.some(a => a.type === 'Card')){ box.innerHTML = ''; return; }
   const now = new Date(), dim = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate(), td = now.getDate();
-  let html = '<div class="sec" style="margin-top:22px"><span>ক্রেডিট কার্ড</span></div><div class="mini-list">';
+  let html = '<div class="sec" style="margin-top:22px"><span>আমার কার্ড</span></div><div class="mini-list">';
   accs.forEach((a, ai) => {
     if (a.type !== 'Card') return;
     const used = Math.max(0, -(Number(a.currentBalance) || 0)), lim = Number(a.limit) || 0;
@@ -843,7 +829,7 @@ function renderCardSection(){
       chips += `<span class="chip ${warn ? 'warn' : ''}">ডিউ: প্রতি মাসের ${a.dueDay} তারিখ${used > 0 ? ' (' + (left === 0 ? 'আজ' : left + ' দিন বাকি') + ')' : ''}</span>`;
     }
     if (a.stmtDay > 0) chips += `<span class="chip">স্টেটমেন্ট: ${a.stmtDay} তারিখ</span>`;
-    html += `<div class="cc glass"><div class="cc-top"><b>${esc(a.name)}</b><button class="cc-edit" onclick="openCardForm(${ai})">লিমিট / তারিখ</button></div>
+    html += `<div class="cc glass"><div class="cc-top"><b>${esc(a.name)}</b><button class="ibtn" title="লিমিট ও তারিখ" onclick="openCardForm(${ai})"><i class="fa-solid fa-pen"></i></button></div>
       <div class="cc-top"><span class="iv-amt ${used > 0 ? 'neg' : ''}">${formatAmount(used)}</span><span style="font-size:12px;color:var(--mute)">${lim > 0 ? 'লিমিট ' + formatAmount(lim) : 'লিমিট দেওয়া নেই'}</span></div>
       ${lim > 0 ? `<div class="bar-t"><i class="${cls}" style="width:${pct}%"></i></div><div class="cc-meta"><span>ব্যবহার ${pct}%</span><span>উপলব্ধ ${formatAmount(Math.max(0, lim - used))}</span></div>` : ''}
       <div class="cc-meta">${chips || '<span>ডিউ তারিখ দেওয়া নেই</span>'}</div></div>`;
@@ -876,9 +862,17 @@ async function saveCardForm(ai){
 
 // ==========================================
 // আমার বিনিয়োগ (অ্যাকাউন্ট পেজ)
+// একই নামের ক্রয় (যেমন ডিপিএস কিস্তি) একটি কার্ডে জমা হয়
 // ==========================================
 let showClosedInv = false;
-const INV_TYPES = ['সঞ্চয়পত্র', 'ডিপিএস (DPS)', 'ডিপিএস', 'এফডিআর', 'বন্ড', 'শেয়ার/মিউচুয়াল ফান্ড', 'অন্যান্য'];
+const INV_TYPES = ['সঞ্চয়পত্র', 'ডিপিএস', 'এফডিআর', 'বন্ড', 'জমি/রিসোর্ট', 'শেয়ার/মিউচুয়াল ফান্ড', 'অন্যান্য'];
+
+function fillInvNameList(){
+  const dl = document.getElementById('invNameList'); if (!dl) return;
+  const names = [...new Set(currentInvestments.filter(i => i.status === 'active').map(i => i.name))];
+  dl.innerHTML = names.map(n => `<option value="${esc(n)}">`).join('');
+}
+
 function renderInvestSection(){
   const box = document.getElementById('investSection'); if (!box) return;
   const list = currentInvestments || [];
@@ -887,30 +881,44 @@ function renderInvestSection(){
     if (x === null && y === null) return 0; if (x === null) return 1; if (y === null) return -1; return x - y;
   });
   const closed = list.filter(i => i.status === 'closed');
-  const net = currentTransactions.filter(t => t.type === T.INVEST).reduce((s, t) => s + (t.repayDir === 'received' ? -1 : 1) * (Number(t.amount) || 0), 0);
   const listed = active.reduce((s, i) => s + (Number(i.amount) || 0), 0);
+  const opening = list.reduce((s, i) => s + (Number(i.opening) || 0), 0);
+  const net = currentTransactions.filter(t => t.type === T.INVEST).reduce((s, t) => s + (t.repayDir === 'received' ? -1 : 1) * (Number(t.amount) || 0), 0) + opening;
   const gap = Math.round((net - listed) * 100) / 100;
 
   let html = '<div class="sec" style="margin-top:22px"><span>আমার বিনিয়োগ</span><a onclick="openInvestForm(\'\')">+ যোগ করুন</a></div>';
-  html += `<div class="sec-sub">চলতি তালিকা মোট ${formatAmount(listed)}${Math.abs(gap) > 1 ? ` • হিসাবের মোট বিনিয়োগ ${formatAmount(net)} (তালিকায় নেই ${formatAmount(gap)})` : ''}</div>`;
-  if (!active.length) html += '<div class="empty glass">কোনো চলমান বিনিয়োগ তালিকাভুক্ত নেই। নতুন বিনিয়োগ এন্ট্রিতে নাম দিলে বা "+ যোগ করুন" চাপলে এখানে আসবে।</div>';
+  html += `<div class="iv-hero glass"><div><small>চলমান বিনিয়োগ</small><b>${formatAmount(listed)}</b></div><div><small>কার্ড</small><b>${active.length} টি</b></div></div>`;
+  if (Math.abs(gap) > 1) html += `<div class="sec-sub warnline">হিসাবের মোট বিনিয়োগের চেয়ে কার্ডে ${formatAmount(Math.abs(gap))} ${gap > 0 ? 'কম' : 'বেশি'} — কিছু বিনিয়োগ কার্ডে যুক্ত নেই।</div>`;
+
+  if (!active.length) html += '<div class="empty glass">কোনো চলমান বিনিয়োগ নেই। "নতুন এন্ট্রি → বিনিয়োগ" থেকে নাম দিয়ে ক্রয় করলে বা "+ যোগ করুন" চাপলে এখানে আসবে।</div>';
   else html += '<div class="mini-list">' + active.map(it => {
+    let pct = null;
+    if (it.startDate && it.maturity){
+      const s = Date.parse(it.startDate), e = Date.parse(it.maturity);
+      if (e > s) pct = Math.max(0, Math.min(100, Math.round((Date.now() - s) / (e - s) * 100)));
+    }
     let mat = '';
     if (it.maturity){
       const d = it.daysLeft;
       if (d !== null && d < 0) mat = `<span class="chip danger">মেয়াদ পেরিয়েছে (${-d} দিন)</span>`;
-      else if (d !== null && d <= 30) mat = `<span class="chip warn">মেয়াদপূর্তি ${esc(it.maturity)} (${d === 0 ? 'আজ' : d + ' দিন বাকি'})</span>`;
-      else mat = `<span class="chip ok">মেয়াদপূর্তি ${esc(it.maturity)}${d !== null ? ' (' + d + ' দিন বাকি)' : ''}</span>`;
+      else if (d !== null && d <= 30) mat = `<span class="chip warn">মেয়াদ ${esc(it.maturity)} (${d === 0 ? 'আজ' : d + ' দিন বাকি'})</span>`;
+      else mat = `<span class="chip ok">মেয়াদ ${esc(it.maturity)}${d !== null ? ' (' + d + ' দিন বাকি)' : ''}</span>`;
     }
-    return `<div class="iv glass"><div class="iv-top"><b>${esc(it.name)}</b><button class="iv-edit" onclick="openInvestForm('${esc(it.id)}')">সম্পাদনা</button></div>
+    const sub = [esc(it.type || 'বিনিয়োগ'), it.rate > 0 ? 'হার ' + it.rate + '%' : ''].filter(Boolean).join(' • ');
+    const parts = [];
+    if (it.installments > 1) parts.push(it.installments + 'টি কিস্তি/ক্রয়');
+    if (it.opening > 0) parts.push('আগের জমা ' + formatAmount(it.opening));
+    return `<div class="iv glass"><div class="iv-top"><div style="min-width:0"><b>${esc(it.name)}</b><div class="iv-sub">${sub}</div></div><button class="ibtn" title="সম্পাদনা" onclick="openInvestForm('${esc(it.id)}')"><i class="fa-solid fa-pen"></i></button></div>
       <div class="iv-amt">${formatAmount(it.amount)}</div>
-      <div class="iv-meta"><span class="chip">${esc(it.type || 'বিনিয়োগ')}</span>${it.rate > 0 ? `<span>হার ${it.rate}%</span>` : ''}${it.startDate ? `<span>শুরু ${esc(it.startDate)}</span>` : ''}${it.account ? `<span>${esc(it.account)}</span>` : ''}</div>
+      ${parts.length ? `<div class="iv-sub">${parts.join(' • ')}</div>` : ''}
+      ${pct !== null ? `<div class="bar-t"><i style="width:${pct}%"></i></div>` : ''}
       ${mat ? `<div class="iv-meta">${mat}</div>` : ''}</div>`;
   }).join('') + '</div>';
+
   if (closed.length){
     html += `<a class="add-link" onclick="showClosedInv=!showClosedInv;renderInvestSection()">${showClosedInv ? '▾' : '▸'} সমাপ্ত বিনিয়োগ (${closed.length})</a>`;
     if (showClosedInv) html += '<div class="mini-list" style="margin-top:8px">' + closed.map(it =>
-      `<div class="iv glass" style="opacity:.8"><div class="iv-top"><b>${esc(it.name)}</b><span class="chip ok">সমাপ্ত ${esc(it.closedDate)}</span></div><div class="iv-meta"><span>${formatAmount(it.amount)}</span><span class="chip">${esc(it.type || 'বিনিয়োগ')}</span></div></div>`).join('') + '</div>';
+      `<div class="iv glass" style="opacity:.8"><div class="iv-top"><div style="min-width:0"><b>${esc(it.name)}</b><div class="iv-sub">${esc(it.type || 'বিনিয়োগ')} • ${formatAmount(it.amount)}</div></div><button class="ibtn" title="সম্পাদনা" onclick="openInvestForm('${esc(it.id)}')"><i class="fa-solid fa-pen"></i></button></div><div class="iv-meta"><span class="chip ok">সমাপ্ত ${esc(it.closedDate)}</span></div></div>`).join('') + '</div>';
   }
   box.innerHTML = html;
 }
@@ -918,23 +926,17 @@ function renderInvestSection(){
 function openInvestForm(id){
   const it = id ? currentInvestments.find(x => x.id === id) : null;
   if (id && !it) return;
-  const linked = !!(it && it.purchaseTxnId);
   const typeList = INV_TYPES.slice(); if (it && it.type && !typeList.includes(it.type)) typeList.unshift(it.type);
-  const accs = (masterData.accounts || []);
-  let html = `<div class="sheet-h"><div class="ic" style="background:var(--blue)"><i class="fa-solid fa-seedling"></i></div><b>${it ? 'বিনিয়োগ সম্পাদনা' : 'আগের বিনিয়োগ যোগ'}</b><button onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>`;
+  let html = `<div class="sheet-h"><div class="ic" style="background:var(--blue)"><i class="fa-solid fa-seedling"></i></div><b>${it ? 'বিনিয়োগ সম্পাদনা' : 'নতুন বিনিয়োগ কার্ড'}</b><button onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>`;
+  if (!it) html += '<div class="sec-sub">শিট শুরুর আগে থেকে থাকা বিনিয়োগ হলে "আগের জমা" দিন, কোনো অ্যাকাউন্ট লাগবে না। নতুন টাকা দিলে "নতুন এন্ট্রি → বিনিয়োগ" ব্যবহার করুন।</div>';
   html += `<div class="fld"><label>নাম *</label><input type="text" id="vf_name" value="${esc(it ? it.name : '')}" placeholder="যেমন: ৫ বছর মেয়াদী সঞ্চয়পত্র"></div>`;
-  html += `<div class="fld"><label>মুনাফার হার %</label><input type="number" step="0.01" min="0" id="vf_rate" inputmode="decimal" value="${it && it.rate ? it.rate : ''}"></div>`;
-  html += `<div class="fld"><label>মেয়াদপূর্তির তারিখ</label><input type="date" id="vf_mat" value="${esc(it ? it.maturity : '')}"></div>`;
-  if (!linked){
-    html += `<div class="fld"><label>প্রকার</label><select id="vf_type">${typeList.map(t => `<option value="${esc(t)}"${it && it.type === t ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select></div>`;
-    html += `<div class="fld"><label>আসল টাকা (৳) *</label><input type="number" step="0.01" min="0" id="vf_amt" inputmode="decimal" value="${it ? it.amount : ''}"></div>`;
-    html += `<div class="fld"><label>ক্রয়ের তারিখ</label><input type="date" id="vf_start" value="${esc(it ? it.startDate : '')}"></div>`;
-    html += `<div class="fld"><label>অ্যাকাউন্ট</label><select id="vf_acc"><option value="">—</option>${accs.map(a => `<option value="${esc(a)}"${it && it.account === a ? ' selected' : ''}>${esc(a)}</option>`).join('')}</select></div>`;
-    if (!it) html += '<div class="sec-sub">এটি শুধু তালিকার রেকর্ড, ব্যালেন্সে কোনো এন্ট্রি হয় না। আগে থেকে হিসাবে থাকা বিনিয়োগের তথ্য এখানে রাখুন।</div>';
-  } else {
-    html += '<div class="sec-sub">আসল টাকা, তারিখ ও অ্যাকাউন্ট ক্রয়-লেনদেন থেকে নেওয়া হয়।</div>';
-  }
+  html += `<div class="fld"><label>প্রকার</label><select id="vf_type">${typeList.map(t => `<option value="${esc(t)}"${it && it.type === t ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select></div>`;
+  html += `<div class="fld"><label>শিট শুরুর আগের জমা (৳) — ঐচ্ছিক</label><input type="number" step="0.01" min="0" id="vf_open" inputmode="decimal" value="${it && it.opening ? it.opening : ''}"></div>`;
+  html += `<div class="fld"><label>মুনাফার হার % — ঐচ্ছিক</label><input type="number" step="0.01" min="0" id="vf_rate" inputmode="decimal" value="${it && it.rate ? it.rate : ''}"></div>`;
+  html += `<div class="fld"><label>শুরুর তারিখ — ঐচ্ছিক</label><input type="date" id="vf_start" value="${esc(it ? it.startDate : '')}"></div>`;
+  html += `<div class="fld"><label>মেয়াদপূর্তির তারিখ — ঐচ্ছিক</label><input type="date" id="vf_mat" value="${esc(it ? it.maturity : '')}"></div>`;
   html += `<div class="fld"><label>নোট</label><input type="text" id="vf_note" value="${esc(it ? it.note : '')}"></div>`;
+  if (it && it.installments > 0) html += `<div class="sec-sub">নতুন এন্ট্রি ফর্ম থেকে জমা: ${it.installments} টি, মোট ${formatAmount(it.amount - (it.opening || 0))}</div>`;
   html += `<div class="btn-row2"><button onclick="closeModal()">বাতিল</button>${it ? `<button class="dng" onclick="deleteInvestForm('${esc(it.id)}')">মুছুন</button>` : ''}<button class="pri" onclick="saveInvestForm('${it ? esc(it.id) : ''}')">সেভ</button></div>`;
   document.getElementById('sheet').innerHTML = html;
   document.getElementById('modal').classList.add('show');
@@ -944,8 +946,8 @@ async function saveInvestForm(id){
   if (!g('vf_name').trim()){ showToast('নাম দিন!', 'error'); return; }
   const fd = new FormData();
   fd.append('action', 'saveInvestment'); fd.append('id', id);
-  fd.append('name', g('vf_name')); fd.append('rate', g('vf_rate')); fd.append('maturity', g('vf_mat')); fd.append('note', g('vf_note'));
-  fd.append('type', g('vf_type')); fd.append('amount', g('vf_amt')); fd.append('startDate', g('vf_start')); fd.append('account', g('vf_acc'));
+  fd.append('name', g('vf_name')); fd.append('type', g('vf_type')); fd.append('opening', g('vf_open'));
+  fd.append('rate', g('vf_rate')); fd.append('startDate', g('vf_start')); fd.append('maturity', g('vf_mat')); fd.append('note', g('vf_note'));
   try {
     const d = await callPost(fd);
     if (d.result === 'success'){ showToast('বিনিয়োগ সেভ হয়েছে', 'success'); closeModal(); refreshAll(); }
@@ -953,7 +955,7 @@ async function saveInvestForm(id){
   } catch(err){ showToast('সেভ হয়নি: ' + err.message, 'error'); }
 }
 async function deleteInvestForm(id){
-  const ok = await showConfirm('বিনিয়োগ মুছুন', 'শুধু এই তালিকার রেকর্ড মুছবে, কোনো লেনদেন নয়। নিশ্চিত?');
+  const ok = await showConfirm('কার্ড মুছুন', 'শুধু এই কার্ডটি মুছবে, কোনো লেনদেন নয়। নিশ্চিত?');
   if (!ok) return;
   const fd = new FormData(); fd.append('action', 'deleteInvestment'); fd.append('id', id);
   try {
@@ -963,9 +965,8 @@ async function deleteInvestForm(id){
   } catch(err){ showToast('মোছা যায়নি: ' + err.message, 'error'); }
 }
 
-function fetchDashboardData(){ refreshAll(); }
 
-const FRONT_VER = 'v5-full';
+
 function updateNameList(){
   const cards = new Set(masterData.cards || []);
   const names = [...new Set(currentTransactions.filter(t => t.type === T.LOAN && t.borrower && !cards.has(t.borrower) && !/card|কার্ড/i.test(t.borrower)).map(t => t.borrower))];
@@ -1143,48 +1144,36 @@ function pageWindow(total, cur){
   return res;
 }
 
-// বছর অনুযায়ী ছেঁকে নেয়; startBal = ওই বছরের শুরুর ব্যালেন্স (চলমান ব্যালেন্স সব সময়ের ওপরই হিসাব করা)
-function ledgerForYear(ledger, year, opening){
-  if (year === 'all') return { rows: ledger, startBal: Number(opening) || 0 };
-  const rows = ledger.filter(e => String(e.t.date).slice(0, 4) === String(year));
-  let startBal = Number(opening) || 0;
-  ledger.forEach(e => { if (String(e.t.date).slice(0, 4) < String(year)) startBal = e.bal; });
-  return { rows, startBal };
-}
-
-function showAccountTxns(ref, page, year){
+function showAccountTxns(ref, page){
   const accs = window.__accounts || [];
   const acc = (typeof ref === 'number') ? accs[ref] : accs.find(a => nfc(a.name) === nfc(ref));
   if (!acc) return;
   closeModal();
   const idx = accs.indexOf(acc);
-  if (year === undefined) year = (accTxnView && nfc(accTxnView.name) === nfc(acc.name)) ? accTxnView.year : 'all';
+  const year = String(new Date().getFullYear());
 
-  const full = buildAccountLedger(acc);                       // পুরোনো → নতুন, সব বছর
-  const years = [...new Set(full.map(e => String(e.t.date).slice(0, 4)))].sort().reverse();
-  if (year !== 'all' && !years.includes(String(year))) year = 'all';
-  const { rows, startBal } = ledgerForYear(full, year, acc.openingBalance);
-  const ledger = rows.slice().reverse();                      // নতুন আগে
+  const full = buildAccountLedger(acc);                 // সব বছরের ওপর চলমান ব্যালেন্স (ওপেনিং থেকে)
+  let startBal = Number(acc.openingBalance) || 0;       // চলতি বছরের শুরুর ব্যালেন্স = আগের বছর পর্যন্ত জের
+  full.forEach(e => { if (String(e.t.date).slice(0, 4) < year) startBal = e.bal; });
+  const ledger = full.filter(e => String(e.t.date).slice(0, 4) === year).reverse(); // শুধু চলতি বছর, নতুন আগে
+
   const totalPages = Math.max(1, Math.ceil(ledger.length / ACC_TXNS_PER_PAGE));
   const cur = Math.min(Math.max(1, page || 1), totalPages);
-  accTxnView = { name: acc.name, page: cur, year };
+  accTxnView = { name: acc.name, page: cur };
   const start = (cur - 1) * ACC_TXNS_PER_PAGE;
   const pageData = ledger.slice(start, start + ACC_TXNS_PER_PAGE);
   const balCls = (Number(acc.currentBalance) >= 0) ? 'pos' : 'neg';
 
   let html = `<div class="sheet-h"><div class="ic" style="background:${palette[idx % palette.length]}"><i class="fa-solid ${accIcon(acc.name, acc.type)}"></i></div><b>${esc(acc.name) || 'নাম নেই'}</b><button onclick="closeAllTxnModal()"><i class="fa-solid fa-xmark"></i></button></div>`;
   html += `<div class="row"><span>বর্তমান ব্যালেন্স</span><b class="${balCls}">${formatAmount(acc.currentBalance)}</b></div>`;
-  html += `<div class="row"><span>লেনদেন</span><b>${ledger.length} টি${year !== 'all' ? ' (সব: ' + full.length + ')' : ''}</b></div>`;
-  html += `<div class="row"><span>বছর</span><select onchange="showAccountTxns(${idx},1,this.value)" style="height:34px;border-radius:10px;padding:0 10px;font-size:13px;border:1px solid #e3e8f4;background:#fff">` +
-          `<option value="all"${year === 'all' ? ' selected' : ''}>সব বছর</option>` +
-          years.map(y => `<option value="${y}"${String(year) === y ? ' selected' : ''}>${y}</option>`).join('') + '</select></div>';
+  html += `<div class="row"><span>${year} সালের লেনদেন</span><b>${ledger.length} টি</b></div>`;
   html += '<div style="margin:10px 0"><a onclick="backToAccount()" style="cursor:pointer;color:var(--blue);font-weight:700;font-size:13px"><i class="fa-solid fa-chevron-left"></i> অ্যাকাউন্টের সারাংশ</a></div>';
   html += '<div class="txn-list" id="accTxnListInner"></div><div class="pagination" id="accTxnPagination"></div>';
   document.getElementById('allTxnSheet').innerHTML = html;
   document.getElementById('allTxnModal').classList.add('show');
 
   const inner = document.getElementById('accTxnListInner');
-  if (pageData.length === 0) inner.innerHTML = '<div class="empty">এই অ্যাকাউন্টে কোনো লেনদেন নেই</div>';
+  if (pageData.length === 0) inner.innerHTML = '<div class="empty">এই বছরে এখনও কোনো লেনদেন নেই</div>';
   pageData.forEach(e => {
     const el = createTxnElement(e.t);
     const isIn = e.delta > 0, isOut = e.delta < 0;
@@ -1200,9 +1189,8 @@ function showAccountTxns(ref, page, year){
     inner.appendChild(el);
   });
   if (cur === totalPages){
-    const label = year === 'all' ? 'ওপেনিং ব্যালেন্স' : (year + ' সালের শুরুর ব্যালেন্স');
     inner.insertAdjacentHTML('beforeend',
-      `<div class="txn-item" style="background:#f8fafc"><div class="txn-details"><h4>${label}</h4></div><div class="txn-amount">${formatAmount(startBal)}</div></div>`);
+      `<div class="txn-item" style="background:#f8fafc"><div class="txn-details"><h4>${year} সালের শুরুর ব্যালেন্স</h4></div><div class="txn-amount">${formatAmount(startBal)}</div></div>`);
   }
 
   const pg = document.getElementById('accTxnPagination');
@@ -1210,7 +1198,7 @@ function showAccountTxns(ref, page, year){
   if (totalPages > 1){
     const mk = (label, p, dis, on) => {
       const b = document.createElement('button'); b.innerHTML = label; b.disabled = !!dis;
-      if (on) b.className = 'on'; b.onclick = () => showAccountTxns(acc.name, p, year); return b;
+      if (on) b.className = 'on'; b.onclick = () => showAccountTxns(acc.name, p); return b;
     };
     pg.appendChild(mk('<i class="fa-solid fa-chevron-left"></i>', cur - 1, cur === 1));
     pageWindow(totalPages, cur).forEach(p => {
@@ -1219,46 +1207,6 @@ function showAccountTxns(ref, page, year){
     });
     pg.appendChild(mk('<i class="fa-solid fa-chevron-right"></i>', cur + 1, cur === totalPages));
   }
-}
-
-// ==========================================
-// মোছা লেনদেন — দেখা ও ফেরানো
-// ==========================================
-async function showDeleted(){
-  accTxnView = null;
-  const sheet = document.getElementById('allTxnSheet');
-  sheet.innerHTML = '<div class="sheet-h"><b>মোছা লেনদেন</b><button onclick="closeAllTxnModal()"><i class="fa-solid fa-xmark"></i></button></div><div class="empty">লোড হচ্ছে…</div>';
-  document.getElementById('allTxnModal').classList.add('show');
-  try {
-    const r = await callGet('action=getDeletedList');
-    if (r.error) throw new Error(r.error);
-    const items = r.items || [];
-    let html = '<div class="sheet-h"><b>মোছা লেনদেন</b><button onclick="closeAllTxnModal()"><i class="fa-solid fa-xmark"></i></button></div>';
-    html += '<p style="font-size:12px;color:var(--mute);margin:0 0 10px">সর্বশেষ ৫০টি। "ফেরান" চাপলে লেনদেনটি আবার তালিকায় ফিরবে।</p>';
-    if (!items.length) html += '<div class="empty">কোনো মোছা লেনদেন নেই</div>';
-    else html += '<div class="txn-list">' + items.map(it => {
-      const dirTxt = (it.type === T.INVEST && it.repayDir === 'received') ? ' (ফেরত)' : '';
-      const acct = it.toAccount ? (it.fromAccount + ' → ' + it.toAccount) : it.fromAccount;
-      const meta = [acct, it.date, it.borrower, it.notes].filter(Boolean).map(esc).join(' • ');
-      return `<div class="txn-item"><div class="txn-left"><div class="txn-details"><h4>${esc(it.subCategory || it.category || it.type)}${dirTxt} — ${formatAmount(it.amount)}</h4><p>${meta}</p><p>মোছা হয়েছে: ${esc(it.deletedAt)}</p></div></div><div class="txn-right"><button class="txn-btn edit" style="font-weight:700;font-size:12px;border-radius:10px;padding:6px 10px" onclick="restoreDeleted('${esc(it.id)}')">ফেরান</button></div></div>`;
-    }).join('') + '</div>';
-    sheet.innerHTML = html;
-  } catch(err){
-    sheet.innerHTML = '<div class="sheet-h"><b>মোছা লেনদেন</b><button onclick="closeAllTxnModal()"><i class="fa-solid fa-xmark"></i></button></div><div class="empty">লোড ব্যর্থ: ' + esc(err.message) + '</div>';
-  }
-}
-
-async function restoreDeleted(id){
-  const ok = await showConfirm('লেনদেন ফেরান', 'এই লেনদেনটি আবার তালিকায় ফিরিয়ে আনবেন?');
-  if (!ok) return;
-  const fd = new FormData();
-  fd.append('action', 'restoreTransaction');
-  fd.append('id', id);
-  try {
-    const d = await callPost(fd);
-    if (d.result === 'success'){ showToast('লেনদেন ফিরেছে!', 'success'); refreshAll(); showDeleted(); }
-    else showToast('ফেরানো যায়নি: ' + (d.error || ''), 'error');
-  } catch(err){ showToast('ফেরানো যায়নি: ' + err.message, 'error'); }
 }
 
 function backToAccount(){
