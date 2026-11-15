@@ -183,7 +183,7 @@ tfoot td:first-child{background:#e6e9fb}
 .field>label i{color:var(--ac);width:14px;font-size:12px;transition:color .4s}
 .required{color:var(--coral)}
 .ctl{position:relative}
-input[type=text],select,textarea{width:100%;height:50px;padding:0 14px;background:rgba(255,255,255,.75);border:1px solid rgba(16,26,51,.08);border-radius:14px;color:var(--ink);font:500 15px 'Hind Siliguri',sans-serif;outline:none;transition:.2s}
+input[type=text],input[type=number],input[type=date],select,textarea{width:100%;height:50px;padding:0 14px;background:rgba(255,255,255,.75);border:1px solid rgba(16,26,51,.08);border-radius:14px;color:var(--ink);font:500 15px 'Hind Siliguri',sans-serif;outline:none;transition:.2s}
 select{appearance:none;-webkit-appearance:none;padding-right:38px;cursor:pointer}
 .ctl:has(select)::after{content:"\f078";font:900 10px 'Font Awesome 6 Free';position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--mute);pointer-events:none}
 textarea{height:84px;padding:13px 14px;resize:none}
@@ -214,10 +214,77 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
 .pagination button{width:36px;height:36px;border:none;border-radius:8px;background:#eef1f8;color:var(--ink);font-weight:700;cursor:pointer}
 .pagination button.on{background:var(--blue);color:#fff}
 .pagination button:disabled{opacity:.4;cursor:not-allowed}
+.pagination span{color:var(--mute);padding:0 2px}
+.acc-txn-btn{width:100%;margin-top:14px;padding:12px;border:none;border-radius:12px;background:var(--blue);color:#fff;font-weight:700;font-size:14px;cursor:pointer}
+.txn-details p.txn-bal{margin-top:2px;font-size:11px;color:var(--mute)}
+.txn-details p.txn-bal b{color:var(--ink)}
 .refresh-btn{width:36px;height:36px;border:none;border-radius:50%;background:#eef1f8;color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:14px;transition:.2s;flex-shrink:0}
 .refresh-btn:hover{background:#e0e5ff}
 .refresh-btn.warn{background:#fff3d6;color:#b45309}
 .refresh-btn.spin i{animation:spin .8s linear infinite}
+/* ---- v5 ---- */
+body{font-variant-numeric:tabular-nums}
+.glass,.acc,.txn-item,.btn-save,.acc-txn-btn{transition:transform .15s ease, box-shadow .2s ease}
+.acc:active,.btn-save:active,.acc-txn-btn:active,.refresh-btn:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.bell-btn{position:relative}
+.bell-badge{position:absolute;top:-3px;right:-3px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--coral);color:#fff;font-size:10px;font-weight:800;display:grid;place-items:center;line-height:1}
+.bell-btn.has-danger{background:#ffe1e8;color:var(--coral)}
+.bell-btn.has-warn{background:#fff3d6;color:#b45309}
+.nt{display:flex;gap:10px;padding:11px 8px;border-bottom:1px dashed #dde2ef;cursor:pointer;border-radius:10px}
+.nt.unread{background:#f4f6ff}
+.nt .ni{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;font-size:14px;color:#fff}
+.nt .ni.danger{background:var(--coral)}.nt .ni.warn{background:#f59e0b}.nt .ni.info{background:var(--blue)}
+.nt .nb{flex:1;min-width:0}.nt .nb b{display:block;font-size:13px;line-height:1.35}
+.nt .nb span{display:block;font-size:12px;color:var(--mute);margin-top:2px;line-height:1.45}
+.nt-actions{display:flex;justify-content:flex-end;margin:0 0 6px}
+.nt-actions a{font-size:12px;font-weight:700;color:var(--blue);cursor:pointer}
+.sec-sub{font-size:12px;color:var(--mute);margin:-4px 2px 10px}
+.mini-list{display:grid;gap:10px}
+.cc,.iv{padding:14px;border-radius:16px;display:grid;gap:8px}
+.cc-top,.iv-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cc-top b,.iv-top b{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ibtn{width:34px;height:34px;border-radius:50%;border:none;background:#eef1f8;color:var(--blue);display:grid;place-items:center;cursor:pointer;flex-shrink:0;font-size:13px;transition:transform .15s}
+.ibtn:active{transform:scale(.92)}
+.iv-hero{display:flex;gap:10px;padding:14px 16px;border-radius:16px;margin-bottom:10px}
+.iv-hero div{flex:1}.iv-hero small{display:block;font-size:11px;color:var(--mute);font-weight:700}.iv-hero b{font-size:19px}
+.sumcard{display:flex;align-items:center;gap:16px;padding:16px 18px;margin-bottom:14px;border-radius:22px}
+.sc-ring{position:relative;width:98px;height:98px;flex-shrink:0}
+.sc-ring svg{transform:rotate(-90deg);display:block}
+.sc-c{position:absolute;inset:0;display:grid;place-content:center;text-align:center;line-height:1.1}
+.sc-c b{font-size:26px;font-weight:800;font-family:'Inter',sans-serif}
+.sc-c small{font-size:10.5px;color:var(--mute);font-weight:600;margin-top:2px}
+.sc-info{flex:1;min-width:0;display:grid;gap:5px}
+.sc-big{font-size:19px;font-weight:800;line-height:1.2}
+.sc-cap{font-size:11px;color:var(--mute);font-weight:600}
+.sc-row{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px}
+.sc-row span:first-child{display:flex;align-items:center;gap:6px;color:var(--mute);font-weight:600;min-width:0}
+.sc-row b{font-weight:700}
+.sc-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;display:inline-block}
+.sc-note{font-size:11.5px;color:var(--mute);line-height:1.4}
+
+.iv-sub{font-size:12px;color:var(--mute)}
+.sec-sub.warnline{color:#b45309;background:#fff3d6;border-radius:10px;padding:7px 10px;margin:0 0 10px}
+.bar-t{height:8px;background:#e8ecf7;border-radius:6px;overflow:hidden}
+.bar-t i{display:block;height:100%;border-radius:6px;background:var(--blue)}
+.bar-t i.w{background:#f59e0b}.bar-t i.d{background:var(--coral)}
+.cc-meta,.iv-meta{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12px;color:var(--mute)}
+.chip{display:inline-block;padding:2px 8px;border-radius:9px;background:#eef1f8;font-size:11px;font-weight:700}
+.chip.warn{background:#fff3d6;color:#b45309}.chip.danger{background:#ffe1e8;color:var(--coral)}.chip.ok{background:#d9f6ec;color:#047857}
+.iv-amt{font-size:16px;font-weight:800}
+.fld{display:grid;gap:4px;margin:8px 0}
+.fld label{font-size:12px;font-weight:700;color:var(--mute)}
+.fld input,.fld select{height:48px;border-radius:14px;border:1px solid rgba(16,26,51,.08);padding:0 14px;font:500 15px 'Hind Siliguri',sans-serif;color:var(--ink);background:rgba(255,255,255,.75);width:100%;box-sizing:border-box;outline:none;transition:.2s}
+.fld input:focus,.fld select:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(51,71,255,.1)}
+.fld select{appearance:none;-webkit-appearance:none;padding-right:36px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' fill='none' stroke='%23737b94' stroke-width='2'/></svg>");background-repeat:no-repeat;background-position:right 14px center}
+input[type=date]{-webkit-appearance:none;appearance:none;min-height:50px}
+input[type=number]{-moz-appearance:textfield}
+.btn-row2{display:flex;gap:8px;margin-top:14px}
+.btn-row2 button{flex:1;padding:11px;border:none;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;background:#eef1f8;color:var(--ink)}
+.btn-row2 button.pri{background:var(--blue);color:#fff}
+.btn-row2 button.dng{background:#ffe1e8;color:var(--coral)}
+.add-link{display:block;margin:10px 0 0;font-size:13px;font-weight:700;color:var(--blue);cursor:pointer}
+
 @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 .mini-loader{position:fixed;top:14px;right:14px;z-index:70;background:#101a33;color:#fff;padding:10px 16px;border-radius:12px;font-size:13px;font-weight:600;display:none;align-items:center;gap:8px;box-shadow:0 10px 30px rgba(0,0,0,.2)}
 .mini-loader.show{display:flex}
@@ -262,8 +329,8 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
         <button data-v="entry" onclick="showView('entry')"><i class="fa-solid fa-circle-plus"></i>নতুন এন্ট্রি</button>
       </nav>
       <div class="spacer"></div>
-      <select id="yearFilter" onchange="fetchDashboardData()" aria-label="আর্থিক বছর" style="height:36px;border-radius:10px;padding:0 10px;font-size:13px;background:#eef1f8;border:1px solid #dde2ef;font-family:inherit;width:auto"></select>
-      <button class="refresh-btn warn" id="warnBtn" title="সতর্কতা দেখুন" style="display:none" onclick="showWarnings()"><i class="fa-solid fa-triangle-exclamation"></i></button>
+      <select id="yearFilter" onchange="refreshAll(true)" aria-label="আর্থিক বছর" style="height:36px;border-radius:10px;padding:0 10px;font-size:13px;background:#eef1f8;border:1px solid #dde2ef;font-family:inherit;width:auto"></select>
+      <button class="refresh-btn bell-btn" id="bellBtn" title="নোটিফিকেশন" onclick="showNotifications()"><i class="fa-solid fa-bell"></i><span class="bell-badge" id="bellBadge" style="display:none">0</span></button>
       <button class="refresh-btn" id="refreshBtn" title="রিফ্রেশ" onclick="refreshAll(true)"><i class="fa-solid fa-rotate"></i></button>
     </div>
   </header>
@@ -328,7 +395,10 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
 
     <section class="view" id="view-accounts">
       <div class="sec" style="margin-top:6px"><span>অ্যাকাউন্ট সামারি</span></div>
+      <div id="accSummary"></div>
       <div class="acc-grid" id="accountGrid"></div>
+      <div id="cardSection"></div>
+      <div id="investSection"></div>
     </section>
 
     <section class="view" id="view-reports">
@@ -352,12 +422,12 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
       <div class="sec" style="margin-top:24px"><span>মাসিক হিসাব</span><a onclick="showAllMonthly()">সব দেখুন</a></div>
       <div class="card glass" style="padding:8px">
         <div class="tw"><table>
-          <thead><tr><th>মাস</th><th>আয়</th><th>ব্যয়</th><th>সঞ্চয়</th><th>বিনিয়োগ</th><th>ঋণ</th><th>সম্পদ</th><th>দায়</th></tr></thead>
+          <thead><tr><th>মাস</th><th>আয়</th><th>ব্যয়</th><th>সঞ্চয়</th><th>বিনিয়োগ</th><th>ঋণ</th></tr></thead>
           <tbody id="monthlyTableBody"></tbody>
           <tfoot><tr id="monthlyTableTotal"></tr></tfoot>
         </table></div>
       </div>
-    </section>
+        </section>
 
     <section class="view" id="view-entry">
       <div class="page-title">হিসাব এন্ট্রি করুন</div>
@@ -404,6 +474,22 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
                 <input type="text" id="borrower" name="borrower" list="nameList" placeholder="যেমন: করিম">
               </div>
             </div>
+            <div class="field" id="invNameGroup" style="display:none">
+              <label><i class="fa-solid fa-seedling"></i>বিনিয়োগের নাম (ঐচ্ছিক)</label>
+              <div class="ctl"><input type="text" id="invName" name="invName" list="invNameList" placeholder="একই নাম দিলে একই কার্ডে জমা হবে (যেমন: ডিপিএস)"></div>
+            </div>
+            <div class="field" id="invRateGroup" style="display:none">
+              <label><i class="fa-solid fa-percent"></i>মুনাফার হার % (ঐচ্ছিক)</label>
+              <div class="ctl"><input type="number" step="0.01" min="0" id="invRate" name="invRate" inputmode="decimal" placeholder="যেমন: 11.5"></div>
+            </div>
+            <div class="field" id="invMatGroup" style="display:none">
+              <label><i class="fa-regular fa-calendar-check"></i>মেয়াদপূর্তির তারিখ (ঐচ্ছিক)</label>
+              <div class="ctl"><input type="date" id="invMaturity" name="invMaturity"></div>
+            </div>
+            <div class="field" id="invIdGroup" style="display:none">
+              <label><i class="fa-solid fa-link"></i>কোন বিনিয়োগ ফেরত? (ঐচ্ছিক)</label>
+              <div class="ctl"><select id="invId" name="invId"><option value="">তালিকায় নেই (শুধু হিসাব)</option></select></div>
+            </div>
             <div class="field" id="fromAccountGroup">
               <label for="fromAccount"><i class="fa-solid fa-wallet"></i><span id="fromLabelText">উৎস অ্যাকাউন্ট</span> <span class="required">*</span></label>
               <div class="ctl"><select id="fromAccount" name="fromAccount" onchange="onFromAccountChange()" required>
@@ -443,6 +529,8 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
 </nav>
 
 <datalist id="nameList"></datalist>
+<datalist id="invNameList"></datalist>
+<div style="height:90px"></div>
 <div class="ov" id="modal" onclick="if(event.target===this)closeModal()"><div class="sheet" id="sheet"></div></div>
 <div class="ov" id="editModal"><div class="sheet" id="editSheet"></div></div>
 <div class="ov" id="allTxnModal" onclick="if(event.target===this)closeAllTxnModal()"><div class="sheet" id="allTxnSheet"></div></div>
@@ -461,7 +549,7 @@ select:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.4)}
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
 <script>
-const scriptURL = 'https://script.google.com/macros/s/AKfycbzc4LBK1p2ICYWYuKSQDV_v6QyPfW8enQehrHUBIwgDgLFxGbeawsqZcm8F85B30BkQGw/exec';
+const scriptURL = 'https://script.google.com/macros/s/AKfycbzaLaxVI7ZXmZvYnnpA93A6zm_8I9j8YgENPCsCo35a245JybuUotEu3ESP6MfxSoo3/exec';
 const bnMonths = ["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
 const enMonths = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const enMonthsShort = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -535,41 +623,15 @@ function showView(v){
 }
 
 // ==========================================
-// নেটওয়ার্ক + ঐচ্ছিক অ্যাক্সেস কোড
-// (সার্ভারে API_TOKEN সেট থাকলে অ্যাপ প্রথমবার কোড চায়; কোড ব্রাউজারেই থাকে, কোডে নয়)
+// নেটওয়ার্ক (সব অনুরোধ POST-এ)
 // ==========================================
-const TOKEN_KEY = 'hisab_token';
-function getToken(){ try { return localStorage.getItem(TOKEN_KEY) || ''; } catch(e){ return ''; } }
-function setToken(t){ try { localStorage.setItem(TOKEN_KEY, t); } catch(e){} }
-let tokenDeclinedAt = 0;
-function askToken(usedToken){
-  if (getToken() !== usedToken) return true;           // অন্য রিকোয়েস্ট ইতিমধ্যে নতুন কোড বসিয়েছে
-  if (Date.now() - tokenDeclinedAt < 5000) return false;
-  const t = prompt('অ্যাক্সেস কোড দিন:');
-  if (!t){ tokenDeclinedAt = Date.now(); return false; }
-  setToken(t.trim());
-  return true;
-}
-const tsParam = () => '&_ts=' + Date.now();
-
 async function callGet(qs){
-  for (let attempt = 0; attempt < 3; attempt++){
-    const used = getToken();
-    const r = await fetch(scriptURL + '?' + qs + tsParam() + '&token=' + encodeURIComponent(used), { cache:'no-store' }).then(x=>x.json());
-    if (r && r.error === 'UNAUTHORIZED'){ if (askToken(used)) continue; throw new Error('অ্যাক্সেস কোড প্রয়োজন'); }
-    return r;
-  }
-  throw new Error('অ্যাক্সেস কোড সঠিক নয়');
+  const fd = new FormData();
+  new URLSearchParams(qs).forEach((v, k) => fd.append(k, v));
+  return callPost(fd);
 }
 async function callPost(formData){
-  for (let attempt = 0; attempt < 3; attempt++){
-    const used = getToken();
-    formData.set('token', used);
-    const r = await fetch(scriptURL, { method:'POST', body: formData }).then(x=>x.json());
-    if (r && r.error === 'UNAUTHORIZED'){ if (askToken(used)) continue; throw new Error('অ্যাক্সেস কোড প্রয়োজন'); }
-    return r;
-  }
-  throw new Error('অ্যাক্সেস কোড সঠিক নয়');
+  return fetch(scriptURL, { method:'POST', body: formData }).then(x => x.json());
 }
 
 // ==========================================
@@ -578,7 +640,6 @@ async function callPost(formData){
 let currentSummary = null;
 let currentLoans = { receivables: [], payables: [] };
 let currentTransactions = [];
-let currentWarnings = [];
 let masterData = { types:[], accounts:[], cardNetworks:[], borrowers:[], cards:[], dataMap:[], warnings:[] };
 let lastRefreshAt = 0;
 
@@ -593,95 +654,402 @@ window.onload = function(){
     yearSelect.appendChild(opt);
   }
   refreshAll();
-  document.addEventListener('visibilitychange', ()=>{
-    if (!document.hidden && Date.now() - lastRefreshAt > 60*1000) refreshAll();
-  });
+  document.addEventListener('visibilitychange', ()=>{ if (!document.hidden) pingCheck(); });
+  setInterval(pingCheck, 45000);
   window.addEventListener('scroll', ()=>{
     if (window.scrollX !== 0) window.scrollTo(0, window.scrollY);
   }, {passive:true});
 };
 
+let refreshing = false, refreshQueued = false, lastStamp = '', masterLoadedOnce = false;
+let currentInvestments = [], currentAlerts = [];
+const CACHE_KEY = 'hisab_cache_v6';
+function saveCache(year, data){ try { localStorage.setItem(CACHE_KEY, JSON.stringify({ year: String(year), t: Date.now(), data })); } catch(e){} }
+function loadCache(year){
+  try { const c = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null'); if (c && c.year === String(year) && c.data && c.data.dash) return c; } catch(e){}
+  return null;
+}
+
+// এক অনুরোধে আসা সব ডেটা স্ক্রিনে বসায় (ক্যাশ ও নতুন ডেটা দুটোর জন্যই)
+function applyBootstrap(b){
+  const dash = b.dash, loan = b.loans || {}, txns = b.txns || {}, master = b.master || {};
+  currentSummary = dash.summary;
+  window.__accounts = dash.accounts || [];
+  currentLoans = { receivables: loan.receivables || [], payables: loan.payables || [] };
+  currentTransactions = txns.transactions || [];
+  currentInvestments = b.investments || [];
+  currentAlerts = b.alerts || [];
+  lastStamp = b.stamp !== undefined ? String(b.stamp) : lastStamp;
+
+  if (master && !master.error){
+    masterData = master;
+    // এন্ট্রি ফর্মে লেখার মাঝখানে ফর্ম রিসেট না করতে
+    if (!masterLoadedOnce || document.body.dataset.view !== 'entry'){ loadMasterDataIntoForm(); masterLoadedOnce = true; }
+  } else {
+    showToast('মাস্টার ডেটা লোড হয়নি' + (master && master.error ? ': ' + master.error : '') + ' — ফর্মের তালিকা পুরোনো/খালি থাকতে পারে', 'error');
+  }
+
+  updateNameList();
+  fillInvReturnSelect();
+  fillInvNameList();
+  renderKPI(dash.summary, dash.accounts);
+  renderMonthlyTable(dash.summary);
+  renderAccountGrid(dash.accounts);
+  renderCardSection();
+  renderInvestSection();
+  renderCharts(dash.summary, dash.accounts);
+  renderNetWorthCard(dash);
+  updateBell();
+  if (document.body.dataset.view === 'reports') renderReportPage();
+  if (accTxnView && document.getElementById('allTxnModal').classList.contains('show')) showAccountTxns(accTxnView.name, accTxnView.page);
+}
+
 async function refreshAll(showLoader){
+  if (refreshing){ refreshQueued = true; return; }
+  refreshing = true;
   const year = document.getElementById('yearFilter').value;
   const loader = document.getElementById('miniLoader');
   const content = document.getElementById('content');
   const skeleton = document.getElementById('skeleton');
   const errorMsg = document.getElementById('errorMsg');
   const refreshBtn = document.getElementById('refreshBtn');
-  const firstLoad = content.style.display === 'none';
+  let firstLoad = content.style.display === 'none';
 
+  // আগে ফোনে রাখা শেষ ডেটা সাথে সাথে দেখাই, পেছনে নতুনটা আনি
+  if (firstLoad){
+    const c = loadCache(year);
+    if (c){
+      try { applyBootstrap(c.data); skeleton.style.display = 'none'; content.style.display = 'block'; errorMsg.style.display = 'none'; firstLoad = false; } catch(e){ console.error(e); }
+    }
+  }
   if (showLoader || !firstLoad){ loader.classList.add('show'); refreshBtn.classList.add('spin'); }
   if (firstLoad){ skeleton.style.display = 'block'; errorMsg.style.display = 'none'; }
 
   try {
-    const [dash, loan, txns, master] = await Promise.all([
-      callGet('year=' + year),
-      callGet('action=getLoanSummary'),
-      callGet('action=getTransactionsList'),
-      callGet('action=getMasterData')
-    ]);
-    if (dash.error) throw new Error(dash.error);
-    if (loan.error) throw new Error(loan.error);
-    if (txns.error) throw new Error(txns.error);
-
-    currentSummary = dash.summary;
-    window.__accounts = dash.accounts || [];
-    currentLoans = { receivables: loan.receivables || [], payables: loan.payables || [] };
-    currentTransactions = txns.transactions || [];
-    currentWarnings = [].concat(dash.warnings||[], loan.warnings||[], txns.warnings||[], master.warnings||[]);
-    // একই বার্তা একবারই
-    currentWarnings = currentWarnings.filter((w,i,a)=>a.indexOf(w)===i);
-
-    if (master && !master.error){
-      masterData = master;
-      loadMasterDataIntoForm();
-    } else {
-      showToast('মাস্টার ডেটা লোড হয়নি' + (master && master.error ? ': ' + master.error : '') + ' — ফর্মের তালিকা পুরোনো/খালি থাকতে পারে', 'error');
-    }
-
-    updateNameList();
-    renderKPI(dash.summary, dash.accounts);
-    renderMonthlyTable(dash.summary);
-    renderAccountGrid(dash.accounts);
-    renderCharts(dash.summary, dash.accounts);
-    renderNetWorthCard(dash);
-    if (document.body.dataset.view === 'reports') renderReportPage();
-
+    const b = await callGet('action=bootstrap&year=' + year);
+    if (b.error) throw new Error(b.error);
+    applyBootstrap(b);
+    saveCache(year, b);
     skeleton.style.display = 'none';
     content.style.display = 'block';
     errorMsg.style.display = 'none';
     lastRefreshAt = Date.now();
-
-    const wb = document.getElementById('warnBtn');
-    wb.style.display = currentWarnings.length ? 'grid' : 'none';
-    wb.title = 'সতর্কতা (' + currentWarnings.length + 'টি)';
-    if (currentWarnings.length && firstLoad) showToast('সতর্কতা: ' + currentWarnings.length + 'টি — উপরের ⚠ বোতাম চাপুন', 'info');
   } catch(err){
     console.error(err);
     skeleton.style.display = 'none';
-    if (firstLoad) errorMsg.style.display = 'block';
+    if (content.style.display === 'none') errorMsg.style.display = 'block';
     else showToast('রিফ্রেশ সমস্যা: ' + err.message, 'error');
   } finally {
     loader.classList.remove('show');
     refreshBtn.classList.remove('spin');
+    refreshing = false;
+    if (refreshQueued){ refreshQueued = false; refreshAll(); }
   }
 }
 
-function fetchDashboardData(){ refreshAll(); }
+// অটো রিফ্রেশ: হালকা "পরিবর্তন-স্ট্যাম্প" মিললে কিছু করি না, বদলালে তবেই পুরো ডেটা আনি
+function isBusyUI(){
+  return document.body.dataset.view === 'entry' || !!document.querySelector('.ov.show');
+}
+async function pingCheck(){
+  if (document.hidden || refreshing || isBusyUI()) return;
+  try {
+    const r = await callGet('action=ping');
+    if (r && r.stamp !== undefined && String(r.stamp) !== lastStamp) refreshAll();
+    else if (Date.now() - lastRefreshAt > 10 * 60 * 1000) refreshAll();
+  } catch(e){ /* নেটওয়ার্ক না থাকলে চুপচাপ */ }
+}
+
+// ==========================================
+// নোটিফিকেশন কেন্দ্র (বেল)
+// ==========================================
+const READ_KEY = 'hisab_alert_read';
+function readSet(){ try { return new Set(JSON.parse(localStorage.getItem(READ_KEY) || '[]')); } catch(e){ return new Set(); } }
+function saveRead(set){ try { localStorage.setItem(READ_KEY, JSON.stringify([...set].slice(-300))); } catch(e){} }
+function updateBell(){
+  // শর্ত মিটে গেলে "পড়া" তালিকা থেকে বাদ — আবার ঘটলে নতুন করে জানাবে
+  const live = new Set(currentAlerts.map(a => a.id));
+  const r = readSet(); const pruned = new Set([...r].filter(id => live.has(id)));
+  if (pruned.size !== r.size) saveRead(pruned);
+  const unread = currentAlerts.filter(a => !pruned.has(a.id));
+  const btn = document.getElementById('bellBtn'), badge = document.getElementById('bellBadge');
+  if (!btn || !badge) return;
+  badge.style.display = unread.length ? 'grid' : 'none';
+  badge.textContent = unread.length > 99 ? '99+' : unread.length;
+  const hasD = unread.some(a => a.level === 'danger');
+  btn.classList.toggle('has-danger', hasD);
+  btn.classList.toggle('has-warn', !hasD && unread.some(a => a.level === 'warn'));
+  btn.title = 'নোটিফিকেশন (' + unread.length + ' টি নতুন)';
+}
+function showNotifications(){
+  const r = readSet();
+  const icon = { danger:'fa-circle-exclamation', warn:'fa-triangle-exclamation', info:'fa-circle-info' };
+  let html = '<div class="sheet-h"><div class="ic" style="background:var(--blue)"><i class="fa-solid fa-bell"></i></div><b>নোটিফিকেশন (' + currentAlerts.length + ')</b><button onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>';
+  if (!currentAlerts.length) html += '<div class="empty">কোনো নোটিফিকেশন নেই — সব ঠিক আছে ✔</div>';
+  else {
+    html += '<div class="nt-actions"><a onclick="markAllRead()">সব পড়েছি</a></div>';
+    currentAlerts.forEach((a, i) => {
+      html += `<div class="nt ${r.has(a.id) ? '' : 'unread'}" onclick="openAlert(${i})"><div class="ni ${esc(a.level)}"><i class="fa-solid ${icon[a.level] || icon.info}"></i></div><div class="nb"><b>${esc(a.title)}</b><span>${esc(a.text)}</span></div></div>`;
+    });
+  }
+  document.getElementById('sheet').innerHTML = html;
+  document.getElementById('modal').classList.add('show');
+}
+function openAlert(i){
+  const a = currentAlerts[i]; if (!a) return;
+  const r = readSet(); r.add(a.id); saveRead(r); updateBell();
+  if (a.kind === 'card' || a.kind === 'invest'){ closeModal(); showView('accounts'); }
+  else showNotifications();
+}
+function markAllRead(){ const r = readSet(); currentAlerts.forEach(a => r.add(a.id)); saveRead(r); updateBell(); showNotifications(); }
+
+// ==========================================
+// এন্ট্রি ফর্মে বিনিয়োগের অতিরিক্ত ঘর
+// ==========================================
+function syncInvestFields(rules){
+  rules = rules || currentFormRules();
+  const isInv = !!rules && rules.dirKind === 'invest';
+  const dir = document.querySelector('#financeForm input[name=repayDir]:checked')?.value;
+  const buy = isInv && dir !== 'received', ret = isInv && dir === 'received';
+  const set = (id, on) => { const el = document.getElementById(id); if (el) el.style.display = on ? 'flex' : 'none'; };
+  set('invNameGroup', buy); set('invRateGroup', buy); set('invMatGroup', buy); set('invIdGroup', ret);
+  if (!buy) ['invName', 'invRate', 'invMaturity'].forEach(id => { const e = document.getElementById(id); if (e) e.value = ''; });
+  if (!ret){ const s = document.getElementById('invId'); if (s) s.value = ''; }
+}
+function fillInvReturnSelect(){
+  const s = document.getElementById('invId'); if (!s) return;
+  const cur = s.value;
+  s.innerHTML = '<option value="">— কার্ড বাছব না —</option>' +
+    currentInvestments.filter(i => i.status === 'active').map(i => `<option value="${esc(i.id)}">${esc(i.name)} — ${formatAmount(i.amount)}</option>`).join('');
+  s.value = cur;
+}
+
+// ==========================================
+// ক্রেডিট কার্ড (অ্যাকাউন্ট পেজ)
+// ==========================================
+
+// ==========================================
+// সামারি কার্ড: রিং + সংখ্যা
+// ==========================================
+function donutSvg(segs, centerBig, centerSmall, size, stroke){
+  size = size || 98; stroke = stroke || 12;
+  const r = (size - stroke) / 2, C = 2 * Math.PI * r, mid = size / 2;
+  const live = segs.filter(s => s.v > 0);
+  const total = live.reduce((s, x) => s + x.v, 0) || 1;
+  const gap = live.length > 1 ? 3 : 0;
+  let off = 0, arcs = '';
+  live.forEach(s => {
+    const part = C * s.v / total, len = Math.max(0, part - gap);
+    arcs += `<circle cx="${mid}" cy="${mid}" r="${r}" fill="none" stroke="${s.c}" stroke-width="${stroke}" stroke-dasharray="${len} ${C - len}" stroke-dashoffset="${-off}"/>`;
+    off += part;
+  });
+  return `<div class="sc-ring"><svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${mid}" cy="${mid}" r="${r}" fill="none" stroke="#e8ecf7" stroke-width="${stroke}"/>${arcs}</svg><div class="sc-c"><b>${centerBig}</b><small>${centerSmall}</small></div></div>`;
+}
+function scRow(color, label, value){ return `<div class="sc-row"><span><i class="sc-dot" style="background:${color}"></i>${label}</span><b>${value}</b></div>`; }
+
+function renderAccSummary(accounts){
+  const box = document.getElementById('accSummary'); if (!box) return;
+  if (!accounts || !accounts.length){ box.innerHTML = ''; return; }
+  const defs = [['Bank', 'ব্যাংক', '#3347ff'], ['Wallet', 'ওয়ালেট', '#8b5cf6'], ['Cash', 'ক্যাশ', '#12b886'], ['Card', 'কার্ড', '#ffa62b']];
+  const cnt = {}; accounts.forEach(a => { cnt[a.type] = (cnt[a.type] || 0) + 1; });
+  const other = accounts.filter(a => !defs.some(d => d[0] === a.type)).length;
+  const segs = defs.map(d => ({ v: cnt[d[0]] || 0, c: d[2] })).concat([{ v: other, c: '#9aa3bd' }]);
+  const liquid = accounts.filter(a => ['Cash', 'Bank', 'Wallet'].includes(a.type)).reduce((s, a) => s + (Number(a.currentBalance) || 0), 0);
+  let rows = defs.filter(d => cnt[d[0]]).map(d => scRow(d[2], d[1], cnt[d[0]] + ' টি')).join('');
+  if (other) rows += scRow('#9aa3bd', 'অন্যান্য', other + ' টি');
+  box.innerHTML = `<div class="sumcard glass">${donutSvg(segs, accounts.length, 'অ্যাকাউন্ট')}<div class="sc-info"><div><div class="sc-cap">মোট ব্যালেন্স (ব্যাংক + ক্যাশ + ওয়ালেট)</div><div class="sc-big ${liquid >= 0 ? '' : 'neg'}">${formatAmount(liquid)}</div></div>${rows}</div></div>`;
+}
+
+function cardSummaryHtml(cards){
+  const used = cards.reduce((s, a) => s + Math.max(0, -(Number(a.currentBalance) || 0)), 0);
+  const lim = cards.reduce((s, a) => s + (Number(a.limit) || 0), 0);
+  const withLimit = cards.filter(a => Number(a.limit) > 0).length;
+  let segs, rows;
+  if (lim > 0){
+    const u = Math.min(used, lim), pct = Math.round(u / lim * 100);
+    segs = [{ v: u, c: pct >= 80 ? '#ff5c7a' : '#ffa62b' }, { v: lim - u, c: '#12b886' }];
+    rows = scRow('#6b7592', 'মোট লিমিট', formatAmount(lim)) + scRow(pct >= 80 ? '#ff5c7a' : '#ffa62b', 'ব্যবহার (' + pct + '%)', formatAmount(used)) + scRow('#12b886', 'উপলব্ধ', formatAmount(Math.max(0, lim - used)));
+    if (withLimit < cards.length) rows += `<div class="sc-note">${cards.length - withLimit} টি কার্ডে লিমিট দেওয়া নেই</div>`;
+  } else {
+    segs = [{ v: 1, c: '#ffa62b' }];
+    rows = scRow('#ff5c7a', 'মোট বকেয়া', formatAmount(used)) + '<div class="sc-note">কার্ডের ✎ চেপে লিমিট দিলে ব্যবহারের হার দেখাবে</div>';
+  }
+  return `<div class="sumcard glass">${donutSvg(segs, cards.length, 'কার্ড')}<div class="sc-info">${rows}</div></div>`;
+}
+
+function investSummaryHtml(active, closed, listed){
+  const segs = [{ v: active.length, c: '#12b886' }, { v: closed.length, c: '#b8c0d8' }];
+  const next = active.filter(i => i.maturity && i.daysLeft !== null).sort((a, b) => a.daysLeft - b.daysLeft)[0];
+  let nxt = '';
+  if (next){
+    const d = next.daysLeft;
+    nxt = scRow(d < 0 ? '#ff5c7a' : (d <= 30 ? '#ffa62b' : '#3347ff'), 'পরের মেয়াদ', d < 0 ? 'পেরিয়েছে' : (d === 0 ? 'আজ' : d + ' দিন'))
+        + `<div class="sc-note">${esc(next.name)} — ${esc(next.maturity)}</div>`;
+  }
+  return `<div class="sumcard glass">${donutSvg(segs, active.length, 'চলমান')}<div class="sc-info"><div><div class="sc-cap">মোট চলমান বিনিয়োগ</div><div class="sc-big">${formatAmount(listed)}</div></div>${scRow('#12b886', 'চলমান', active.length + ' টি')}${scRow('#b8c0d8', 'সমাপ্ত', closed.length + ' টি')}${nxt}</div></div>`;
+}
+
+function renderCardSection(){
+  const box = document.getElementById('cardSection'); if (!box) return;
+  const accs = window.__accounts || [];
+  if (!accs.some(a => a.type === 'Card')){ box.innerHTML = ''; return; }
+  const now = new Date(), dim = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate(), td = now.getDate();
+  let html = '<div class="sec" style="margin-top:22px"><span>আমার কার্ড</span></div>' + cardSummaryHtml(accs.filter(a => a.type === 'Card')) + '<div class="mini-list">';
+  accs.forEach((a, ai) => {
+    if (a.type !== 'Card') return;
+    const used = Math.max(0, -(Number(a.currentBalance) || 0)), lim = Number(a.limit) || 0;
+    const pct = lim > 0 ? Math.min(100, Math.round(used / lim * 100)) : 0;
+    const cls = pct >= 100 ? 'd' : (pct >= 80 ? 'w' : '');
+    let chips = '';
+    if (a.dueDay > 0){
+      const left = a.dueDay >= td ? a.dueDay - td : (dim - td) + a.dueDay;
+      const warn = used > 0 && left <= 3;
+      chips += `<span class="chip ${warn ? 'warn' : ''}">ডিউ: প্রতি মাসের ${a.dueDay} তারিখ${used > 0 ? ' (' + (left === 0 ? 'আজ' : left + ' দিন বাকি') + ')' : ''}</span>`;
+    }
+    if (a.stmtDay > 0) chips += `<span class="chip">স্টেটমেন্ট: ${a.stmtDay} তারিখ</span>`;
+    html += `<div class="cc glass"><div class="cc-top"><b>${esc(a.name)}</b><button class="ibtn" title="লিমিট ও তারিখ" onclick="openCardForm(${ai})"><i class="fa-solid fa-pen"></i></button></div>
+      <div class="cc-top"><span class="iv-amt ${used > 0 ? 'neg' : ''}">${formatAmount(used)}</span><span style="font-size:12px;color:var(--mute)">${lim > 0 ? 'লিমিট ' + formatAmount(lim) : 'লিমিট দেওয়া নেই'}</span></div>
+      ${lim > 0 ? `<div class="bar-t"><i class="${cls}" style="width:${pct}%"></i></div><div class="cc-meta"><span>ব্যবহার ${pct}%</span><span>উপলব্ধ ${formatAmount(Math.max(0, lim - used))}</span></div>` : ''}
+      <div class="cc-meta">${chips || '<span>ডিউ তারিখ দেওয়া নেই</span>'}</div></div>`;
+  });
+  box.innerHTML = html + '</div>';
+}
+function openCardForm(ai){
+  const a = (window.__accounts || [])[ai]; if (!a) return;
+  const html = `<div class="sheet-h"><div class="ic" style="background:var(--blue)"><i class="fa-regular fa-credit-card"></i></div><b>${esc(a.name)}</b><button onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="fld"><label>ক্রেডিট লিমিট (৳)</label><input type="number" id="cf_limit" inputmode="decimal" min="0" value="${a.limit || ''}"></div>
+    <div class="fld"><label>স্টেটমেন্ট তারিখ (মাসের কত তারিখ, ১–৩১)</label><input type="number" id="cf_stmt" inputmode="numeric" min="1" max="31" value="${a.stmtDay || ''}"></div>
+    <div class="fld"><label>বিল ডিউ তারিখ (মাসের কত তারিখ, ১–৩১)</label><input type="number" id="cf_due" inputmode="numeric" min="1" max="31" value="${a.dueDay || ''}"></div>
+    <div class="btn-row2"><button onclick="closeModal()">বাতিল</button><button class="pri" onclick="saveCardForm(${ai})">সেভ</button></div>`;
+  document.getElementById('sheet').innerHTML = html;
+  document.getElementById('modal').classList.add('show');
+}
+async function saveCardForm(ai){
+  const a = (window.__accounts || [])[ai]; if (!a) return;
+  const fd = new FormData();
+  fd.append('action', 'saveCardInfo'); fd.append('name', a.name);
+  fd.append('limit', document.getElementById('cf_limit').value);
+  fd.append('stmtDay', document.getElementById('cf_stmt').value);
+  fd.append('dueDay', document.getElementById('cf_due').value);
+  try {
+    const d = await callPost(fd);
+    if (d.result === 'success'){ showToast('কার্ডের তথ্য সেভ হয়েছে', 'success'); closeModal(); refreshAll(); }
+    else showToast('সেভ হয়নি: ' + (d.error || ''), 'error');
+  } catch(err){ showToast('সেভ হয়নি: ' + err.message, 'error'); }
+}
+
+// ==========================================
+// আমার বিনিয়োগ (অ্যাকাউন্ট পেজ)
+// একই নামের ক্রয় (যেমন ডিপিএস কিস্তি) একটি কার্ডে জমা হয়
+// ==========================================
+let showClosedInv = false;
+const INV_TYPES = ['সঞ্চয়পত্র', 'ডিপিএস', 'এফডিআর', 'বন্ড', 'জমি/রিসোর্ট', 'শেয়ার/মিউচুয়াল ফান্ড', 'অন্যান্য'];
+
+function fillInvNameList(){
+  const dl = document.getElementById('invNameList'); if (!dl) return;
+  const names = [...new Set(currentInvestments.filter(i => i.status === 'active').map(i => i.name))];
+  dl.innerHTML = names.map(n => `<option value="${esc(n)}">`).join('');
+}
+
+function renderInvestSection(){
+  const box = document.getElementById('investSection'); if (!box) return;
+  const list = currentInvestments || [];
+  const active = list.filter(i => i.status === 'active').sort((a, b) => {
+    const x = a.daysLeft, y = b.daysLeft;
+    if (x === null && y === null) return 0; if (x === null) return 1; if (y === null) return -1; return x - y;
+  });
+  const closed = list.filter(i => i.status === 'closed');
+  const listed = active.reduce((s, i) => s + (Number(i.amount) || 0), 0);
+  const opening = list.reduce((s, i) => s + (Number(i.opening) || 0), 0);
+  const net = currentTransactions.filter(t => t.type === T.INVEST).reduce((s, t) => s + (t.repayDir === 'received' ? -1 : 1) * (Number(t.amount) || 0), 0) + opening;
+  const gap = Math.round((net - listed) * 100) / 100;
+
+  let html = '<div class="sec" style="margin-top:22px"><span>আমার বিনিয়োগ</span><a onclick="openInvestForm(\'\')">+ যোগ করুন</a></div>';
+  html += investSummaryHtml(active, closed, listed);
+  if (Math.abs(gap) > 1) html += `<div class="sec-sub warnline">হিসাবের মোট বিনিয়োগের চেয়ে কার্ডে ${formatAmount(Math.abs(gap))} ${gap > 0 ? 'কম' : 'বেশি'} — কিছু বিনিয়োগ কার্ডে যুক্ত নেই।</div>`;
+
+  if (!active.length) html += '<div class="empty glass">কোনো চলমান বিনিয়োগ নেই। "নতুন এন্ট্রি → বিনিয়োগ" থেকে নাম দিয়ে ক্রয় করলে বা "+ যোগ করুন" চাপলে এখানে আসবে।</div>';
+  else html += '<div class="mini-list">' + active.map(it => {
+    let pct = null;
+    if (it.startDate && it.maturity){
+      const s = Date.parse(it.startDate), e = Date.parse(it.maturity);
+      if (e > s) pct = Math.max(0, Math.min(100, Math.round((Date.now() - s) / (e - s) * 100)));
+    }
+    let mat = '';
+    if (it.maturity){
+      const d = it.daysLeft;
+      if (d !== null && d < 0) mat = `<span class="chip danger">মেয়াদ পেরিয়েছে (${-d} দিন)</span>`;
+      else if (d !== null && d <= 30) mat = `<span class="chip warn">মেয়াদ ${esc(it.maturity)} (${d === 0 ? 'আজ' : d + ' দিন বাকি'})</span>`;
+      else mat = `<span class="chip ok">মেয়াদ ${esc(it.maturity)}${d !== null ? ' (' + d + ' দিন বাকি)' : ''}</span>`;
+    }
+    const sub = [esc(it.type || 'বিনিয়োগ'), it.rate > 0 ? 'হার ' + it.rate + '%' : ''].filter(Boolean).join(' • ');
+    const parts = [];
+    if (it.installments > 1) parts.push(it.installments + 'টি কিস্তি/ক্রয়');
+    if (it.opening > 0) parts.push('আগের জমা ' + formatAmount(it.opening));
+    return `<div class="iv glass"><div class="iv-top"><div style="min-width:0"><b>${esc(it.name)}</b><div class="iv-sub">${sub}</div></div><button class="ibtn" title="সম্পাদনা" onclick="openInvestForm('${esc(it.id)}')"><i class="fa-solid fa-pen"></i></button></div>
+      <div class="iv-amt">${formatAmount(it.amount)}</div>
+      ${parts.length ? `<div class="iv-sub">${parts.join(' • ')}</div>` : ''}
+      ${pct !== null ? `<div class="bar-t"><i style="width:${pct}%"></i></div>` : ''}
+      ${mat ? `<div class="iv-meta">${mat}</div>` : ''}</div>`;
+  }).join('') + '</div>';
+
+  if (closed.length){
+    html += `<a class="add-link" onclick="showClosedInv=!showClosedInv;renderInvestSection()">${showClosedInv ? '▾' : '▸'} সমাপ্ত বিনিয়োগ (${closed.length})</a>`;
+    if (showClosedInv) html += '<div class="mini-list" style="margin-top:8px">' + closed.map(it =>
+      `<div class="iv glass" style="opacity:.8"><div class="iv-top"><div style="min-width:0"><b>${esc(it.name)}</b><div class="iv-sub">${esc(it.type || 'বিনিয়োগ')} • ${formatAmount(it.amount)}</div></div><button class="ibtn" title="সম্পাদনা" onclick="openInvestForm('${esc(it.id)}')"><i class="fa-solid fa-pen"></i></button></div><div class="iv-meta"><span class="chip ok">সমাপ্ত ${esc(it.closedDate)}</span></div></div>`).join('') + '</div>';
+  }
+  box.innerHTML = html;
+}
+
+function openInvestForm(id){
+  const it = id ? currentInvestments.find(x => x.id === id) : null;
+  if (id && !it) return;
+  const typeList = INV_TYPES.slice(); if (it && it.type && !typeList.includes(it.type)) typeList.unshift(it.type);
+  let html = `<div class="sheet-h"><div class="ic" style="background:var(--blue)"><i class="fa-solid fa-seedling"></i></div><b>${it ? 'বিনিয়োগ সম্পাদনা' : 'নতুন বিনিয়োগ কার্ড'}</b><button onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>`;
+  if (!it) html += '<div class="sec-sub">শিট শুরুর আগে থেকে থাকা বিনিয়োগ হলে "আগের জমা" দিন, কোনো অ্যাকাউন্ট লাগবে না। নতুন টাকা দিলে "নতুন এন্ট্রি → বিনিয়োগ" ব্যবহার করুন।</div>';
+  html += `<div class="fld"><label>নাম *</label><input type="text" id="vf_name" value="${esc(it ? it.name : '')}" placeholder="যেমন: ৫ বছর মেয়াদী সঞ্চয়পত্র"></div>`;
+  html += `<div class="fld"><label>প্রকার</label><select id="vf_type">${typeList.map(t => `<option value="${esc(t)}"${it && it.type === t ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select></div>`;
+  html += `<div class="fld"><label>শিট শুরুর আগের জমা (৳) — ঐচ্ছিক</label><input type="number" step="0.01" min="0" id="vf_open" inputmode="decimal" value="${it && it.opening ? it.opening : ''}"></div>`;
+  html += `<div class="fld"><label>মুনাফার হার % — ঐচ্ছিক</label><input type="number" step="0.01" min="0" id="vf_rate" inputmode="decimal" value="${it && it.rate ? it.rate : ''}"></div>`;
+  html += `<div class="fld"><label>শুরুর তারিখ — ঐচ্ছিক</label><input type="date" id="vf_start" value="${esc(it ? it.startDate : '')}"></div>`;
+  html += `<div class="fld"><label>মেয়াদপূর্তির তারিখ — ঐচ্ছিক</label><input type="date" id="vf_mat" value="${esc(it ? it.maturity : '')}"></div>`;
+  html += `<div class="fld"><label>নোট</label><input type="text" id="vf_note" value="${esc(it ? it.note : '')}"></div>`;
+  if (it && it.installments > 0) html += `<div class="sec-sub">নতুন এন্ট্রি ফর্ম থেকে জমা: ${it.installments} টি, মোট ${formatAmount(it.amount - (it.opening || 0))}</div>`;
+  html += `<div class="btn-row2"><button onclick="closeModal()">বাতিল</button>${it ? `<button class="dng" onclick="deleteInvestForm('${esc(it.id)}')">মুছুন</button>` : ''}<button class="pri" onclick="saveInvestForm('${it ? esc(it.id) : ''}')">সেভ</button></div>`;
+  document.getElementById('sheet').innerHTML = html;
+  document.getElementById('modal').classList.add('show');
+}
+async function saveInvestForm(id){
+  const g = x => { const e = document.getElementById(x); return e ? e.value : ''; };
+  if (!g('vf_name').trim()){ showToast('নাম দিন!', 'error'); return; }
+  const fd = new FormData();
+  fd.append('action', 'saveInvestment'); fd.append('id', id);
+  fd.append('name', g('vf_name')); fd.append('type', g('vf_type')); fd.append('opening', g('vf_open'));
+  fd.append('rate', g('vf_rate')); fd.append('startDate', g('vf_start')); fd.append('maturity', g('vf_mat')); fd.append('note', g('vf_note'));
+  try {
+    const d = await callPost(fd);
+    if (d.result === 'success'){ showToast('বিনিয়োগ সেভ হয়েছে', 'success'); closeModal(); refreshAll(); }
+    else showToast('সেভ হয়নি: ' + (d.error || ''), 'error');
+  } catch(err){ showToast('সেভ হয়নি: ' + err.message, 'error'); }
+}
+async function deleteInvestForm(id){
+  const ok = await showConfirm('কার্ড মুছুন', 'শুধু এই কার্ডটি মুছবে, কোনো লেনদেন নয়। নিশ্চিত?');
+  if (!ok) return;
+  const fd = new FormData(); fd.append('action', 'deleteInvestment'); fd.append('id', id);
+  try {
+    const d = await callPost(fd);
+    if (d.result === 'success'){ showToast('মুছে ফেলা হয়েছে', 'success'); closeModal(); refreshAll(); }
+    else showToast('মোছা যায়নি: ' + (d.error || ''), 'error');
+  } catch(err){ showToast('মোছা যায়নি: ' + err.message, 'error'); }
+}
+
+
 
 function updateNameList(){
   const cards = new Set(masterData.cards || []);
   const names = [...new Set(currentTransactions.filter(t => t.type === T.LOAN && t.borrower && !cards.has(t.borrower) && !/card|কার্ড/i.test(t.borrower)).map(t => t.borrower))];
   const dl = document.getElementById('nameList');
   if (dl) dl.innerHTML = names.map(n => `<option value="${esc(n)}">`).join('');
-}
-
-function showWarnings(){
-  let html = '<div class="sheet-h"><div class="ic" style="background:#f59e0b"><i class="fa-solid fa-triangle-exclamation"></i></div><b>সতর্কতা (' + currentWarnings.length + ')</b><button onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>';
-  if (!currentWarnings.length) html += '<div class="empty">কোনো সতর্কতা নেই</div>';
-  else currentWarnings.forEach(w => { html += '<div class="warn-item">• ' + esc(w) + '</div>'; });
-  document.getElementById('sheet').innerHTML = html;
-  document.getElementById('modal').classList.add('show');
 }
 
 function renderNetWorthCard(data){
@@ -733,20 +1101,20 @@ function renderMonthlyTable(summary){
     Object.keys(totals).forEach(k=> totals[k] += Number(d[k])||0);
     const row = document.createElement('tr');
     const sCls = (Number(d.Surplus)>0)?'pos':(Number(d.Surplus)<0?'neg':'');
-    row.innerHTML = `<td>${bnMonths[idx]}</td><td>${formatAmount(d.Income)}</td><td>${formatAmount(d.Expense)}</td><td class="${sCls}">${formatAmount(d.Surplus)}</td><td>${formatAmount(d.Investment)}</td><td>${formatAmount(d.Loan)}</td><td>${formatAmount(d.Asset)}</td><td>${formatAmount(d.Liability)}</td>`;
+    row.innerHTML = `<td>${bnMonths[idx]}</td><td>${formatAmount(d.Income)}</td><td>${formatAmount(d.Expense)}</td><td class="${sCls}">${formatAmount(d.Surplus)}</td><td>${formatAmount(d.Investment)}</td><td>${formatAmount(d.Loan)}</td>`;
     tbody.appendChild(row);
   });
   const tCls = (totals.Surplus>0)?'pos':(totals.Surplus<0?'neg':'');
-  tfoot.innerHTML = `<td>৩ মাসের মোট</td><td>${formatAmount(totals.Income)}</td><td>${formatAmount(totals.Expense)}</td><td class="${tCls}">${formatAmount(totals.Surplus)}</td><td>${formatAmount(totals.Investment)}</td><td>${formatAmount(totals.Loan)}</td><td>${formatAmount(totals.Asset)}</td><td>${formatAmount(totals.Liability)}</td>`;
+  tfoot.innerHTML = `<td>৩ মাসের মোট</td><td>${formatAmount(totals.Income)}</td><td>${formatAmount(totals.Expense)}</td><td class="${tCls}">${formatAmount(totals.Surplus)}</td><td>${formatAmount(totals.Investment)}</td><td>${formatAmount(totals.Loan)}</td>`;
 }
 
 function showAllMonthly(){
   const sheet = document.getElementById('allTxnSheet');
   let html = '<div class="sheet-h"><div class="ic" style="background:var(--blue)"><i class="fa-solid fa-calendar"></i></div><b>সব মাসিক হিসাব</b><button onclick="closeAllTxnModal()"><i class="fa-solid fa-xmark"></i></button></div>';
-  html += '<div class="modal-table-wrap"><table><thead><tr><th>মাস</th><th>আয়</th><th>ব্যয়</th><th>সঞ্চয়</th><th>বিনিয়োগ</th><th>ঋণ</th><th>সম্পদ</th><th>দায়</th></tr></thead><tbody>';
+  html += '<div class="modal-table-wrap"><table><thead><tr><th>মাস</th><th>আয়</th><th>ব্যয়</th><th>সঞ্চয়</th><th>বিনিয়োগ</th><th>ঋণ</th></tr></thead><tbody>';
   enMonths.forEach((month, idx)=>{
     const d = currentSummary && currentSummary[month] ? currentSummary[month] : { Income:0, Expense:0, Surplus:0, Investment:0, Loan:0, Asset:0, Liability:0 };
-    html += `<tr><td>${bnMonths[idx]}</td><td>${formatAmount(d.Income)}</td><td>${formatAmount(d.Expense)}</td><td>${formatAmount(d.Surplus)}</td><td>${formatAmount(d.Investment)}</td><td>${formatAmount(d.Loan)}</td><td>${formatAmount(d.Asset)}</td><td>${formatAmount(d.Liability)}</td></tr>`;
+    html += `<tr><td>${bnMonths[idx]}</td><td>${formatAmount(d.Income)}</td><td>${formatAmount(d.Expense)}</td><td>${formatAmount(d.Surplus)}</td><td>${formatAmount(d.Investment)}</td><td>${formatAmount(d.Loan)}</td></tr>`;
   });
   html += '</tbody></table></div>';
   sheet.innerHTML = html;
@@ -764,6 +1132,7 @@ function accIcon(name, type){
 }
 
 function renderAccountGrid(accounts){
+  renderAccSummary(accounts);
   const grid = document.getElementById('accountGrid');
   grid.innerHTML = '';
   if (!accounts || accounts.length===0){ grid.innerHTML = '<div class="empty glass" style="grid-column:1/-1;">কোনো অ্যাকাউন্ট ডেটা পাওয়া যায়নি</div>'; return; }
@@ -802,10 +1171,130 @@ function openModal(i){
     <div class="row"><span>মোট ব্যয়</span><b class="neg">${formatAmount(acc.totalOut)}</b></div>
     <div class="cur"><span>বর্তমান ব্যালেন্স</span><b class="${cls}">${formatAmount(acc.currentBalance)}</b></div>
     <div class="share"><i style="width:${share}%"></i></div>
-    <div class="share-l">${note}</div>`;
+    <div class="share-l">${note}</div>
+    <button class="acc-txn-btn" onclick="showAccountTxns(${i},1)"><i class="fa-solid fa-list"></i> লেনদেন দেখুন</button>`;
   document.getElementById('modal').classList.add('show');
 }
 function closeModal(){ document.getElementById('modal').classList.remove('show'); }
+
+// ==========================================
+// অ্যাকাউন্ট-ভিত্তিক লেনদেন (চলমান ব্যালেন্স সহ)
+// নিয়ম ব্যাকএন্ডের rowEffects_-এর সাথে একই
+// ==========================================
+let accTxnView = null; // { name, page } — খোলা থাকলে এডিট/ডিলিটের পর আবার আঁকা হয়
+const ACC_TXNS_PER_PAGE = 10;
+
+function txnEffects(t){
+  const type = nfc(t.type), sub = nfc(t.subCategory), amt = Number(t.amount) || 0;
+  const f = nfc(t.fromAccount), to = nfc(t.toAccount), dir = t.repayDir || '';
+  const e = [];
+  if (type === T.INCOME) e.push([f, amt]);
+  else if (type === T.EXPENSE) e.push([f, -amt]);
+  else if (type === T.INVEST) e.push([f, dir === 'received' ? amt : -amt]);
+  else if (type === T.TRANSFER){ e.push([f, -amt]); e.push([to, amt]); }
+  else if (type === T.LOAN){
+    if (sub === SUBCATS.LOAN_TAKE) e.push([f, amt]);
+    else if (sub === SUBCATS.LOAN_GIVE) e.push([f, -amt]);
+    else if (sub === SUBCATS.LOAN_REPAY) e.push([f, dir === 'received' ? amt : -amt]);
+    else if (sub === SUBCATS.CARD_DUE) e.push([nfc(t.borrower), -amt]); // পুরোনো কার্ড-বিল সারি
+  }
+  return e;
+}
+
+// পুরোনো → নতুন ক্রমে চলমান ব্যালেন্স বের করে
+function buildAccountLedger(acc){
+  const name = nfc(acc.name);
+  const list = currentTransactions.slice().sort((a, b) =>
+    String(a.date).localeCompare(String(b.date)) || (Number(a.row) || 0) - (Number(b.row) || 0));
+  let bal = Number(acc.openingBalance) || 0;
+  const out = [];
+  list.forEach(t => {
+    let delta = 0, hit = false;
+    txnEffects(t).forEach(([n, d]) => { if (n === name){ delta += d; hit = true; } });
+    if (hit){ bal = Math.round((bal + delta) * 100) / 100; out.push({ t, delta, bal }); }
+  });
+  return out;
+}
+
+function pageWindow(total, cur){
+  const set = new Set([1, total, cur - 1, cur, cur + 1].filter(p => p >= 1 && p <= total));
+  const arr = [...set].sort((a, b) => a - b), res = [];
+  arr.forEach((p, i) => { if (i > 0 && p - arr[i-1] > 1) res.push('…'); res.push(p); });
+  return res;
+}
+
+function showAccountTxns(ref, page){
+  const accs = window.__accounts || [];
+  const acc = (typeof ref === 'number') ? accs[ref] : accs.find(a => nfc(a.name) === nfc(ref));
+  if (!acc) return;
+  closeModal();
+  const idx = accs.indexOf(acc);
+  const year = String(new Date().getFullYear());
+
+  const full = buildAccountLedger(acc);                 // সব বছরের ওপর চলমান ব্যালেন্স (ওপেনিং থেকে)
+  let startBal = Number(acc.openingBalance) || 0;       // চলতি বছরের শুরুর ব্যালেন্স = আগের বছর পর্যন্ত জের
+  full.forEach(e => { if (String(e.t.date).slice(0, 4) < year) startBal = e.bal; });
+  const ledger = full.filter(e => String(e.t.date).slice(0, 4) === year).reverse(); // শুধু চলতি বছর, নতুন আগে
+
+  const totalPages = Math.max(1, Math.ceil(ledger.length / ACC_TXNS_PER_PAGE));
+  const cur = Math.min(Math.max(1, page || 1), totalPages);
+  accTxnView = { name: acc.name, page: cur };
+  const start = (cur - 1) * ACC_TXNS_PER_PAGE;
+  const pageData = ledger.slice(start, start + ACC_TXNS_PER_PAGE);
+  const balCls = (Number(acc.currentBalance) >= 0) ? 'pos' : 'neg';
+
+  let html = `<div class="sheet-h"><div class="ic" style="background:${palette[idx % palette.length]}"><i class="fa-solid ${accIcon(acc.name, acc.type)}"></i></div><b>${esc(acc.name) || 'নাম নেই'}</b><button onclick="closeAllTxnModal()"><i class="fa-solid fa-xmark"></i></button></div>`;
+  html += `<div class="row"><span>বর্তমান ব্যালেন্স</span><b class="${balCls}">${formatAmount(acc.currentBalance)}</b></div>`;
+  html += `<div class="row"><span>${year} সালের লেনদেন</span><b>${ledger.length} টি</b></div>`;
+  html += '<div style="margin:10px 0"><a onclick="backToAccount()" style="cursor:pointer;color:var(--blue);font-weight:700;font-size:13px"><i class="fa-solid fa-chevron-left"></i> অ্যাকাউন্টের সারাংশ</a></div>';
+  html += '<div class="txn-list" id="accTxnListInner"></div><div class="pagination" id="accTxnPagination"></div>';
+  document.getElementById('allTxnSheet').innerHTML = html;
+  document.getElementById('allTxnModal').classList.add('show');
+
+  const inner = document.getElementById('accTxnListInner');
+  if (pageData.length === 0) inner.innerHTML = '<div class="empty">এই বছরে এখনও কোনো লেনদেন নেই</div>';
+  pageData.forEach(e => {
+    const el = createTxnElement(e.t);
+    const isIn = e.delta > 0, isOut = e.delta < 0;
+    const ic = el.querySelector('.txn-icon');
+    ic.style.background = isIn ? '#d9f6ec' : (isOut ? '#ffe1e8' : '#e0e5ff');
+    ic.style.color = isIn ? 'var(--mint)' : (isOut ? 'var(--coral)' : 'var(--blue)');
+    ic.querySelector('i').className = 'fa-solid ' + (isIn ? 'fa-arrow-down' : (isOut ? 'fa-arrow-up' : 'fa-right-left'));
+    const am = el.querySelector('.txn-amount');
+    am.className = 'txn-amount ' + (isIn ? 'pos' : (isOut ? 'neg' : ''));
+    am.textContent = (isIn ? '+' : (isOut ? '-' : '')) + formatAmount(Math.abs(e.delta));
+    el.querySelector('.txn-details').insertAdjacentHTML('beforeend',
+      `<p class="txn-bal">ব্যালেন্স: <b class="${e.bal >= 0 ? 'pos' : 'neg'}">${formatAmount(e.bal)}</b></p>`);
+    inner.appendChild(el);
+  });
+  if (cur === totalPages){
+    inner.insertAdjacentHTML('beforeend',
+      `<div class="txn-item" style="background:#f8fafc"><div class="txn-details"><h4>${year} সালের শুরুর ব্যালেন্স</h4></div><div class="txn-amount">${formatAmount(startBal)}</div></div>`);
+  }
+
+  const pg = document.getElementById('accTxnPagination');
+  pg.innerHTML = '';
+  if (totalPages > 1){
+    const mk = (label, p, dis, on) => {
+      const b = document.createElement('button'); b.innerHTML = label; b.disabled = !!dis;
+      if (on) b.className = 'on'; b.onclick = () => showAccountTxns(acc.name, p); return b;
+    };
+    pg.appendChild(mk('<i class="fa-solid fa-chevron-left"></i>', cur - 1, cur === 1));
+    pageWindow(totalPages, cur).forEach(p => {
+      if (p === '…'){ const s = document.createElement('span'); s.textContent = '…'; pg.appendChild(s); }
+      else pg.appendChild(mk(String(p), p, false, p === cur));
+    });
+    pg.appendChild(mk('<i class="fa-solid fa-chevron-right"></i>', cur + 1, cur === totalPages));
+  }
+}
+
+function backToAccount(){
+  const n = accTxnView ? accTxnView.name : null;
+  closeAllTxnModal();
+  const i = (window.__accounts || []).findIndex(a => nfc(a.name) === nfc(n));
+  if (i >= 0) openModal(i);
+}
+
 document.addEventListener('keydown', e=>{ if (e.key==='Escape'){ if (document.getElementById('confirmDialog').classList.contains('show')){ closeConfirm(false); return; } closeModal(); closeEditModal(); closeAllTxnModal(); closeAllLoanModal(); } });
 
 function renderReportPage(){
@@ -856,6 +1345,7 @@ function loadRecentTransactions(){
 let currentTxnPage = 1;
 const TXNS_PER_PAGE = 10;
 function showAllTransactions(page){
+  accTxnView = null;
   if (!txnMonthCursor) txnMonthCursor = latestTxnMonth();
   currentTxnPage = page || 1;
   const { y, m } = txnMonthCursor;
@@ -897,7 +1387,7 @@ function txnMonthNext(){
   let { y, m } = txnMonthCursor; m++; if (m>11){ m=0; y++; }
   txnMonthCursor = { y, m }; showAllTransactions(1);
 }
-function closeAllTxnModal(){ document.getElementById('allTxnModal').classList.remove('show'); }
+function closeAllTxnModal(){ accTxnView = null; document.getElementById('allTxnModal').classList.remove('show'); }
 
 // লেনদেনের চাবি: id থাকলে id, না থাকলে সারি নম্বর (মাইগ্রেশনের আগের সারির জন্য)
 const txnKey = t => t.id ? t.id : ('row:' + t.row);
@@ -1037,6 +1527,7 @@ function applyFieldRules(formEl, rules){
   if (fromSel) fromSel.required = rules.fromRequired;
   if (toSel) toSel.required = rules.toRequired;
   setDirLabels(formEl, rules.dirKind);
+  if (formEl.id === 'financeForm') syncInvestFields(rules);
   return rules;
 }
 
@@ -1069,12 +1560,13 @@ function editTxn(key){
   document.getElementById('editSheet').innerHTML = `
     <div class="sheet-h"><div class="ic" style="background:var(--blue)"><i class="fa-solid fa-pen"></i></div><b>লেনদেন এডিট করুন</b><button onclick="closeEditModal()"><i class="fa-solid fa-xmark"></i></button></div>
     <div class="edit-form">
+      <div class="sec-sub" style="grid-column:1/-1;margin:0 0 2px"><i class="fa-solid fa-lock"></i> ধরন, খাত ও উপ-খাত বদলানো যায় না। ভুল হলে লেনদেনটি মুছে নতুন করে দিন।</div>
       <div class="edit-field"><label><i class="fa-regular fa-calendar"></i> তারিখ</label><input type="date" id="editDate" value="${esc(txn.date)}"></div>
-      <div class="edit-field"><label><i class="fa-solid fa-right-left"></i> ধরন</label><select id="editType" onchange="onEditTypeChange()"><option value="">নির্বাচন</option>${optsHtml(masterData.types, txn.type)}</select></div>
-      <div class="edit-field"><label><i class="fa-solid fa-layer-group"></i> খাত</label><select id="editCategory" onchange="onEditCategoryChange()"></select></div>
-      <div class="edit-field"><label><i class="fa-solid fa-tag"></i> উপ-খাত</label><select id="editSubCategory" onchange="onEditSubCategoryChange()"></select></div>
+      <div class="edit-field"><label><i class="fa-solid fa-right-left"></i> ধরন</label><select id="editType" disabled onchange="onEditTypeChange()"><option value="">নির্বাচন</option>${optsHtml(masterData.types, txn.type)}</select></div>
+      <div class="edit-field"><label><i class="fa-solid fa-layer-group"></i> খাত</label><select id="editCategory" disabled onchange="onEditCategoryChange()"></select></div>
+      <div class="edit-field"><label><i class="fa-solid fa-tag"></i> উপ-খাত</label><select id="editSubCategory" disabled onchange="onEditSubCategoryChange()"></select></div>
       <div class="edit-field" id="editRepayDirGroup" style="display:none"><label><i class="fa-solid fa-arrows-left-right"></i> দিক</label>
-        <div class="radio-group"><label><input type="radio" name="editRepayDir" value="paid" onchange="onEditRepayDirChange()"> <span class="dl-paid">আমি দিলাম</span></label><label><input type="radio" name="editRepayDir" value="received" onchange="onEditRepayDirChange()"> <span class="dl-recv">আমি পেলাম</span></label></div>
+        <div class="radio-group"><label><input type="radio" name="editRepayDir" value="paid" disabled onchange="onEditRepayDirChange()"> <span class="dl-paid">আমি দিলাম</span></label><label><input type="radio" name="editRepayDir" value="received" disabled onchange="onEditRepayDirChange()"> <span class="dl-recv">আমি পেলাম</span></label></div>
       </div>
       <div class="edit-field" id="editBorrowerGroup" style="display:none"><label><i class="fa-solid fa-user"></i> <span id="editBorrowerLabel">ঋণগ্রহীতা</span></label><div id="editBorrowerWrapper"></div></div>
       <div class="edit-field" id="editFromGroup"><label><i class="fa-solid fa-wallet"></i> <span id="editFromLabel">উৎস</span></label><select id="editFrom" onchange="onEditFromChange()"><option value="">নির্বাচন</option>${optsHtml(masterData.accounts, txn.fromAccount)}</select></div>
@@ -1246,7 +1738,7 @@ async function deleteTxn(key){
       showToast('লেনদেন ডিলিট হয়েছে!', 'success');
       // তালিকা থেকে সাথে সাথে বাদ দিয়ে খোলা "সব লেনদেন" মডাল আবার আঁকা (একই পেজেই থাকে)
       currentTransactions = currentTransactions.filter(t => txnKey(t) !== key);
-      if (document.getElementById('allTxnModal').classList.contains('show')) showAllTransactions(currentTxnPage);
+      if (document.getElementById('allTxnModal').classList.contains('show')){ if (accTxnView) showAccountTxns(accTxnView.name, accTxnView.page); else showAllTransactions(currentTxnPage); }
       if (document.body.dataset.view === 'reports') loadRecentTransactions();
       refreshAll();
     }
@@ -1401,6 +1893,7 @@ function onTypeChange(){
   document.getElementById('borrowerWrapper').innerHTML = '';
   document.getElementById('toAccount').value = '';
   document.getElementById('cardNetwork').value = '';
+  { const pd = document.querySelector('#financeForm input[name=repayDir][value=paid]'); if (pd) pd.checked = true; } // ধরন বদলালে দিক আবার ডিফল্টে
   if (!type){ catSelect.disabled = true; applyFieldRules(document.getElementById('financeForm'), fieldRules('', '')); return; }
   catSelect.disabled = false;
   const cats = [...new Set((masterData.dataMap||[]).filter(d=>d.type===type).map(d=>d.category))];
@@ -1459,6 +1952,7 @@ function onRepayDirChange(){
   document.getElementById('fromLabelText').textContent = repayFromLabel(dir, rules.dirKind);
   if (rules.dirKind === 'loan') document.getElementById('borrowerLabel').textContent = repayBorrowerLabel(dir);
   renderBorrowerControl(rules); // দিক অনুযায়ী নামের তালিকা বদলায়
+  syncInvestFields(rules);
 }
 
 function onFromAccountChange(){
